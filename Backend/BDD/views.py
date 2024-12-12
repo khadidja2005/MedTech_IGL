@@ -76,6 +76,8 @@ class AntecedentViewSet(viewsets.ModelViewSet):
     serializer_class = AntecedentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
+
 class DPIViewSet(viewsets.ModelViewSet):
     queryset = DPI.objects.all()
     serializer_class = DPISerializer
@@ -97,6 +99,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
 
     def get_queryset(self):
         queryset = Consultation.objects.all()
