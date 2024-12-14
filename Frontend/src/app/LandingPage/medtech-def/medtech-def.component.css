@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .medtec-txt {
+    @apply text-[30px] text-[#4B6386] opacity-85 font-poppins;
+  }
+}
