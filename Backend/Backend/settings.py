@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'BDD',
     'rest_framework',
+    'Auth',
 
 ]
 
@@ -87,6 +88,8 @@ DATABASES = {
     }
 }
 
+# Print database settings for debugging
+print(f"DB SETTINGS: {DATABASES['default']}")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -128,3 +131,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Si tu utilises Gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ms_namoune@esi.dz'  # Remplace par ton adresse email
+EMAIL_HOST_PASSWORD = 'Saad2004@*'  # Remplace par ton mot de passe d'email
+DEFAULT_FROM_EMAIL = 'no-reply@medtech.com'

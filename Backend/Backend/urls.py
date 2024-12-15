@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , include
-from BDD.urls import urlpatterns as bdd_urls
+from django.urls import path, include
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(bdd_urls)),
+    path('auth/', include('Auth.urls')),  # Assure-toi d'inclure l'URL de l'application Auth
+    # Ajoute ici toutes les autres routes de ton API
 ]
