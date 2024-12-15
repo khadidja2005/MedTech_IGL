@@ -5,7 +5,7 @@ from .views import (
     MutuelleViewSet, PatientViewSet, ContactViewSet, AntecedentViewSet,
     DPIViewSet, HospitalisationViewSet, ConsultationViewSet,
     OrdonnanceViewSet, MedicamentViewSet, SoinsViewSet, BilanBioViewSet,
-    ResultatBioViewSet, BilanRadioViewSet, ResultatRadioViewSet
+    ResultatBioViewSet, BilanRadioViewSet, ResultatRadioViewSet , EtablissementPersonnelMedicalViewSet
 )
 
 
@@ -27,6 +27,7 @@ router.register(r'bilan-bio', BilanBioViewSet)
 router.register(r'resultat-bio', ResultatBioViewSet)
 router.register(r'bilan-radio', BilanRadioViewSet)
 router.register(r'resultat-radio', ResultatRadioViewSet)
+router.register(r'etablissement-personnel-medical',EtablissementPersonnelMedicalViewSet )
 urlpatterns = [
     path('', include(router.urls)),
 ]

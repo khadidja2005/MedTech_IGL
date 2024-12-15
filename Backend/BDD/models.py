@@ -16,6 +16,7 @@ class PersonnelMedical(models.Model):
         RADIOLOGUE = 'RADIOLOGUE', 'Radiologue'
         LABORANTIN = 'LABORANTIN', 'Laborantin'
         INFIRMIER = 'INFIRMIER', 'Infirmier'
+        PHARMACIEN = 'PHARMACIEN', 'Pharmacien'
     id = models.CharField(max_length=100 , primary_key=True)
     nom_complet = models.CharField(max_length=200)
     email = models.EmailField(max_length=100)
@@ -95,7 +96,7 @@ class Soins (models.Model):
         LABO = 'LABO', 'Laboratoire'
     id = models.CharField(max_length=100 , primary_key=True)
     date = models.DateField()
-    heure = models.DateField()
+    heure = models.TimeField()
     type_soins = models.CharField(
         max_length=10,
         choices=typeSoinsChoices.choices,
@@ -118,7 +119,7 @@ class ResultatBio(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     valeur_mesure = models.CharField(max_length=100)
     date_mesure = models.DateField()
-    heure_mesure = models.DateTimeField()
+    heure_mesure = models.TimeField()
     parametre = models.CharField(max_length=100)
     bilan_bio = models.ForeignKey(BilanBio, on_delete=models.CASCADE)
     laborantin = models.ForeignKey(PersonnelMedical , on_delete=models.CASCADE)
