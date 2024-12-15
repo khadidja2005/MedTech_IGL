@@ -6,7 +6,7 @@
       <!-- Loop through the reviews array and get the index -->
       <div *ngFor="let review of reviews; let index = index" class="review-item" [class.left-half]="index % 2 === 0" [class.right-half]="index % 2 !== 0">
         <div class="review-card">
-          <p class="review-feedback">{{ review.feedback }}</p>
+          <p class="review-feedback =">{{ review.feedback }}</p>
           <div class="review-header">
             <img [src]="review.image" alt="Doctor Image" class="doctor-image">
             <div class="doctor-info">

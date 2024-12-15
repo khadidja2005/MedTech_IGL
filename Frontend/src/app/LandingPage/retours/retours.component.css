@@ -3,28 +3,33 @@
 @tailwind utilities;
 
 .page-container {
-    @apply w-full h-screen flex flex-col items-center justify-start pt-10 bg-[#F3F8FF];
+    @apply w-full h-auto flex flex-col items-center justify-start pt-10 bg-[#F3F8FF];
 }
 
 .title {
-    @apply text-[58px] font-bold text-[#0C2757] text-center;
+    @apply text-[58px] pt-20 font-bold text-[#0C2757] text-center font-poppins;
 }
 
 .reviews-container {
-    @apply w-[90%] flex flex-wrap justify-start mt-5;
+    @apply w-[90%] h-auto flex flex-wrap justify-center items-center mt-5 relative;
 }
 
 .review-item {
-    @apply w-[45%] p-4 flex justify-center;
+    @apply w-[45%] p-4 ml-10 flex justify-center;
 }
 
 .review-card {
-    @apply bg-white shadow-lg rounded-[50px] w-full h-[250px] flex flex-col justify-between transform transition duration-300 ease-in-out;
+    @apply bg-white shadow-lg rounded-[50px] p-4 w-full h-[250px] flex flex-col justify-between; 
 }
 
-.review-card:hover {
-    @apply scale-105 shadow-2xl bg-[#EAF3FF]; /* Slight zoom, deeper shadow, and subtle color change */
+.review-feedback {
+    @apply text-[14px] text-[#4B6386] opacity-75 italic font-poppins flex-grow flex items-center; 
 }
+
+
+
+.review-card:hover {
+    @apply scale-105 shadow-2xl bg-[#EAF3FF]; }
 
 .review-header {
     @apply flex items-center m-4;
@@ -46,6 +51,4 @@
     @apply text-[14px] text-[#3A8EF6] font-poppins;
 }
 
-.review-feedback {
-    @apply text-[14px] text-[#4B6386] opacity-75 italic m-5 font-poppins;
-}
+

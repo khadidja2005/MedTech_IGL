@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .box-container {
+    @apply bg-white rounded-[30px] w-[1100px] h-[650px] p-[50px]  shadow-[0px_6px_12px_rgba(0,0,0,0.3)];
+  }
+
+  .email-box {
+    @apply bg-[#F3F8FF] p-2 pl-5 w-full h-[50px] border-[1px] border-[#3A8EF6] focus:outline-none focus:ring-2 focus:ring-[#3A8EF6] rounded-[15px] font-poppins text-[#4B6386] text-[23px];
+  }
+
+  .message-box {
+    @apply bg-[#F3F8FF] p-2 pl-5 mb-[75px] w-full h-[200px] border-[1px] border-[#3A8EF6] focus:outline-none focus:ring-2 focus:ring-[#3A8EF6] rounded-[15px] font-poppins text-[#4B6386] text-[23px];
+  }
+
+  .boutton-envoyer {
+    @apply  w-[120px] h-[50px] rounded-[80px] bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] text-white text-center font-poppins text-[18px] absolute;
+    bottom: 40px; 
+    right: 50px;  
+  }}

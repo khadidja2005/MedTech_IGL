@@ -6,11 +6,14 @@ import { AdvantagesComponent } from './LandingPage/advantages/advantages.compone
 import {MedtechDefComponent} from './LandingPage/medtech-def/medtech-def.component';
 import {RetoursComponent} from './LandingPage/retours/retours.component'
 import { CommonModule } from '@angular/common'; 
+import {ContactComponent} from './LandingPage/contact/contact.component';
+import { FormsModule } from '@angular/forms';
+import {LogoContactComponent} from './LandingPage/logo-contact/logo-contact.component';
 
 @Component({
   selector: 'app-root',
   standalone: true, 
-  imports: [RouterOutlet, HeaderComponent, MainContentComponent, AdvantagesComponent, MedtechDefComponent, RetoursComponent, CommonModule],  
+  imports: [RouterOutlet, HeaderComponent, MainContentComponent, AdvantagesComponent, MedtechDefComponent, RetoursComponent, CommonModule, ContactComponent, FormsModule , LogoContactComponent ],  
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
