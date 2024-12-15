@@ -7,8 +7,6 @@ from .views import (
     OrdonnanceViewSet, MedicamentViewSet, SoinsViewSet, BilanBioViewSet,
     ResultatBioViewSet, BilanRadioViewSet, ResultatRadioViewSet , EtablissementPersonnelMedicalViewSet
 )
-
-
 router = DefaultRouter()
 router.register(r'etablissements', EtablissementViewSet)
 router.register(r'admins', AdminViewSet)
