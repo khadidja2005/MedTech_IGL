@@ -28,6 +28,9 @@ services:
       MYSQL_DATABASE: medical_db
       MYSQL_USER: medical_user
       MYSQL_PASSWORD: medical_password
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   mysql_data:
