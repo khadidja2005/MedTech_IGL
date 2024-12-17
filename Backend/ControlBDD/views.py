@@ -224,18 +224,4 @@ def seed_database (request):
         return Response({
             "status": "error",
             "message" : str(e)},
-            status=500)
-@api_view(["DELETE"]) 
-def deleteBDD(request):
-    try:
-        clean_database()
-        return ({
-            "status" : 200,
-            "message":"BDD deleted successfully"
-        })
-
-    except Exception as e:
-        return Response({
-            "status":"error",
-            "message":str(e)
-        } , status=500)    
+            status=500)   
