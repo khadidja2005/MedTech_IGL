@@ -8,57 +8,102 @@ from BDD.models import (
     etablissement_personnel_medical 
 )
 import random
+def clean_database():
+    # Suppression dans l'ordre inverse des dépendances
+    ResultatRadio.objects.all().delete()
+    BilanRadio.objects.all().delete()
+    ResultatBio.objects.all().delete()
+    BilanBio.objects.all().delete()
+    Soins.objects.all().delete()
+    Medicament.objects.all().delete()
+    Ordonnance.objects.all().delete()
+    Consultation.objects.all().delete()
+    Hospitalisation.objects.all().delete()
+    Antecedent.objects.all().delete()
+    DPI.objects.all().delete()
+    Contact.objects.all().delete()
+    Patient.objects.all().delete()
+    Mutuelle.objects.all().delete()
+    etablissement_personnel_medical.objects.all().delete()
+    PersonnelMedical.objects.all().delete()
+    Admin.objects.all().delete()
+    Etablissement.objects.all().delete()
+
+
 def seed_database_func ():
     fake = Faker()
+    etablissements = []
     for _ in range(10):
-        Etablissement.objects.create(
-            id = fake.uuid4(),
-            nom_etablissement = fake.company(),
-            adresse = fake.address(),
-            telephone = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
-            email = fake.email(),
+        etablissement = Etablissement.objects.create(
+            id=fake.uuid4(),
+            nom_etablissement=fake.company(),
+            adresse=fake.address(),
+            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            email=fake.email(),
         )
+        etablissements.append(etablissement)
+
+    # Create admins
     for _ in range(5):
         Admin.objects.create(
-            id = fake.uuid4(),
-            nom_complet = fake.name(),
-            email = fake.email(),
-            password = fake.password(),
+            id=fake.uuid4(),
+            nom_complet=fake.name(),
+            email=fake.email(),
+            password=fake.password(),
         )
+
+    # Create medical personnel and link to establishments without duplicates
+    personnel_list = []
     for _ in range(20):
-        PersonnelMedical.objects.create(
-            id = fake.uuid4(),
-            nom_complet = fake.name(),
-            email = fake.email(),
-            telephone = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
-            password = fake.password(),
-            role = random.choice(['MEDECIN', 'INFIRMIER', 'PHARMACIEN' , 'RADIOLOGUE' , 'LABORANTIN'])
+        personnel = PersonnelMedical.objects.create(
+            id=fake.uuid4(),
+            nom_complet=fake.name(),
+            email=fake.email(),
+            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            password=fake.password(),
+            role=random.choice(['MEDECIN', 'INFIRMIER', 'PHARMACIEN', 'RADIOLOGUE', 'LABORANTIN'])
         )
+        personnel_list.append(personnel)
+        
+        # Assign each personnel to a random establishment (one-to-one)
+        etablissement = random.choice(etablissements)
         etablissement_personnel_medical.objects.create(
-            id = fake.uuid4(),
-            etablissement = random.choice(Etablissement.objects.all()),
-            personnel_medical = random.choice(PersonnelMedical.objects.all())
+            id=fake.uuid4(),
+            etablissement=etablissement,
+            personnel_medical=personnel
         )
+
+    # Rest of your seeding code remains the same
     for _ in range(10):
         Mutuelle.objects.create(
-            id = fake.uuid4(),
-            nom = fake.company(),
-            numero_adherent = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
-            type_couverture = fake.word(),
-            telephone = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            id=fake.uuid4(),
+            nom=fake.company(),
+            numero_adherent=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            type_couverture=fake.word(),
+            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
         )
-    for _ in range(100):
-        Patient.objects.create(
-            id = fake.uuid4(),
-            nss = ''.join([str(random.randint(0, 9)) for _ in range(10)]),
-            nom_complet = fake.name(),
-            date_naissance = fake.date_of_birth(),
-            adresse = fake.address(),
-            telephone = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
-            email = fake.email(),
-            password = fake.password(),
-            mutuelle = random.choice(Mutuelle.objects.all())
+    patients = []
+    for _ in range(20):
+        patient = Patient.objects.create(
+            id=fake.uuid4(),
+            nss=''.join([str(random.randint(0, 9)) for _ in range(10)]),
+            nom_complet=fake.name(),
+            date_naissance=fake.date_of_birth(),
+            adresse=fake.address(),
+            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            email=fake.email(),
+            password=fake.password(),
+            mutuelle=random.choice(Mutuelle.objects.all())
         )
+        patients.append(patient)
+        
+        # Create one DPI per patient
+        DPI.objects.create(
+            id=fake.uuid4(),
+            date_creation=fake.date(),
+            patient=patient  # Directly associate with the just-created patient
+        )
+
     for _ in range(20):
         Contact.objects.create(
             id = fake.uuid4(),
@@ -68,12 +113,7 @@ def seed_database_func ():
             adresse = fake.address(),
             patient = random.choice(Patient.objects.all())
         ) 
-    for _ in range(5):
-        DPI.objects.create(
-            id = fake.uuid4(),
-            date_creation = fake.date(),
-            patient = random.choice(Patient.objects.all())
-        ) 
+
     for _ in range(20):
         Antecedent.objects.create(
             id = fake.uuid4(),
@@ -173,6 +213,7 @@ def seed_database_func ():
 @api_view(["POST"])
 def seed_database (request):
     try:
+        clean_database()
         for _ in range(2):
             seed_database_func()
         return Response({
@@ -184,3 +225,17 @@ def seed_database (request):
             "status": "error",
             "message" : str(e)},
             status=500)
+@api_view(["DELETE"]) 
+def deleteBDD(request):
+    try:
+        clean_database()
+        return ({
+            "status" : 200,
+            "message":"BDD deleted successfully"
+        })
+
+    except Exception as e:
+        return Response({
+            "status":"error",
+            "message":str(e)
+        } , status=500)    
