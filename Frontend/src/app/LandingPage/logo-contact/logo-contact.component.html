@@ -1,0 +1,40 @@
+<div class="bg-[#F3F8FF]">
+    <div class="w-full h-[350px] flex flex-col items-center justify-start bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] rounded-t-[70px]">
+      <div class="w-full flex justify-between p-10 mt-[30px]">
+        <div class="flex-1 mr-[300px]">
+          <h1 class="Medtech-logo"> MedTech logo </h1>
+          <p class="location">8 W. South St. Buford, GA 30518<br>5 Briarwood Lane, Vienna, VA 22180 RER</p>
+        </div>
+        <div class="flex-1 w-full flex justify-between">
+          <div class="flex-1">
+            <h1 class="title-inf"> Company info </h1> 
+            <div class="mt-4"></div>
+            <a href="" class="inf ">About</a> <br> 
+            <div class="mt-4"></div>
+            <a href="" class="inf">Services</a> <br>
+            <div class="mt-4"></div>
+            <a href="" class="inf">Blog</a>
+          </div>
+          <div class="flex-1 relative">
+            <h1 class="title-inf"> Contact info </h1>
+            <div class="mt-4"></div>
+            <p class="phone-number cursor-pointer text-white font-poppins-thin text-[16px] " (click)="copyToClipboard('+1 123456789')">+1 123456789</p>
+            <div class="mt-4"></div>
+            <p class="gmail cursor-pointer text-white font-poppins-thin text-[16px] " (click)="copyToClipboard('IGL_UI@gmail.com')">IGL_UI&#64;gmail.com</p>
+            <div class="mt-4"></div>
+            <p class="phone cursor-pointer text-white font-poppins-thin text-[16px] " (click)="copyToClipboard('+1 12345678')">Phone: +1 12345678</p>
+            
+            <!-- Notification -->
+            <div
+              *ngIf="copied"
+              class="absolute top-[-20px] right-0 px-4 py-2 bg-white text-black text-sm rounded-lg shadow-md transition-opacity duration-300"
+            >
+              Text copied!
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-8 text-white font-poppins-thin text-[18px]">© MedTech all rights 2023 - Designed by Equipe IGL 24/25</p>
+    </div>
+  </div>
+  

@@ -1,0 +1,22 @@
+
+/* Flexbox container for the image section */
+.image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tailwind-based text style */
+.solution-text {
+    @apply text-[58px] font-poppins text-[#0C2757] mb-6 font-bold;
+    transition: all 0.3s ease-in-out; /* Apply smooth transition */
+}
+
+/* Text hover effect */
+.solution-text:hover {
+    color: #3A8EF6; /* Change text color to blue */
+    transform: translateY(-5px); /* Subtle upward movement for a floating effect */
+    text-shadow: 0px 4px 6px rgba(58, 142, 246, 0.3); /* Soft shadow effect */
+}
+
+
