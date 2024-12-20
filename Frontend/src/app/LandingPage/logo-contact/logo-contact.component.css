@@ -2,5 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-}
+    .Medtech-logo {
+     @apply   text-white font-bold font-poppins text-[50px] ;
+
+    }
+    
+    .location {
+        @apply text-[16px] text-white italic font-poppins-thin mt-[35px];
+    }
+
+    .title-inf{
+        @apply  text-white font-poppins text-[20px] 
+      }
+
+      .inf{
+        @apply  text-white font-poppins-thin text-[16px] 
+      }
+    
+   .copied-notification {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .copied-notification.ng-leave {
+    opacity: 0;
+  }
+  
