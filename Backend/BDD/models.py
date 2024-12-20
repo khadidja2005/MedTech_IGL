@@ -44,7 +44,7 @@ class Patient(models.Model):
     telephone = models.IntegerField()
     email = models.EmailField(max_length=100)
     password = models.CharField(max_length=100)
-    lieunPhoto = models.URLField()
+    lienPhoto = models.URLField()
     lieu_naissance = models.CharField(max_length= 100)
     genre = models.CharField(max_length= 100)
     statueMatrimonial = models.CharField(max_length= 100)
@@ -74,7 +74,7 @@ class DPI (models.Model):
 class Antecedent (models.Model):
     id = models.CharField(max_length=100 , primary_key=True)
     type = models.CharField(max_length=100)
-    nom = models.CharField(max=100)
+    nom = models.CharField(max_length=50)
     description = models.TextField()
     date_debut = models.DateField()
     date_fin = models.DateField()
@@ -88,6 +88,7 @@ class Hospitalisation(models.Model):
 class Consultation (models.Model):
     id = models.CharField(max_length=100 , primary_key=True)
     resume = models.TextField()
+    date = models.DateField()
     Hospitalisation = models.ForeignKey(Hospitalisation , on_delete=models.CASCADE)
     Medecin = models.ForeignKey(PersonnelMedical , on_delete=models.CASCADE)
 class Ordonnance(models.Model):
@@ -120,14 +121,6 @@ class Soins (models.Model):
     dose = models.CharField(max_length=100)
     hospitalisation = models.ForeignKey(Hospitalisation , on_delete=models.CASCADE)
     infermier = models.ForeignKey(PersonnelMedical , on_delete=models.SET_NULL , null=True)
-class ResultatBio(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    valeur_mesure = models.CharField(max_length=100)
-    date_mesure = models.DateField()
-    heure_mesure = models.TimeField()
-    parametre = models.CharField(max_length=100)
-    norme = models.CharField(max_length=50)
-    laborantin = models.ForeignKey(PersonnelMedical , on_delete=models.CASCADE)
 class BilanBio (models.Model):
     id = models.CharField(max_length= 100 , primary_key=True)
     date_debut = models.DateField()
@@ -137,8 +130,15 @@ class BilanBio (models.Model):
     est_resultat = models.BooleanField(default=False)
     medecin = models.ForeignKey(PersonnelMedical , on_delete=models.CASCADE)
     Consultation = models.ForeignKey(Consultation , on_delete=models.SET_NULL , null=True)
-    resultat_id = models.ForeignKey(ResultatBio , on_delete= models.CASCADE)
-
+class ResultatBio(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    valeur_mesure = models.CharField(max_length=100)
+    date_mesure = models.DateField()
+    heure_mesure = models.TimeField()
+    parametre = models.CharField(max_length=100)
+    norme = models.CharField(max_length=50)
+    bilan_bio = models.ForeignKey(BilanBio , on_delete=models.CASCADE)
+    laborantin = models.ForeignKey(PersonnelMedical , on_delete=models.CASCADE)
 class ResultatRadio (models.Model):  
     id = models.CharField(max_length=100 , primary_key=True)
     description = models.TextField()

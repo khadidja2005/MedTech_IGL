@@ -40,6 +40,7 @@ def seed_database_func ():
             adresse=fake.address(),
             telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
             email=fake.email(),
+            type = fake.word(),
         )
         etablissements.append(etablissement)
 
@@ -50,6 +51,7 @@ def seed_database_func ():
             nom_complet=fake.name(),
             email=fake.email(),
             password=fake.password(),
+            lienPhoto = fake.url(),
         )
 
     # Create medical personnel and link to establishments without duplicates
@@ -61,7 +63,8 @@ def seed_database_func ():
             email=fake.email(),
             telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
             password=fake.password(),
-            role=random.choice(['MEDECIN', 'INFIRMIER', 'PHARMACIEN', 'RADIOLOGUE', 'LABORANTIN'])
+            role=random.choice(['MEDECIN', 'INFIRMIER', 'PHARMACIEN', 'RADIOLOGUE', 'LABORANTIN']),
+            lienPhoto = fake.url(),
         )
         personnel_list.append(personnel)
         
@@ -73,15 +76,6 @@ def seed_database_func ():
             personnel_medical=personnel
         )
 
-    # Rest of your seeding code remains the same
-    for _ in range(10):
-        Mutuelle.objects.create(
-            id=fake.uuid4(),
-            nom=fake.company(),
-            numero_adherent=''.join([str(random.randint(0, 9)) for _ in range(5)]),
-            type_couverture=fake.word(),
-            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
-        )
     patients = []
     for _ in range(20):
         patient = Patient.objects.create(
@@ -93,17 +87,25 @@ def seed_database_func ():
             telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
             email=fake.email(),
             password=fake.password(),
-            mutuelle=random.choice(Mutuelle.objects.all())
         )
-        patients.append(patient)
-        
+        patients.append(patient)     
         # Create one DPI per patient
         DPI.objects.create(
             id=fake.uuid4(),
             date_creation=fake.date(),
-            patient=patient  # Directly associate with the just-created patient
+            patient=patient ,  # Directly associate with the just-created patient
+            etablissement_id= random.choice(Etablissement.objects.all())
         )
-
+    for _ in range(10):
+        Mutuelle.objects.create(
+            id=fake.uuid4(),
+            nom=fake.company(),
+            numero_adherent=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            type_couverture=fake.word(),
+            telephone=''.join([str(random.randint(0, 9)) for _ in range(5)]),
+            patient_id = random.choice(Patient.objects.all()),
+            email = fake.email(),
+        )  
     for _ in range(20):
         Contact.objects.create(
             id = fake.uuid4(),
@@ -111,37 +113,44 @@ def seed_database_func ():
             relation = fake.word(),
             telephone = ''.join([str(random.randint(0, 9)) for _ in range(5)]),
             adresse = fake.address(),
-            patient = random.choice(Patient.objects.all())
+            patient = random.choice(Patient.objects.all()),
+            email = fake.email(),
         ) 
 
     for _ in range(20):
         Antecedent.objects.create(
             id = fake.uuid4(),
             type = fake.word(),
+            nom = fake.word(),
             description = fake.text(),
             date_debut = fake.date(),
             date_fin = fake.date(),
-            patient = random.choice(Patient.objects.all())
+            DPI_id = random.choice(DPI.objects.all())
         ) 
+
+    medecins = PersonnelMedical.objects.filter(role = "MEDECIN")
     for _ in range(30):
         Hospitalisation.objects.create(
             id = fake.uuid4(),
             date_debut = fake.date(),
             date_fin = fake.date(),
-            DPI = random.choice(DPI.objects.all())
+            DPI = random.choice(DPI.objects.all()),
+            medecin_responsable = random.choice(medecins)
         )
-    medecins = PersonnelMedical.objects.filter(role = "MEDECIN")
     for _ in range(30):
         Consultation.objects.create(
             id = fake.uuid4(),
+            date = fake.date(),
             resume = fake.text(),
             Medecin = random.choice(medecins),
             Hospitalisation = random.choice(Hospitalisation.objects.all())
         )
+    pharmacien = PersonnelMedical.objects.filter(role = "PHARMACIEN")
     for _ in range(30):
         Ordonnance.objects.create(
             id = fake.uuid4(),
             date = fake.date(), 
+            pharmacien_id = random.choice(pharmacien),
             estValide = fake.boolean(),
             consultation = random.choice(Consultation.objects.all())
         )   
@@ -166,17 +175,18 @@ def seed_database_func ():
             dose=f"{random.randint(1, 1000)}mg",
             medicament = fake.word(),
             description = fake.text(),
-        )
-    for _ in range(10):
+        )       
+    for _ in range(15):
         BilanBio.objects.create(
             id = fake.uuid4(),
             date_debut  = fake.date(),
             date_fin = fake.date(),
             parametres = fake.text(),
             est_complet = fake.boolean(),
+            est_resultat = fake.boolean(),
             medecin = random.choice(medecins),
             Consultation = random.choice(Consultation.objects.all())
-        )
+        )   
     laborantins = PersonnelMedical.objects.filter(role = "LABORANTIN")
     for _ in range (10):
         ResultatBio.objects.create(
@@ -184,11 +194,23 @@ def seed_database_func ():
             date_mesure = fake.date(),
             heure_mesure = fake.time(),
             parametre = fake.word(),
-            bilan_bio = random.choice(BilanBio.objects.all()),
             laborantin = random.choice(laborantins),
-            valeur_mesure = f"{random.randint(1, 100)} {random.choice(['mg/dL', 'mmol/L', 'g/L'])}"
-        )
-    for _ in range ( 10):
+            valeur_mesure = f"{random.randint(1, 100)} {random.choice(['mg/dL', 'mmol/L', 'g/L'])}",
+            bilan_bio = random.choice(BilanBio.objects.all()),
+            norme = fake.word()
+        )          
+    radiologues = PersonnelMedical.objects.filter(role = "RADIOLOGUE")
+    for _ in range (20):
+        ResultatRadio.objects.create(
+            id = fake.uuid4(),
+            piece_jointe = fake.file_name(),
+            compte_rendu = fake.text(),
+            date = fake.date(),
+            radiologue_compte_rendu = random.choice(radiologues),
+            description = fake.text(),
+            radiologue = random.choice(radiologues),
+        ) 
+    for _ in range ( 15):
         BilanRadio.objects.create(
             id = fake.uuid4(),
             date_debut = fake.date(),
@@ -196,20 +218,11 @@ def seed_database_func ():
             type_radio=random.choice(['RADIO', 'SCANNER', 'IRM']),
             Consultation = random.choice(Consultation.objects.all()),
             medecin = random.choice(medecins),
-            est_complet = fake.boolean(),
-        )
-    radiologues = PersonnelMedical.objects.filter(role = "RADIOLOGUE")
-    for _ in range (10):
-        ResultatRadio.objects.create(
-            id = fake.uuid4(),
-            piece_jointe = fake.file_name(),
-            test = fake.text(),
-            est_valide = fake.boolean(),
-            radiologue_compte_rendu = random.choice(radiologues),
             description = fake.text(),
-            bilan_radio = random.choice(BilanRadio.objects.all()),
-            radiologue = random.choice(radiologues),
-        )    
+            est_complet = fake.boolean(),
+            est_resultat = fake.boolean(),
+            resultat_id = random.choice(ResultatRadio.objects.all())
+        )           
 @api_view(["POST"])
 def seed_database (request):
     try:
