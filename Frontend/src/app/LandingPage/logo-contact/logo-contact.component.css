@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-    .Medtech-logo {
+@layer components {
+   .Medtech-logo {
      @apply   text-white font-bold font-poppins text-[50px] ;
 
     }
@@ -19,12 +20,11 @@
         @apply  text-white font-poppins-thin text-[16px] 
       }
     
-   .copied-notification {
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out;
-  }
-  
-  .copied-notification.ng-leave {
-    opacity: 0;
-  }
-  
+      .copied-notification {
+        @apply opacity-100 transition-opacity duration-500 ease-in-out;
+      }
+      
+      .copied-notification.ng-leave {
+        @apply opacity-0;
+      }
+    }

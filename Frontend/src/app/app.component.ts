@@ -1,19 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './LandingPage/header/header.component';
-import { MainContentComponent } from './LandingPage/main-content/main-content.component';
-import { AdvantagesComponent } from './LandingPage/advantages/advantages.component';
-import {MedtechDefComponent} from './LandingPage/medtech-def/medtech-def.component';
-import {RetoursComponent} from './LandingPage/retours/retours.component'
-import { CommonModule } from '@angular/common'; 
-import {ContactComponent} from './LandingPage/contact/contact.component';
-import { FormsModule } from '@angular/forms';
-import {LogoContactComponent} from './LandingPage/logo-contact/logo-contact.component';
+import {LandingPageComponent} from './LandingPage/landing-page/landing-page.component';
 
 @Component({
   selector: 'app-root',
   standalone: true, 
-  imports: [RouterOutlet, HeaderComponent, MainContentComponent, AdvantagesComponent, MedtechDefComponent, RetoursComponent, CommonModule, ContactComponent, FormsModule , LogoContactComponent ],  
+  imports: [RouterOutlet,LandingPageComponent],  
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
