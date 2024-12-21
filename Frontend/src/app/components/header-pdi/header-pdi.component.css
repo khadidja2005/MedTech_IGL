@@ -5,8 +5,35 @@
 @layer components {
   .header {
     @apply bg-white;
-    box-shadow: 0px 5px 11.7px 4px rgba(65, 132, 247, 0.2);
-    backdrop-filter: blur(30px); 
+  }
+
+  /* Custom shadow position */
+  .header-shadow {
+    position: relative;
+  }
+
+  /* First shadow (from left to 210px) */
+  .header-shadow::before {
+    content: '';
+    position: absolute;
+    bottom: -4px; /* Align with the second shadow */
+    left: 0;
+    width: 210px; /* Fixed width instead of right property */
+    height: 0.5px;
+    box-shadow: 0px 2px 2px rgba(65, 132, 247, 0.2);
+    z-index: -1;
+  }
+
+  /* Second shadow (from 210px to right) */
+  .header-shadow::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 210px; /* Start exactly where the first shadow ends */
+    right: 0;
+    height: 4px;
+    box-shadow: 0px 6px 12px rgba(65, 132, 247, 0.3);
+    z-index: -1;
   }
 
   .logo {
