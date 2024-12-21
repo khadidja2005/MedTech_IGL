@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .header {
+    @apply bg-white;
+    box-shadow: 0px 5px 11.7px 4px rgba(65, 132, 247, 0.2);
+    backdrop-filter: blur(30px); 
+  }
+
+  .logo {
+    @apply font-poppins font-semibold text-[45px] leading-[60px] text-[#0C2757];
+  }
+
+  .doctor-image {
+    @apply object-cover w-[60px] h-[60px] rounded-full border-4 border-[#3A8EF6];
+  }
+
+  .doctor-name {
+    @apply text-[25px] font-bold text-[#0C2757] font-poppins;
+  }
+
+  .admin {
+    @apply text-[18px] text-[#3A8EF6] font-poppins;
+  }
+}
