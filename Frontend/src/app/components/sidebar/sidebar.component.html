@@ -1,0 +1,18 @@
+<div class="sidebar">
+  <ul class="menu">
+    <li *ngFor="let item of filteredItems">
+      <a [href]="item.link"  class="menu-item">
+        <img [src]="item.icon" alt="{{ item.label }}" class="icon" />
+        <span>{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+  <ul class="footer">
+    <li *ngFor="let item of filteredfooterItems">
+      <a [href]="item.link"  class="menu-item">
+        <img [src]="item.icon" alt="{{ item.label }}" class="icon" />
+        <span>{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+</div>
