@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="code.component.css">
+  <title>Restaurer Mot de Passe</title>
+</head>
+<body>
+  <!-- Barre de navigation -->
+  <header class="top-bar">
+    <div class="logo">
+      <h1>MedTech</h1>
+    </div>
+    <nav class="navbar">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#service">Service</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Formulaire de restauration du mot de passe -->
+  <div class="login-container">
+    <h2 class="title">Restaurer Mot de Passe</h2>
+    <p class="subtitle">Entrer le code envoyé vers le email <strong>emaill</strong></p>
+
+    <!-- Zone d'entrée pour le code -->
+    <div class="code-inputs">
+      <input type="text" maxlength="1" class="code-box">
+      <input type="text" maxlength="1" class="code-box">
+      <input type="text" maxlength="1" class="code-box">
+      <input type="text" maxlength="1" class="code-box">
+    </div>
+
+    <!-- Lien pour réenvoyer le code -->
+    <a href="#" class="resend-link">réenvoyer le code</a>
+
+    <!-- Bouton vérifier -->
+    <button  type="button" class="btn-primary" (click)="gotosauvegarde()" > vérifier </button>
+
+
+    <!-- Lien annuler -->
+    <p class="cancel-text">
+      <a href="#" class="cancel-link">Annuler</a>
+    </p>
+  </div>
+</body>
+</html>

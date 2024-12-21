@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Patient</title>
+  <link rel="stylesheet" href="recherche.component.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu latéral -->
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><i class="icon">🏥</i> Établissements</li>
+        <li><i class="icon">👨‍💼</i> Employés</li>
+        <li><i class="icon">📁</i> DPIs</li>
+      </ul>
+      <div class="menu-bottom">
+        <ul>
+          <li><i class="icon">💾</i> Contrôle de BDD</li>
+          <li><i class="icon">🔓</i> Se déconnecter</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <header class="top-bar">
+        <span class="brand">Medtech</span>
+        <div class="user-info">
+          <div class="user-details">
+            <span class="user-name">Mina Khelifi</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <img src="user-avatar.png" alt="Avatar" class="avatar">
+        </div>
+      </header>
+
+      <!-- Section de recherche -->
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher un dossier médical">
+        <button class="btn-search">🔍</button>
+      </div>
+
+      <!-- Résumé des dossiers -->
+      <div class="content-header">
+        <p>Il existe 200 dossiers médicaux</p>
+        <button class="btn-add" (click)="gotoajoutdpi()">+ Ajouter un dossier médical</button>
+      </div>
+
+      <!-- Cartes des dossiers -->
+      <div class="dossier-grid">
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 1</p>
+          <p class="dossier-id">01245689999941569</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 2</p>
+          <p class="dossier-id">01245689999941570</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 3</p>
+          <p class="dossier-id">01245689999941571</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 4</p>
+          <p class="dossier-id">01245689999941572</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 5</p>
+          <p class="dossier-id">01245689999941573</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+        <div class="dossier-card">
+          <p class="dossier-name">Patient 6</p>
+          <p class="dossier-id">01245689999941574</p>
+          <p class="dossier-establishment">Établissement</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page">1</button>
+        <button class="page">2</button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

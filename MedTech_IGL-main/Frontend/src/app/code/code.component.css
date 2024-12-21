@@ -1,0 +1,148 @@
+/* Barre de navigation */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    color: #0C2757;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .top-bar .logo h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .top-bar .navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .top-bar .navbar ul li {
+    margin: 0 15px;
+  }
+  
+  .top-bar .navbar ul li a {
+    color: gray;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: normal;
+    transition: color 0.3s ease;
+  }
+  
+  .top-bar .navbar ul li a:hover {
+    color: #3A8EF6;
+  }
+  
+  /* Conteneur principal */
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    max-width: 400px;
+    margin: 120px auto 0;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8faff;
+  }
+  
+  /* Titre principal */
+  .title {
+    font-size: 24px;
+    color: #0C2757;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  /* Sous-titre */
+  .subtitle {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Zone d'entrée pour le code */
+  .code-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .code-box {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #3A8EF6;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #EEF2F8;
+    color: #0C2757;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .code-box:focus {
+    border-color: #6F3AFA;
+    box-shadow: 0 0 5px rgba(111, 58, 250, 0.5);
+  }
+  
+  /* Lien pour réenvoyer le code */
+  .resend-link {
+    font-size: 14px;
+    color: #3A8EF6;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  
+  .resend-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Bouton vérifier */
+  .btn-primary {
+    width: 60%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3A8EF6, #6F3AFA);
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #6F3AFA, #3A8EF6);
+  }
+  
+  /* Lien annuler */
+  .cancel-text {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .cancel-link {
+    color: #6c757d;
+    text-decoration: none;
+  }
+  
+  .cancel-link:hover {
+    text-decoration: underline;
+  }
+  
