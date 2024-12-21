@@ -17,7 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from BDD.urls import urlpatterns as bdd_urls
+from ControlBDD.urls import urlpatterns as control_bdd_urls
+from DashboardAdmin.urls import urlpatterns as dashboard_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(bdd_urls)),
+    path('control/', include(control_bdd_urls)),
+    path("dashboard/" , include(dashboard_urls))
 ]

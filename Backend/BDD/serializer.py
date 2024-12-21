@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import (
     Etablissement, Admin, PersonnelMedical, Mutuelle, Patient, Contact,
     Antecedent, DPI, Hospitalisation, Consultation, Ordonnance, Medicament,
-    Soins, BilanBio, ResultatBio, BilanRadio, ResultatRadio
+    Soins, BilanBio, ResultatBio, BilanRadio, ResultatRadio , etablissement_personnel_medical
 )
 
 class EtablissementSerializer(serializers.ModelSerializer):
@@ -53,7 +53,10 @@ class DPISerializer(serializers.ModelSerializer):
     class Meta:
         model = DPI
         fields = '__all__'
-
+class EtablissementPersonnelMedicalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = etablissement_personnel_medical
+        fields = '__all__'
 class HospitalisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospitalisation
