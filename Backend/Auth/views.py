@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
-from .models import Admin, PersonnelMedical
-from .serializers import AdminSerializer, PersonnelMedicalSerializer
+from .models import Admin, PersonnelMedical, Patient
+from .serializers import AdminSerializer, PersonnelMedicalSerializer, PatientSerializer
 from django.contrib.auth.hashers import make_password, check_password
 from hashlib import pbkdf2_hmac
 from os import urandom
@@ -59,6 +59,11 @@ class LoginView(APIView):
         if personnel and verify_password(password, personnel.password):
             return Response({"id": personnel.id, "role": personnel.role, "message": "Login successful"}, status=status.HTTP_200_OK)
 
+        # Vérification dans la table Patient
+        patient = Patient.objects.filter(email=email).first()
+        if patient and verify_password(password, patient.password):
+            return Response({"id": patient.id, "role": "patient", "message": "Login successful"}, status=status.HTTP_200_OK)
+
         return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class ForgotPasswordView(APIView):
@@ -81,6 +86,14 @@ class ForgotPasswordView(APIView):
             self.send_email(email, code)
             return Response({"message": "Reset code sent to your email"}, status=status.HTTP_200_OK)
 
+        # Recherche dans la table Patient
+        patient = Patient.objects.filter(email=email).first()
+        if patient:
+            code = get_random_string(length=4, allowed_chars='0123456789')
+            RESET_CODES[email] = code
+            self.send_email(email, code)
+            return Response({"message": "Reset code sent to your email"}, status=status.HTTP_200_OK)
+
         return Response({"error": "Email not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def send_email(self, email, code):
@@ -98,7 +111,7 @@ class ForgotPasswordView(APIView):
         </body>
         </html>
         """
-        send_mail(subject, message, 'no-reply@medtech.com', [email], fail_silently=False, html_message=html_message)
+        send_mail(subject, message, 'ms_namoune@esi.dz', [email], fail_silently=False, html_message=html_message)
 
 class VerifyResetCodeView(APIView):
     def post(self, request):
@@ -136,6 +149,14 @@ class ResetPasswordView(APIView):
         if personnel:
             personnel.password = custom_hash_password(new_password)
             personnel.save()
+            del RESET_CODES[email]
+            return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
+
+        # Met à jour le mot de passe dans la table Patient
+        patient = Patient.objects.filter(email=email).first()
+        if patient:
+            patient.password = custom_hash_password(new_password)
+            patient.save()
             del RESET_CODES[email]
             return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
 

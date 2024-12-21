@@ -30,3 +30,15 @@ class PersonnelMedical(models.Model):
         if not self.password.startswith("$pbkdf2-sha256$"):
             self.password = make_password(self.password)
         super().save(*args, **kwargs)
+
+# New Patient Model
+class Patient(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    nom_complet = models.CharField(max_length=200)
+    email = models.EmailField(max_length=100, unique=True)
+    password = models.CharField(max_length=256)
+
+    def save(self, *args, **kwargs):
+        if not self.password.startswith("$pbkdf2-sha256$"):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)

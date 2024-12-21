@@ -20,5 +20,11 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('Auth.urls')),  # Assure-toi d'inclure l'URL de l'application Auth
+    path('laboratoire/', include('LaboratoireRadiologi.urls')),  # Ajoute les routes de LaboratoireRadiologi
+    path('ordonnances/', include('Ordonnances.urls')),  # Ajoute les routes de Ordonnances
+    path('consultations/', include('Consultations.urls')),  # Ajoute les routes de Consultations
+    path('parametres/', include('Parametres.urls')), # Ajoute les routes de Parametres
+    path('etablissements/', include('Etablissements.urls')),  # Ajoute les routes de Etablissements
+    path('pharmacie/',include('Pharmacie.urls')), # Ajoute les routes de Pharmacie
     # Ajoute ici toutes les autres routes de ton API
 ]

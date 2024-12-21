@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+import logging
+import sys
+print(f"DJANGO_SETTINGS_MODULE: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +49,7 @@ INSTALLED_APPS = [
     'BDD',
     'rest_framework',
     'Auth',
+    'django_extensions',
 
 ]
 
@@ -134,11 +144,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # settings.py
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Si tu utilises Gmail
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ms_namoune@esi.dz'  # Remplace par ton adresse email
-EMAIL_HOST_PASSWORD = 'Saad2004@*'  # Remplace par ton mot de passe d'email
-DEFAULT_FROM_EMAIL = 'no-reply@medtech.com'
+EMAIL_HOST_USER = 'ms_namoune@esi.dz'
+EMAIL_HOST_PASSWORD = 'Saad2004@*'
+DEFAULT_FROM_EMAIL = 'ms_namoune@esi.dz'
