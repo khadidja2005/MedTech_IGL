@@ -25,7 +25,7 @@
 
 /* Footer section */
 .footer {
-  @apply border-t border-second;
+  @apply border-none;
 }
 
 .footer .menu-item {
