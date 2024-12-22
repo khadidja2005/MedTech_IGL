@@ -21,12 +21,14 @@ from ControlBDD.urls import urlpatterns as control_bdd_urls
 from DashboardAdmin.urls import urlpatterns as dashboard_urls
 from DPI.urls import urlpatterns as dpi_urls
 from Soins.urls import urlpatterns as soins_urls
+from Cloudinary.urls import urlpatterns as cloudinary_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(bdd_urls)),
     path('control/', include(control_bdd_urls)),
     path("dashboard/" , include(dashboard_urls)),
     path('dpi/', include(dpi_urls)),
-    path('soins/', include(soins_urls))
+    path('soins/', include(soins_urls)),
+    path('cloudinary/', include(cloudinary_urls)),
 
 ]
