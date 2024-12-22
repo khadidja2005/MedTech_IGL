@@ -15,10 +15,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path , include
+from BDD.urls import urlpatterns as bdd_urls
+from ControlBDD.urls import urlpatterns as control_bdd_urls
+from DashboardAdmin.urls import urlpatterns as dashboard_urls
+from DPI.urls import urlpatterns as dpi_urls
+from Soins.urls import urlpatterns as soins_urls
+from Cloudinary.urls import urlpatterns as cloudinary_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(bdd_urls)),
+    path('control/', include(control_bdd_urls)),
+    path("dashboard/" , include(dashboard_urls)),
+    path('dpi/', include(dpi_urls)),
+    path('soins/', include(soins_urls)),
+    path('cloudinary/', include(cloudinary_urls)),
+    path('auth/', include('Auth.urls')),  # Assure-toi d'inclure l'URL de l'application Auth
+    path('laboratoire/', include('LaboratoireRadiologi.urls')),  # Ajoute les routes de LaboratoireRadiologi
+    path('ordonnances/', include('Ordonnances.urls')),  # Ajoute les routes de Ordonnances
+    path('consultations/', include('Consultations.urls')),  # Ajoute les routes de Consultations
+    path('parametres/', include('Parametres.urls')), # Ajoute les routes de Parametres
+    path('etablissements/', include('Etablissements.urls')),  # Ajoute les routes de Etablissements
+    path('pharmacie/',include('Pharmacie.urls')), # Ajoute les routes de Pharmacie
     path('auth/', include('Auth.urls')),  # Assure-toi d'inclure l'URL de l'application Auth
     path('laboratoire/', include('LaboratoireRadiologi.urls')),  # Ajoute les routes de LaboratoireRadiologi
     path('ordonnances/', include('Ordonnances.urls')),  # Ajoute les routes de Ordonnances

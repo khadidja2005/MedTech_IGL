@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from .models import (
     Etablissement, Admin, PersonnelMedical, Mutuelle, Patient, Contact,
     Antecedent, DPI, Hospitalisation, Consultation, Ordonnance, Medicament,
-    Soins, BilanBio, ResultatBio, BilanRadio, ResultatRadio
+    Soins, BilanBio, ResultatBio, BilanRadio, ResultatRadio , etablissement_personnel_medical
 )
 from .serializer import (
     EtablissementSerializer, AdminSerializer, PersonnelMedicalSerializer,
@@ -12,7 +12,7 @@ from .serializer import (
     ContactSerializer, AntecedentSerializer, DPISerializer,
     HospitalisationSerializer, ConsultationSerializer, OrdonnanceSerializer,
     MedicamentSerializer, SoinsSerializer, BilanBioSerializer,
-    ResultatBioSerializer, BilanRadioSerializer, ResultatRadioSerializer
+    ResultatBioSerializer, BilanRadioSerializer, ResultatRadioSerializer , EtablissementPersonnelMedicalSerializer
 )
 
 class EtablissementViewSet(viewsets.ModelViewSet):
@@ -83,6 +83,10 @@ class DPIViewSet(viewsets.ModelViewSet):
     serializer_class = DPISerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class EtablissementPersonnelMedicalViewSet(viewsets.ModelViewSet):
+    queryset = etablissement_personnel_medical.objects.all()
+    serializer_class = EtablissementPersonnelMedicalSerializer
+    permission_classes = [permissions.IsAuthenticated]
 class HospitalisationViewSet(viewsets.ModelViewSet):
     queryset = Hospitalisation.objects.all()
     serializer_class = HospitalisationSerializer
