@@ -68,7 +68,7 @@ class Contact(models.Model):
 class DPI (models.Model):
     id = models.CharField(max_length=100 , primary_key=True)
     date_creation = models.DateField()
-    patient = models.OneToOneField(Patient , on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient , on_delete=models.CASCADE)
     etablissement_id = models.ForeignKey(Etablissement , on_delete= models.CASCADE)
     createur_id = models.ForeignKey(Admin , on_delete=models.SET_NULL , null=True)
 class Antecedent (models.Model):

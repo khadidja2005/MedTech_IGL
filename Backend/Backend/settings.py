@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'BDD',
     'rest_framework',
     'ControlBDD',
-    'Auth'
+    'Auth',
+    "DPI",
 
 ]
 

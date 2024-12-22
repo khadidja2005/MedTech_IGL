@@ -19,9 +19,14 @@ from django.urls import path , include
 from BDD.urls import urlpatterns as bdd_urls
 from ControlBDD.urls import urlpatterns as control_bdd_urls
 from DashboardAdmin.urls import urlpatterns as dashboard_urls
+from DPI.urls import urlpatterns as dpi_urls
+from Soins.urls import urlpatterns as soins_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(bdd_urls)),
     path('control/', include(control_bdd_urls)),
-    path("dashboard/" , include(dashboard_urls))
+    path("dashboard/" , include(dashboard_urls)),
+    path('dpi/', include(dpi_urls)),
+    path('soins/', include(soins_urls))
+
 ]
