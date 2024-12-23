@@ -1,6 +1,6 @@
-export type TypeSoins = 'INFIRMIER' | 'RADIO' | 'LABO';
+export type TypeSoins = 'SOIN INFERMIER' | 'OBSERVATION DETAT' | 'ADMINISTRATION DE MEDICAMENT' | 'AUTRE';
 
-export interface Soins {
+export class Soins {
     id: string;
     date: string; // ISO date string
     heure: string; // ISO time string
