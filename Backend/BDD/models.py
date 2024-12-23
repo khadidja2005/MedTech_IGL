@@ -20,7 +20,7 @@ class Admin(models.Model):
 
 class PersonnelMedical(models.Model):
     class RoleChoices(models.TextChoices):
-        MEDECIN = "MEDECIN", "Médecin"
+        MEDECIN = "MEDECIN", "Medecin"
         RADIOLOGUE = "RADIOLOGUE", "Radiologue"
         LABORANTIN = "LABORANTIN", "Laborantin"
         INFIRMIER = "INFIRMIER", "Infirmier"
