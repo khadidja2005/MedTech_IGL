@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "Soins",
     "Cloudinary",
     "Recherche",
+    "Hospitalisation",
 
 ]
 

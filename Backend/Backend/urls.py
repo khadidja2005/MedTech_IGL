@@ -23,6 +23,7 @@ from DPI.urls import urlpatterns as dpi_urls
 from Soins.urls import urlpatterns as soins_urls
 from Cloudinary.urls import urlpatterns as cloudinary_urls
 from Recherche.urls import urlpatterns as recherche_urls
+from Hospitalisation.urls import urlpatterns as hospitalisation_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(bdd_urls)),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('soins/', include(soins_urls)),
     path('cloudinary/', include(cloudinary_urls)),
     path('recherche/', include(recherche_urls)),
+    path('hospitalisation/', include(hospitalisation_urls)),
 ]
