@@ -26,6 +26,7 @@ from Cloudinary.urls import urlpatterns as cloudinary_urls
 from Recherche.urls import urlpatterns as recherche_urls
 from Hospitalisation.urls import urlpatterns as hospitalisation_urls
 from BilanBio.urls import urlpatterns as bilan_bio_urls
+from ArchivePharmacie.urls import urlpatterns as archive_pharmacie_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -38,4 +39,5 @@ urlpatterns = [
     path("recherche/", include(recherche_urls)),
     path("hospitalisation/", include(hospitalisation_urls)),
     path("bilanbio/", include(bilan_bio_urls)),
+    path("pharmacie/archive", include(archive_pharmacie_urls)),
 ]
