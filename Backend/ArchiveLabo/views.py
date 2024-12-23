@@ -5,46 +5,45 @@ from django.views.decorators.http import require_http_methods
 from BDD.models import (
     PersonnelMedical,
     etablissement_personnel_medical,
-    Ordonnance,
+    BilanBio,
 )
 
 
 @csrf_exempt
 @require_http_methods(["GET"])
-def archive_pharmacie(request):
+def archive_labo(request):
     if request.method == "GET":
         data = json.loads(request.body)
-        pharmacien = data.get("pharmacien")
+        laborantin = data.get("laborantin")
         try:
-            pharmacien = PersonnelMedical.objects.get(id=pharmacien)
+            laborantin = PersonnelMedical.objects.get(id=laborantin)
         except PersonnelMedical.DoesNotExist:
-            return JsonResponse({"error": "Pharmacien not found"}, status=404)
-        if pharmacien.role != "PHARMACIEN":
-            return JsonResponse({"error": "Personnel is not a pharmacien"}, status=400)
+            return JsonResponse({"error": "Laborantin not found"}, status=404)
+        if laborantin.role != "LABORANTIN":
+            return JsonResponse({"error": "Personnel is not a laborantin"}, status=400)
         etab_perso = etablissement_personnel_medical.objects.filter(
-            personnel_medical=pharmacien
+            personnel_medical=laborantin
         )
         etablissement = []
         count = 0
         for ep in etab_perso:
             etablissement.append(ep.etablissement)
             count += 1
-
         if count == 0:
             return JsonResponse(
                 {"error": "Pharmacien has no etablissement"}, status=400
             )
-        ords = []
-        for ord in Ordonnance.objects.all():
-            etab = ord.consultation.Hospitalisation.DPI.etablissement_id
-            if etab in etablissement and ord.estValide:
-                ords.append(
+        bilans = []
+        for bilan in BilanBio.objects.all():
+            etab = bilan.Consultation.Hospitalisation.DPI.etablissement_id
+            if etab in etablissement and bilan.est_resultat:
+                bilans.append(
                     {
-                        "id": ord.id,
-                        "date": ord.date.strftime("%Y-%m-%d"),
+                        "id": bilan.id,
+                        "date": bilan.date_debut.strftime("%Y-%m-%d"),
                         "etablissement": etab.nom_etablissement,
                     }
                 )
-        return JsonResponse({"ordonnances": ords, "numOrdonnances": len(ords)})
+        return JsonResponse({"bilans": bilans, "numBilans": len(bilans)})
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)

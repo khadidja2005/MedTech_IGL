@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "DashboardAdmin",
     "BilanBio",
     "ArchivePharmacie",
+    "ArchiveLabo",
 ]
 
 MIDDLEWARE = [
