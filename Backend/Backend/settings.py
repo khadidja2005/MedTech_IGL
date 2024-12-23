@@ -11,15 +11,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-import logging
-import sys
-print(f"DJANGO_SETTINGS_MODULE: {os.environ.get('DJANGO_SETTINGS_MODULE')}")
-
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -59,7 +50,6 @@ INSTALLED_APPS = [
     "Soins",
     "cloudinary",
     "Cloudinary",
-    'django_extensions'
 
 ]
 
@@ -108,8 +98,6 @@ DATABASES = {
     }
 }
 
-# Print database settings for debugging
-print(f"DB SETTINGS: {DATABASES['default']}")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -151,13 +139,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ms_namoune@esi.dz'
-EMAIL_HOST_PASSWORD = 'Saad2004@*'
-DEFAULT_FROM_EMAIL = 'ms_namoune@esi.dz'
