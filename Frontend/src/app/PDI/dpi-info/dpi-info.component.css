@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .error-container {
+        min-height: 24px; /* Ajustez cette hauteur pour correspondre à la taille du texte */
+      }
+      
+}

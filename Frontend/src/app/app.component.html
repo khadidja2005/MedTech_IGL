@@ -1,8 +1,10 @@
 <router-outlet>
     <app-header-pdi></app-header-pdi>
-    <div class="layout">
-    <app-sidebar></app-sidebar>
-    <div calss="bg-[#F3F8FF]"></div>
-</div>
-</router-outlet>
+    <div class="layout flex"> <!-- Ajout de flex -->
+      <app-sidebar></app-sidebar>
+      <div class="bg-[#F3F8FF] flex-1 mt-3">
+        <app-dpi-info></app-dpi-info>
+      </div> <!-- Ajout de flex-1 pour prendre l'espace restant -->
+    </div>
+  </router-outlet>
 
