@@ -114,8 +114,8 @@ class Consultation(models.Model):
 
 
 class Ordonnance(models.Model):
-    date = models.DateField()
     estValide = models.BooleanField(default=False)
+    estTermier = models.BooleanField(default=False)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     pharmacien_id = models.ForeignKey(
         PersonnelMedical, on_delete=models.CASCADE, null=True
