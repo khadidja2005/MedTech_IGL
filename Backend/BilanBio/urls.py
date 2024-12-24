@@ -3,10 +3,10 @@ from . import views
 
 urlpatterns = [
     path("", views.get_info_bilan_bio, name="get_info_bilan_bio"),
-    path("labo/valider", views.valider_bilan_bio, name="valider_bilan_bio"),
+    path("valider", views.valider_bilan_bio, name="valider_bilan_bio"),
     path("peut-valider", views.peut_valider, name="peut_valider"),
     path("peut-terminer", views.peut_terminer, name="peut_terminer"),
-    path("labo/terminer", views.terminer, name="bilan_bio_terminer"),
+    path("terminer", views.terminer, name="bilan_bio_terminer"),
     path("supprimer", views.supprimer_bilan_bio, name="supprimer_bilan_bio"),
     path("ajouter/param", views.ajouter_parametre, name="ajouter_parametre"),
     path("modifier/param", views.modifier_parametre, name="modifier_parametre"),

@@ -13,7 +13,7 @@ def get_info_bilan_bio(request):
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         if not bilan_id:
-            return JsonResponse({"error": "Invalid request"})
+            return JsonResponse({"error": "bilan_id is required"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
@@ -36,7 +36,7 @@ def get_info_bilan_bio(request):
                 )
 
         else:
-            resultats = []
+            resultats_response = []
         return JsonResponse(
             {
                 "date_debut": bilan.date_debut,
@@ -44,7 +44,8 @@ def get_info_bilan_bio(request):
                 "parametres": bilan.parametres,
                 "est_complet": bilan.est_complet,
                 "est_resultat": bilan.est_resultat,
-                "medecin": bilan.medecin.id,
+                "medecin_id": bilan.medecin.id,
+                "medecin": bilan.medecin.nom_complet,
                 "resultats": resultats_response,
             }
         )
@@ -154,7 +155,7 @@ def ajouter_parametre(request):
         if not bilan_id:
             return JsonResponse({"error": "Billan id is required"})
         if not parametre:
-            return JsonResponse({"error": "Parametre is required"})
+            return JsonResponse({"error": "parametre is required"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
@@ -189,7 +190,7 @@ def modifier_parametre(request):
             bilan.parametres = ",".join(parametres)
             bilan.parametres += "," + parametre_new
             bilan.save()
-            return JsonResponse({"success": "Parametre removed"})
+            return JsonResponse({"success": "Parametre modified"})
         else:
             return JsonResponse({"error": "Parametre not found"})
     else:
@@ -247,8 +248,6 @@ def ajouter_resultat_bio(request):
             return JsonResponse({"error": "Norme is required"})
         if not laborantin_id:
             return JsonResponse({"error": "Laborantin id is required"})
-        if parametre not in bilan.parametres.split(","):
-            return JsonResponse({"error": "Parametre not found in bilan"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
@@ -257,10 +256,12 @@ def ajouter_resultat_bio(request):
             laborantin = PersonnelMedical.objects.get(id=laborantin_id)
         except PersonnelMedical.DoesNotExist:
             return JsonResponse({"error": "Laborantin not found"})
+        if parametre not in bilan.parametres.split(","):
+            return JsonResponse({"error": "Parametre not found in bilan"})
         resultat = ResultatBio(
             valeur_mesure=valeur_mesure,
-            date_mesure=date_mesure,
-            heure_mesure=heure_mesure,
+            date_mesure=datetime.strptime(date_mesure, "%d/%m/%Y").strftime("%Y-%m-%d"),
+            heure_mesure=datetime.strptime(heure_mesure, "%H:%M").strftime("%H:%M:%S"),
             parametre=parametre,
             norme=norme,
             bilan_bio=bilan,
@@ -297,8 +298,6 @@ def modifier_resultat_bio(request):
             return JsonResponse({"error": "Norme is required"})
         if not laborantin_id:
             return JsonResponse({"error": "Laborantin id is required"})
-        if parametre not in bilan.parametres.split(","):
-            return JsonResponse({"error": "Parametre not found in bilan"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
@@ -307,7 +306,9 @@ def modifier_resultat_bio(request):
             laborantin = PersonnelMedical.objects.get(id=laborantin_id)
         except PersonnelMedical.DoesNotExist:
             return JsonResponse({"error": "Laborantin not found"})
-        resultat = ResultatBio.objects.filter(bilan_bio=bilan, parametre=parametre)
+        if parametre not in bilan.parametres.split(","):
+            return JsonResponse({"error": "Parametre not found in bilan"})
+        resultat = ResultatBio.objects.get(bilan_bio=bilan, parametre=parametre)
         if not resultat:
             return JsonResponse({"error": "Resultat not found"})
         if resultat.laborantin != laborantin:
@@ -315,8 +316,12 @@ def modifier_resultat_bio(request):
                 {"error": "Laborantin not allowed to modify this result"}
             )
         resultat.valeur_mesure = valeur_mesure
-        resultat.date_mesure = date_mesure
-        resultat.heure_mesure = heure_mesure
+        resultat.date_mesure = datetime.strptime(date_mesure, "%d/%m/%Y").strftime(
+            "%Y-%m-%d"
+        )
+        resultat.heure_mesure = datetime.strptime(heure_mesure, "%H:%M").strftime(
+            "%H:%M:%S"
+        )
         resultat.norme = norme
         resultat.save()
         return JsonResponse({"success": "Resultat modified"})
@@ -335,16 +340,22 @@ def supprimer_resultat_bio(request):
             return JsonResponse({"error": "Billan id is required"})
         if not parametre:
             return JsonResponse({"error": "Parametre is required"})
-        if parametre not in bilan.parametres.split(","):
-            return JsonResponse({"error": "Parametre not found in bilan"})
+        if not laborantin_id:
+            return JsonResponse({"error": "Laborantin id is required"})
+        try:
+            laborantin = PersonnelMedical.objects.get(id=laborantin_id)
+        except PersonnelMedical.DoesNotExist:
+            return JsonResponse({"error": "Laborantin not found"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
             return JsonResponse({"error": "BilanBio not found"})
-        resultat = ResultatBio.objects.filter(bilan_bio=bilan, parametre=parametre)
+        if parametre not in bilan.parametres.split(","):
+            return JsonResponse({"error": "Parametre not found in bilan"})
+        resultat = ResultatBio.objects.get(bilan_bio=bilan, parametre=parametre)
         if not resultat:
             return JsonResponse({"error": "Resultat not found"})
-        if resultat.laborantin != laborantin_id:
+        if resultat.laborantin != laborantin:
             return JsonResponse(
                 {"error": "Laborantin not allowed to delete this result"}
             )
