@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  .header {
+    @apply bg-white;
+    box-shadow: 0px 5px 11.7px 4px rgba(65, 132, 247, 0.2);
+    backdrop-filter: blur(30px); 
+  }
+
+  .logo {
+    @apply font-poppins font-semibold text-[45px] leading-[60px] text-[#0C2757];
+  }
+  
+  @layer components {
+    .menu-item {
+      @apply font-poppins text-[18px] text-[#4B6386] opacity-75 transition-all duration-300 ease-in-out relative;
+    }
+  
+    .menu-item:hover {
+      @apply text-[#3A8EF6] scale-105 opacity-100;
+    }
+  
+    .menu-item::after {
+      content: '';
+      @apply block absolute bottom-0 left-0 w-0 h-[2px] bg-[#3A8EF6] transition-all duration-300 ease-in-out;
+    }
+  
+    .menu-item:hover::after {
+      @apply w-full;
+    }
+  }
+  
+  .boutton-connecter{
+    @apply  ml-8 w-[195px] h-[50px] rounded-[80px] bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] text-white text-center font-poppins text-[18px]
+}
+}

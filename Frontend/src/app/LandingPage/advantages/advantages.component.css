@@ -1,0 +1,23 @@
+.advantage-container {
+  @apply w-[320px] h-[90px] px-[19px] py-[10px] gap-0 rounded-[20px] bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:brightness-110;
+}
+
+.adv-text {
+  @apply text-[19px] font-bold text-[#FFFFFF];
+}
+
+.subtext {
+  @apply text-[16px] text-[#FFFFFF];
+}
+
+.advantage-image-clock img {
+  @apply w-[75px] h-auto object-contain;
+}
+
+.advantage-image-check-circle img {
+  @apply w-[58px] h-auto object-contain pt-2;
+}
+
+.advantage-image-MedicalSymbol img {
+  @apply w-[95px] h-auto object-contain pt-2;
+}

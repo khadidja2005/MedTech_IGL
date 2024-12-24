@@ -84,6 +84,7 @@ class Contact(models.Model):
 
 class DPI(models.Model):
     date_creation = models.DateField()
+
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     etablissement_id = models.ForeignKey(Etablissement, on_delete=models.CASCADE)
     createur_id = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True)
