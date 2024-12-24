@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SidebarComponent {
   @Input() role: string = 'admin'; // Default role
-
+  @Input() activeItem: string = ''; // Default active item
   // Sidebar items configuration
   sidebarItems = [
     { label: 'Ordonnance', icon: '/assets/images/DPI.png', roles: ['pharmacien'], link: '#' },

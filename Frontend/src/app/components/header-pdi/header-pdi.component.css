@@ -4,10 +4,9 @@
 
 @layer components {
   .header {
-    @apply bg-white;
+    @apply bg-white h-[60px] fixed top-0 left-0 right-0 z-20; /* Fix header at the top */
   }
 
-  /* Custom shadow position */
   .header-shadow {
     position: relative;
   }

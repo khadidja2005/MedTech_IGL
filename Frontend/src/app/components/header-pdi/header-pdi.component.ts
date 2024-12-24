@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -7,21 +7,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './header-pdi.component.html',
   imports: [FormsModule, CommonModule],
   styleUrls: ['./header-pdi.component.css']
- 
+
 })
 
-export class HeaderPDIComponent { 
-  user1 = {
+export class HeaderPDIComponent {
+  @Input() user1 = {
     name: "Amina Benali",
     job: "Cardiologue",
-    Admin: true, 
+    Admin: true,
     image: "assets/images/doctor.png"
   };
 
   user2 = {
     name: "Khaled Moulay",
     job: "Neurologue",
-    Admin: false, 
+    Admin: true,
     image: "assets/images/doctor.png"
   };
 }

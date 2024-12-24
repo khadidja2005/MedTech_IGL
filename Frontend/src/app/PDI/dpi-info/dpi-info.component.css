@@ -5,7 +5,7 @@
 
 @layer components {
     .error-container {
-        min-height: 24px; /* Ajustez cette hauteur pour correspondre à la taille du texte */
+        min-height: 24px; 
       }
       
 }
