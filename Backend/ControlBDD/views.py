@@ -204,13 +204,12 @@ def seed_database_func():
                     ):
                         pharmacien = phar
                         break
-            estValide = (fake.boolean(),)
+            estValide = fake.boolean()
             if estValide:
                 estTerminer = True
             else:
                 estTerminer = False
         Ordonnance.objects.create(
-            date=fake.date(),
             estValide=estValide,
             estTerminer=estTerminer,
             pharmacien_id=pharmacien,
