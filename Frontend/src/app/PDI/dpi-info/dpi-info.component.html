@@ -21,7 +21,7 @@
   </div>
 <!-- Modify Modal -->
 <div *ngIf="showModifyModal" 
-     class="fixed bottom-0 h-[500px] right-0 mb-8 mr-8 bg-white rounded-xl shadow-lg p-6 w-96 z-50">
+     class="fixed bottom-0 h-[500px] right-0 mb-8 mr-8  bg-white rounded-xl shadow-lg p-6 w-96 z-50">
      <div class="flex justify-between items-center mb-4">
       <!-- Image goBack -->
       <img 
@@ -42,7 +42,7 @@
     
     <div class="relative">
       <div 
-        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl relative cursor-pointer flex items-center"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl relative cursor-pointer flex items-center "
         (click)="toggleEtablissementDropdown($event)"
       >
         <div class="flex-1 px-4 text-gray-700">
@@ -168,7 +168,7 @@
       </div>
     <div class="flex flex-wrap pl-4 mt-4 gap-6">
        <!-- Nom complet -->
-      <div class="flex w-[800px] bg-white p-4 shadow-lg rounded-xl relative">
+      <div class="flex w-[800px] bg-white p-4 shadow-lg rounded-xl relative ">
         <div>
           <span class="font-bold font-poppins text-[25px] text-black">Nom complet: </span>
           <ng-container *ngIf="editingField !== 'nom_complet'; else editNomComplet">
@@ -432,8 +432,8 @@
         <div class="w-2/12"></div> <!-- Colonne vide -->
       </div>
       
-      <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div class="bg-white rounded-lg w-[1200px] p-6">
+      <div *ngIf="showModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg w-[1200px] p-6 ">
             <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
                 {{ modalMode === 'add' ? 'Ajouter un antécédent' : 
                     modalMode === 'view' ? 'Détails de l\'antécédent' : 
@@ -561,7 +561,7 @@
         </div>
         
 
-        <div *ngIf="showHospitalizationModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div *ngIf="showHospitalizationModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div class="bg-white rounded-lg w-[800px] p-6">
               <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
                   {{ hospitalizationModalMode === 'add' ? 'Ajouter une hospitalisation' : 'Détails de l\'hospitalisation' }}
@@ -698,7 +698,7 @@
       </div>
     
       <!-- Filter Modal -->
-      <div *ngIf="showFilterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div *ngIf="showFilterModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-12 rounded-lg w-[800px]">
           <!-- Title -->
           <h2 class="text-center text-5xl font-semibold font-poppins mb-8 !text-[#4B6386]">Ajouter filtre</h2>
@@ -706,7 +706,7 @@
           <!-- Content Container -->
           <div class="w-full flex flex-col items-center space-y-4 my-4">
             <!-- Type Filter -->
-            <<div class="w-full max-w-[500px] flex flex-col my-6 relative custom-dropdown">
+            <div class="w-full max-w-[500px] flex flex-col my-6 relative custom-dropdown">
               <label class="block text-xl font-poppins font-semibold mb-2">Type</label>
               
               <!-- Custom dropdown button -->
@@ -853,7 +853,7 @@
       
 
       </div>
-        <div *ngIf="showMutuelleModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div *ngIf="showMutuelleModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div class="bg-white rounded-lg w-[1200px] p-6">
             <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
               {{ mutuelleModalMode !== 'add' ? 'Ajouter un Mutuelle' : 'Détails du Mutuelle' }}
