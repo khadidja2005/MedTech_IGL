@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component} from '@angular/core';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HospitalisationDetailsComponent } from '../hospitalisation-details/hospitalisation-details.component';
