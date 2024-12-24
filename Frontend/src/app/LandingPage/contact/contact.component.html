@@ -1,0 +1,24 @@
+<div class="w-full h-screen flex flex-col items-center justify-start pt-20 bg-[#F3F8FF]">
+  <div class="title">
+    <span class="font-bold text-[58px] font-poppins ml-2 bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] text-transparent bg-clip-text">Contactez</span>
+    <span class="font-bold text-[58px] font-poppins text-[#0C2757]">-nous</span>
+  </div>
+
+  <div class="box-container mt-10 relative">  
+    <input class="email-box" type="email" [(ngModel)]="email" placeholder="Email" required><br><br>
+    <textarea class="message-box" [(ngModel)]="message" placeholder="Message" required></textarea>
+    <div class="flex items-center justify-between w-full mb-5">
+    
+      <div class="text-red-500 font-poppins text-[18px] h-[24px]">
+        {{ errorMessage }}
+      </div>
+      <button class="boutton-envoyer" (click)="submitForm()" type="button">
+        Envoyer
+      </button>
+    </div>
+    
+  </div>
+
+  
+  
+</div>
