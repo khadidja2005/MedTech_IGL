@@ -18,25 +18,21 @@ def get_info_bilan_bio(request):
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
             return JsonResponse({"error": "BilanBio not found"})
-        if bilan.est_resultat:
-            resultats = ResultatBio.objects.filter(bilan_bio=bilan)
-            resultats_response = []
-            for res in resultats:
-                resultats_response.append(
-                    {
-                        "id": res.id,
-                        "valeur_mesure": res.valeur_mesure,
-                        "date_mesure": res.date_mesure.strftime("%Y-%m-%d"),
-                        "heure_mesure": res.heure_mesure.strftime("%H:%M:%S"),
-                        "parametre": res.parametre,
-                        "norme": res.norme,
-                        "laborantin_id": res.laborantin.id,
-                        "laborantin": res.laborantin.nom_complet,
-                    }
-                )
-
-        else:
-            resultats_response = []
+        resultats = ResultatBio.objects.filter(bilan_bio=bilan)
+        resultats_response = []
+        for res in resultats:
+            resultats_response.append(
+                {
+                    "id": res.id,
+                    "valeur_mesure": res.valeur_mesure,
+                    "date_mesure": res.date_mesure.strftime("%Y-%m-%d"),
+                    "heure_mesure": res.heure_mesure.strftime("%H:%M:%S"),
+                    "parametre": res.parametre,
+                    "norme": res.norme,
+                    "laborantin_id": res.laborantin.id,
+                    "laborantin": res.laborantin.nom_complet,
+                }
+            )
         return JsonResponse(
             {
                 "date_debut": bilan.date_debut,
@@ -65,6 +61,7 @@ def valider_bilan_bio(request):
         except BilanBio.DoesNotExist:
             return JsonResponse({"error": "BilanBio not found"})
         bilan.est_resultat = True
+        bilan.date_fin = datetime.now()
         bilan.save()
         return JsonResponse({"success": "BilanBio validated"})
     else:
