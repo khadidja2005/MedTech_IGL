@@ -14,21 +14,36 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path , include
+from django.urls import path, include
 from BDD.urls import urlpatterns as bdd_urls
 from ControlBDD.urls import urlpatterns as control_bdd_urls
 from DashboardAdmin.urls import urlpatterns as dashboard_urls
 from DPI.urls import urlpatterns as dpi_urls
 from Soins.urls import urlpatterns as soins_urls
 from Cloudinary.urls import urlpatterns as cloudinary_urls
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(bdd_urls)),
-    path('control/', include(control_bdd_urls)),
-    path("dashboard/" , include(dashboard_urls)),
-    path('dpi/', include(dpi_urls)),
-    path('soins/', include(soins_urls)),
-    path('cloudinary/', include(cloudinary_urls)),
+from Recherche.urls import urlpatterns as recherche_urls
+from Hospitalisation.urls import urlpatterns as hospitalisation_urls
+from BilanBio.urls import urlpatterns as bilan_bio_urls
+from ArchivePharmacie.urls import urlpatterns as archive_pharmacie_urls
+from ArchiveLabo.urls import urlpatterns as archive_labo_urls
+from ArchiveRadio.urls import urlpatterns as archive_radio_urls
+from BilanRadio.urls import urlpatterns as bilan_radio_urls
 
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/", include(bdd_urls)),
+    path("control/", include(control_bdd_urls)),
+    path("dashboard/", include(dashboard_urls)),
+    path("dpi/", include(dpi_urls)),
+    path("soins/", include(soins_urls)),
+    path("cloudinary/", include(cloudinary_urls)),
+    path("recherche/", include(recherche_urls)),
+    path("hospitalisation/", include(hospitalisation_urls)),
+    path("bilanbio/", include(bilan_bio_urls)),
+    path("pharmacie/archive", include(archive_pharmacie_urls)),
+    path("labo/archive", include(archive_labo_urls)),
+    path("radio/archive", include(archive_radio_urls)),
+    path("bilanradio/", include(bilan_radio_urls)),
 ]
