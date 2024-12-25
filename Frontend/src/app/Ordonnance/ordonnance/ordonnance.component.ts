@@ -13,7 +13,16 @@ import { TableMedicamentComponent } from '../table-medicament/table-medicament.c
   styleUrl: './ordonnance.component.css'
 })
 export class OrdonnanceComponent {
-  role: string = 'pharmacien';
+  role: string = 'medecin';
+  activeItem: string;
+  constructor() {
+    if (this.role == 'pharmacien') {
+      this.activeItem = 'Ordonnance';
+    }
+    else {
+      this.activeItem = 'DPI';
+    }
+  }
   ordonnance: Ordonnance = {
       id: '1',
       date: '25/12/2024',

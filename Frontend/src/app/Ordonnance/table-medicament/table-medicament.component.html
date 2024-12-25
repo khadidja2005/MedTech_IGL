@@ -8,7 +8,7 @@
       </div>
 
       <!-- Medicament Rows -->
-      <div *ngFor="let medicament of medicaments let i = index" class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div *ngFor="let medicament of medicaments; let i = index" class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <!-- Medicament -->
         <div class="flex items-center gap-4 text-left">
         <span class=" text-main_color"> {{ medicament.nom  }}</span>
@@ -30,11 +30,12 @@
           <button><img src="/assets/images/supp.png" class="h-5 w-5"/></button>
         </div>
         <app-modifier-medicament
-          [isVisible]="isPopupVisible"
-          [medicament]="medicament"
-          (closePopup)="closePopup()"
-          (saveChanges)="updateMedicament($event)"
-         ></app-modifier-medicament>
+        *ngIf="isPopupVisible && currentIndex === i"
+        [isVisible]="isPopupVisible"
+        [medicament]="medicament"
+        (closePopup)="closePopup()"
+        (saveChanges)="updateMedicament($event)"
+    ></app-modifier-medicament>
     </div>
   </div>
 </div>

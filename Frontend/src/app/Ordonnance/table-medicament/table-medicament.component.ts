@@ -15,6 +15,7 @@ export class TableMedicamentComponent {
   @Input() ordonnance!: Ordonnance;
   @Input() medicaments!: Medicament[];
   @Input() role!: string;
+  index=0;
 
   isPopupVisible = false;
   currentMedicament: Medicament | null = null; // Stores the medicament being modified
