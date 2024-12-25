@@ -412,6 +412,10 @@ export class ConsultationInfoComponent {
     return this.user1?.Admin || this.user1?.profession === 'médecin';
   }
 
+  canEditOrdonnance(): boolean {
+    return this.user1?.Admin || this.user1?.profession === 'pharmacien';
+  }
+
   closeModifyModal() {
     this.showModifyModal = false;
     this.selectedMedecin = null;
