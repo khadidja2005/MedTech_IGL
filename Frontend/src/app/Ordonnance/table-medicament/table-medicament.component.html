@@ -1,0 +1,40 @@
+<div class="bg-transparent text-main_color font-poppins w-full max-w-screen-lg mx-auto">
+  <div class="grid gap-3">
+    <!-- Headers -->
+    <div class="bg-white grid grid-cols-4 px-6 py-3 uppercase text-main_color font-medium rounded-lg">
+      <div class="text-left">Medicament</div>
+      <div class="text-center">dose</div>
+      <div class="text-center">duree</div>
+      </div>
+
+      <!-- Medicament Rows -->
+      <div *ngFor="let medicament of medicaments let i = index" class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <!-- Medicament -->
+        <div class="flex items-center gap-4 text-left">
+        <span class=" text-main_color"> {{ medicament.nom  }}</span>
+        </div>
+
+        <!-- dose -->
+        <div class="text-main_color text-center">
+        {{ medicament.dosage }}
+        </div>
+
+        <!-- duree -->
+        <div class=" text-main_color text-center">
+        {{ medicament.duree }}
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-4" *ngIf="role === 'admin' || role === 'medecin'">
+          <button (click)="openPopup(medicament,i)"><img src="/assets/images/modifier.png" class="h-5 w-5"/></button>
+          <button><img src="/assets/images/supp.png" class="h-5 w-5"/></button>
+        </div>
+        <app-modifier-medicament
+          [isVisible]="isPopupVisible"
+          [medicament]="medicament"
+          (closePopup)="closePopup()"
+          (saveChanges)="updateMedicament($event)"
+         ></app-modifier-medicament>
+    </div>
+  </div>
+</div>

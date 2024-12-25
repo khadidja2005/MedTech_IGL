@@ -23,7 +23,7 @@ export class SidebarComponent {
 
   footerItems = [
     { label: 'Control de BDD', icon: '/assets/images/BDD.png', roles: ['admin'], link: '#' },
-    { label: 'Se Déconnecter', icon: '/assets/images/disconnect.png', roles: ['admin', 'patient', 'medecin', 'infirmier', 'radiologue', 'laborantin', 'pharmacien'], link: '#' }
+    { label: 'Se Déconnecter', icon: '/assets/images/disconnect.png', roles: ['admin', 'patient', 'medecin', 'infermier', 'radiologue', 'laborantin', 'pharmacien'], link: '#' }
   ];
 
   // Filter items based on role

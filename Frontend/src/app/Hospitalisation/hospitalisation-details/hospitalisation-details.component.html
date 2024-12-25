@@ -16,7 +16,7 @@
         [medecins]="medecins"
         (closePopup)="closePopup()"
         (saveChanges)="updateHospitalisation($event)"
-></app-modifier>
+  ></app-modifier>
         <button class="delete-button flex items-center gap-1">
           <img src="/assets/images/delete.png" class="h-5 w-5">
           Supprimer
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Footer Section -->
-<div class="footer">
+  <div class="footer">
   <div class="tabs">
     <button
       class="tab"
@@ -63,24 +63,24 @@
     (click)="openAddPanel()">
     Ajouter {{ selectedTab }}
   </button>
-</div>
+  </div>
 
-<!-- Add Consultation Panel (Popup) -->
-<app-ajouter-consultation
+  <!-- Add Consultation Panel (Popup) -->
+  <app-ajouter-consultation
   *ngIf="selectedTab === 'consultations'"
   [isVisible]="isAddPanelVisible"
   [medecins]="medecins"
   (closePanel)="closeAddPanel()"
   (saveConsultation)="addConsultation($event)">
-</app-ajouter-consultation>
+  </app-ajouter-consultation>
 
-<app-ajouter-soin
+  <app-ajouter-soin
   *ngIf="selectedTab === 'soins'"
   [isVisible]="isAddPanelVisible"
   [infermiers]="infermiers"
   (closePanel)="closeAddPanel()"
   (saveSoin)="addSoin($event)">
-</app-ajouter-soin>
+  </app-ajouter-soin>
 
 
   <!-- Conditional Rendering of Tables -->

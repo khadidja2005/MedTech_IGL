@@ -4,11 +4,12 @@ import {LandingPageComponent} from './LandingPage/landing-page/landing-page.comp
 
 import { HospitalisationComponent } from './Hospitalisation/hospitalisation/hospitalisation.component';
 import { SoinComponent } from "./Soin/soin/soin.component";
+import { OrdonnanceComponent } from "./Ordonnance/ordonnance/ordonnance.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SoinComponent],
+  imports: [RouterOutlet, OrdonnanceComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

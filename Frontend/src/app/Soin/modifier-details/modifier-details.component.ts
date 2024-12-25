@@ -12,36 +12,36 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ModifierDetailsComponent {
   @Input() isVisible: boolean = false;
-      @Input() label!: string;
-      @Input() detail!: string;
-      @Output() closePopup = new EventEmitter<void>();
-      @Output() saveChanges = new EventEmitter<Partial<String>>();
-      detailForm: FormGroup;
+  @Input() label!: string;
+  @Input() detail!: string;
+  @Output() closePopup = new EventEmitter<void>();
+  @Output() saveChanges = new EventEmitter<Partial<String>>();
+  detailForm: FormGroup;
 
 
-      constructor(private fb: FormBuilder) {
-        this.detailForm = this.fb.group({
-          detail: ['', Validators.required],
+  constructor(private fb: FormBuilder) {
+    this.detailForm = this.fb.group({
+    detail: ['', Validators.required],
 
-        });
+    });
 
-      }
+  }
 
 
-      ngOnInit() {
-        if (this.detail) {
-          this.detailForm = this.fb.group({
-            detail: [this.detail || '', Validators.required], // Set the initial value
+  ngOnInit() {
+    if (this.detail) {
+     this.detailForm = this.fb.group({
+     detail: [this.detail || '', Validators.required], // Set the initial value
 
-          });
-        }
-      }
+      });
+    }
+  }
 
-      onSubmit() {
-        if (this.detailForm.valid) {
-          const formValue = this.detailForm.value;
-          const updatedData: Partial<String> = formValue.detail;
-          this.saveChanges.emit(updatedData);
-        }
-      }
+  onSubmit() {
+    if (this.detailForm.valid) {
+      const formValue = this.detailForm.value;
+      const updatedData: Partial<String> = formValue.detail;
+      this.saveChanges.emit(updatedData);
+    }
+  }
 }
