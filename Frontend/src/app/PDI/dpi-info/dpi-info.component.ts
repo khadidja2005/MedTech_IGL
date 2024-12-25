@@ -27,7 +27,7 @@ export class DpiInfoComponent implements OnInit {
   editingField: string | null = null;
   tempValue: string = '';
   showGenderDropdown: boolean = false;  // Add this line
-mutuelleModalMode: any;
+  mutuelleModalMode: any;
   dpiService: any;
 
   // Function to change the selected menu
@@ -664,10 +664,6 @@ deleteAntecedent(id: string) {
     this.filter.number = 0;
     this.toggleFilterModal();
   }
-
-
-
-
 
   mutuelles: Mutuelle[] = [
     {

@@ -1,0 +1,404 @@
+<div class="grid grid-cols-12 gap-2 p-4 font-poppins relative">
+    <div class="consultation flex-col col-span-3 p-4">
+      <div class="flex font-bold mb-6 text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
+        <span> Consultation :&nbsp;</span>
+        <span>{{ consultation.id}}</span>
+      </div>
+      <div class="flex justify-between gap-4 w-full">
+        <button class="w-full" (click)="modifyConsultation()">
+          <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1">
+            <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">
+            <p class="text-lg font-semibold text-[#FCBC05] ml-2">modifier</p>
+          </div>
+        </button>
+        
+        <button class="w-full" (click)="deleteConsultation()">
+          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1">
+            <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
+            <p class="text-lg font-semibold text-[#FF3E3E]">supprimer</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Doctor's Name and Date: Positioned in the top-right corner -->
+    <div class="etab-createur absolute top-4 right-4 p-8 text-[24px] ">
+      <div class="mb-4">
+        <span class="font-bold font-poppins">Médecin: </span>
+        <span class="text-[#4B6386] font-bold">{{consultation.Medecin}}</span>
+      </div>
+      <div>
+        <span class="font-bold font-poppins">Date: </span>
+        <span class="text-[#4B6386] font-bold">{{consultation.date | date:'dd/MM/yyyy'}}</span>
+      </div>
+    </div>
+  </div>
+  
+    <!-- Modify Modal -->
+    <div *ngIf="showModifyModal" 
+         class="fixed bottom-0 h-[500px] right-0 mb-8 mr-8 bg-white rounded-xl shadow-lg p-6 w-96 z-50">
+      <div class="flex justify-between items-center mb-4">
+        <img 
+          src="assets/images/goBack.png" 
+          alt="return" 
+          class="cursor-pointer" 
+          (click)="closeModifyModal()">
+        <h2 class="text-xl font-semibold text-[#0C2757]">
+          Modifier Consultation
+        </h2>
+      </div>
+  
+      <!-- Date Input -->
+      <div class="mt-6">
+        <label class="block text-sm font-medium text-[#4B6386] mb-2">
+          Date et heure
+        </label>
+        <input
+          type="datetime-local"
+          [(ngModel)]="selectedDate"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+      </div>
+  
+      <!-- Médecin Dropdown -->
+      <div class="relative medecin-dropdown mt-6">
+        <label class="block text-sm font-medium text-[#4B6386] mb-2">
+          Médecin
+        </label>
+        
+        <div class="relative">
+          <div 
+            class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl relative cursor-pointer flex items-center"
+            (click)="toggleMedecinDropdown($event)"
+          >
+            <div class="flex-1 px-4 text-[#4B6386]">
+              {{ selectedMedecin || 'Sélectionner un médecin' }}
+            </div>
+            
+            <div class="px-4">
+              <img 
+                src="assets/images/fleche.png" 
+                alt="fleche" 
+                class="w-5 h-3 transition-transform duration-200"
+                [ngClass]="{'transform rotate-180': showMedecinDropdown}"
+              >
+            </div>
+          </div>
+  
+          <div 
+            *ngIf="showMedecinDropdown"
+            class="absolute top-full left-0 w-full bg-white border-2 border-[#3A8EF6] rounded-xl mt-1 z-50 max-h-48 overflow-y-auto"
+          >
+            <div 
+              *ngFor="let medecin of medecins"
+              class="p-3 hover:bg-[#F3F8FF] cursor-pointer"
+              (click)="selectMedecin(medecin)"
+            >
+              {{medecin}}
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Action Buttons -->
+      <div class="flex justify-end gap-3 mt-6">
+        <button 
+          (click)="saveModifications()"
+          class="px-4 py-2 bg-[#3A8EF6] text-white rounded-lg"
+        >
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  
+
+    <div class="flex w-full max-w-[1250px] p-10 mx-6 mt-6 bg-white rounded-lg shadow-lg">
+        <p class="text-[24px] font-poppins font-bold pr-10 whitespace-nowrap">resumé:</p>
+        <div class="w-full max-w-[900px]">
+          <p class="text-[24px] font-poppins font-bold text-[#4B6386] px-10 break-words overflow-hidden">
+            {{consultation.resume}}
+          </p>
+        </div>
+        <div class="flex flex-shrink-0">
+          <button *ngIf="canEditConsultation()"
+                  (click)="modifyResume()"
+                  class="p-2">
+            <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+          </button>
+          <button *ngIf="canEditConsultation()"
+                  (click)="deleteResume()"
+                  class="p-2">
+            <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10">
+          </button>
+          <button *ngIf="!canEditConsultation()"
+                  class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+            Consulter
+          </button>
+        </div>
+      </div>
+  
+      <!-- Resume Edit Modal -->
+      <div *ngIf="showResumeModal"
+           class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg w-[800px] p-6">
+          <div class="flex items-center mb-4 w-full">
+            <img src="assets/images/cancel.png"
+                 (click)="showResumeModal = false"
+                 alt="return"
+                 class="cursor-pointer w-8 h-8">
+            <h2 class="block !text-4xl font-poppins !text-[#4B6386] mx-auto">
+              Résumé
+            </h2>
+          </div>
+  
+          <div class="mt-6">
+            <textarea
+              [(ngModel)]="editedResume"
+              class="w-full bg-[#F3F8FF] text-2xl min-h-[200px] border-2 border-[#3A8EF6] rounded-xl px-4 py-2 resize-none"
+              placeholder="Entrez le résumé..."
+              maxlength="900"
+            ></textarea>
+            <div class="text-right text-sm text-gray-500">
+              {{editedResume.length}}/900 caractères
+            </div>
+          </div>
+  
+          <div class="flex justify-end gap-3 mt-6">
+            <button
+              (click)="saveResume()"
+              class="px-4 py-2 bg-[#3A8EF6] text-white rounded-lg"
+            >
+              Sauvegarder
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col w-full">
+        <!-- Menu Section reste inchangée -->
+        <div class="flex text-[#4B6386] text-[35px] p-2 rounded-lg border-b border-gray-200">
+          <div class="flex w-full">
+            <div 
+              class="menu-item text-center py-2  ml-10 w-[600px] cursor-pointer"
+              [ngClass]="{'text-[#3A8EF6] !border-b-2 !border-[#3A8EF6] pb-2': selectedMenu === 1}"
+              (click)="selectMenu(1)">
+              Ordonnances
+            </div>
+            <div 
+              class="menu-item text-center py-2 flex-1 cursor-pointer"
+              [ngClass]="{'text-[#3A8EF6] !border-b-2 !border-[#3A8EF6] pb-2': selectedMenu === 2}"
+              (click)="selectMenu(2)">
+              bilans
+            </div>
+          </div>
+        </div>
+      
+        <!-- Content Section -->
+        <div class="mt-6">
+          <!-- Ordonnances Content -->
+          <div *ngIf="selectedMenu === 1" class="w-full px-10">
+            <!-- Add Ordonnance button -->
+            <div class="flex mb-6">
+                <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[400px]">Liste des Ordonnances</h1>  
+              <button *ngIf="canEditConsultation()" 
+                      class="flex items-center  rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+                      (click)="toggleOrdonnanceModal('add')">
+                <img src="assets/images/plus.png" alt="" class="pr-4">
+                Ajouter une Ordonnance
+              </button>
+            </div>
+      
+            <!-- En-tête des colonnes -->
+            <div class="flex !py-5 bg-white !my-4">
+              <div class="w-1/12 m-6"></div>
+              <div class="w-4/12 !text-[#0C2757] !text-[25px]">Ordonnance</div>
+              <div class="w-3/12 !text-[#0C2757] !text-[25px]">État</div>
+              <div class="w-4/12 !text-[#0C2757] !text-[25px]">Créé par</div>
+              <div class="w-3/12"></div>
+            </div>
+      
+            <!-- Liste des ordonnances -->
+            <div class="!space-y-4">
+              <div *ngFor="let ord of Ordonnances" class="flex py-5 bg-white items-center">
+                <div class="w-1/12 text-center m-6">
+                  <img src="assets/images/doc.png" alt="">
+                </div>
+                <div class="w-4/12 !text-[#0C2757] !text-[25px]">
+                  Ordonnance #{{ord.id}}
+                </div>
+                <div class="w-3/12 !text-[25px]" [ngStyle]="{'color': ord.estValide ? '#0CF045' : '#FF3E3E'}">
+                  {{ord.estValide ? 'Validé' : 'Non validé'}}
+                </div>
+                <div class="w-4/12 !text-[#0C2757] !text-[25px]">
+                   {{ord.pharmacien_id}}
+                </div>
+                <div class="w-3/12 text-center">
+                  <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+                    Consulter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+<div *ngIf="showOrdonnanceModal" 
+class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+<div class="bg-white rounded-lg w-[800px] !p-10">
+<!-- Header -->
+<div class="flex justify-between items-center mb-4">
+ <h2 class="text-center w-full text-4xl font-semibold font-poppins mb-8 !text-[#4B6386]">
+   {{addOrdonnanceModalMode === 'add' ? 'Ajouter une Ordonnance' : 'Voir Ordonnance'}}
+ </h2>
+ <img src="assets/images/cancel.png" 
+      alt="close" 
+      class="cursor-pointer w-8 h-8"
+      (click)="toggleOrdonnanceModal()">
+</div>
+
+<!-- Form Content -->
+<div class="flex flex-col items-center w-full">
+ <!-- Date Input -->
+ <div class="mb-4 w-full max-w-[500px]">
+   <label class="block text-xl font-semibold mb-2 text-left">Date</label>
+   <input type="datetime-local" 
+          [(ngModel)]="newOrdonnance.date"
+          [disabled]="addOrdonnanceModalMode === 'view'"
+          class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
+   <div *ngIf="OrdonnanceValidationErrors.date" class="text-red-500 text-sm mt-1">
+     {{OrdonnanceValidationErrors.date}}
+   </div>
+ </div>
+
+ <!-- Pharmacien Selection -->
+ <div class="mb-4 w-full max-w-[500px]">
+   <label class="block text-xl font-semibold mb-2 text-left">Pharmacien</label>
+   <select [(ngModel)]="newOrdonnance.pharmacien_id"
+           [disabled]="addOrdonnanceModalMode === 'view'"
+           class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
+     <option value="">Sélectionner un pharmacien</option>
+     <option *ngFor="let pharmacien of pharmaciens" [value]="pharmacien">
+       {{pharmacien}}
+     </option>
+   </select>
+   <div *ngIf="OrdonnanceValidationErrors.pharmacien_id" class="text-red-500 text-sm mt-1">
+     {{OrdonnanceValidationErrors.pharmacien_id}}
+   </div>
+ </div>
+
+ <!-- Validation Status -->
+ <div class="mb-4 w-full max-w-[500px]">
+   <label class="block text-xl font-semibold mb-2 text-left">Etat</label>
+   <select [(ngModel)]="newOrdonnance.estValide"
+           [disabled]="addOrdonnanceModalMode === 'view'"
+           class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
+     <option [ngValue]="false">Non validé</option>
+     <option [ngValue]="true">Validé</option>
+   </select>
+ </div>
+
+ <!-- Action Buttons -->
+ <div class="mt-6 w-full max-w-[500px] flex justify-center">
+   <button *ngIf="addOrdonnanceModalMode === 'add'"
+           (click)="addOrdonnance()"
+           class="px-8 py-3 font-semibold text-2xl bg-[#3A8EF6] text-white rounded-lg">
+     Ajouter
+   </button>
+ </div>
+</div>
+</div>
+</div>
+
+<div *ngIf="selectedMenu === 2">
+    <div class="flex ml-10 mb-6">
+        <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[650px]">Liste des Bilans</h1>  
+      <button *ngIf="canEditConsultation()" 
+              class="flex items-center  rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+              (click)="toggleBilanModal('add')">
+        <img src="assets/images/plus.png" alt="" class="pr-4">
+        Ajouter un Bilan
+      </button>
+    </div>
+  
+    <!-- Bilans List -->
+    <div class="w-full space-y-4 px-6">
+      <!-- Header Row -->
+      <div class="flex py-5 bg-white">
+        <div class="w-1/12 ml-2"></div>
+        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Bilans</div>
+        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Type</div>
+        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Etat</div>
+        <div class="w-2/12"></div>
+      </div>
+
+
+      <div *ngIf="showBilanModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white rounded-lg w-[800px] !p-10">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-center w-full text-4xl font-semibold font-poppins mb-8 !text-[#4B6386]">
+              {{addBilanModalMode === 'add' ? 'Ajouter un Bilan' : 'Voir Bilan'}}
+            </h2>
+            <img src="assets/images/cancel.png" 
+                 alt="close" 
+                 class="cursor-pointer w-8 h-8"
+                 (click)="toggleBilanModal()">
+          </div>
+      
+          <div class="flex flex-col items-center w-full">
+            <!-- Type Selection -->
+            <div class="mb-4 w-full max-w-[500px]">
+              <label class="block text-xl font-semibold mb-2 text-left">Type</label>
+              <select [(ngModel)]="newBilan.type"
+                      [disabled]="addBilanModalMode === 'view'"
+                      class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
+                <option value="">Sélectionner un type</option>
+                <option value="bio">Biologique</option>
+                <option value="radio">Radiologique</option>
+              </select>
+              <div *ngIf="BilanValidationErrors.type" class="text-red-500 text-sm mt-1">
+                {{BilanValidationErrors.type}}
+              </div>
+            </div>
+      
+            <!-- Action Buttons -->
+            <div class="mt-6 w-full max-w-[500px] flex justify-center">
+              <button *ngIf="addBilanModalMode === 'add'"
+                      (click)="addBilan()"
+                      class="px-8 py-3 font-semibold text-2xl bg-[#3A8EF6] text-white rounded-lg">
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Bilans Rows -->
+      <div
+        *ngFor="let bilan of combinedBilans"
+        class="flex !py-5 bg-white items-center"
+      >
+        <div class="ml-2 w-1/12 text-center">
+          <img src="assets/images/doc.png" alt="">
+        </div>
+        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">{{ bilan.id }}</div>
+        <div class="w-3/12 text-[25px] text-center">
+          <span 
+            class="px-3 py-1 rounded"
+            [ngStyle]="getBilanTypeStyle(bilan.type)"
+          >
+            {{ getBilanDisplayType(bilan) }}
+          </span>
+        </div>  
+        <div *ngIf=" bilan.est_complet"
+        class="w-3/12 !text-[#0CF045] !text-[25px] text-center"> fini</div>
+        <div *ngIf=" !bilan.est_complet"
+        class="w-3/12 !text-[#FF0004] !text-[25px] text-center">non fini</div>
+        <div class="w-2/12 text-center flex ml-4">
+          <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+            Consulter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
