@@ -1,16 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {LandingPageComponent} from './LandingPage/landing-page/landing-page.component';
-
-import { HospitalisationComponent } from './Hospitalisation/hospitalisation/hospitalisation.component';
-import { SoinComponent } from "./Soin/soin/soin.component";
-import { OrdonnanceComponent } from "./Ordonnance/ordonnance/ordonnance.component";
-import { PharmacieComponent } from "./Pharmacie/pharmacie/pharmacie.component";
-
+import { ArchiveComponent } from './PharmacieArchive/archive/archive.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, PharmacieComponent],
+  imports: [RouterOutlet, ArchiveComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
