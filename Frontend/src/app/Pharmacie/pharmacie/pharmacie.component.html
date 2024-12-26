@@ -1,0 +1,51 @@
+<div class="app-layout">
+  <!-- Header -->
+  <app-header-pdi class="header"></app-header-pdi>
+  <!-- Main Content -->
+  <div class="main-section">
+    <!-- Sidebar -->
+    <app-sidebar class="sidebar" [activeItem]="activeItem" [role]="role"></app-sidebar>
+
+    <!--real main-->
+    <div class="content">
+      <app-pharma-header
+    [ordonnances]="ordonnances"
+    (applyFilter)="onFilterApply($event)">
+    </app-pharma-header>
+      <div class="cards">
+        <app-ordonnance-card
+          *ngFor="let ordonnance of paginatedOrdonnances"
+          [ordonnance]="ordonnance">
+        </app-ordonnance-card>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination">
+      <!-- Previous Arrow -->
+      <button
+      class="page-button"
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)">
+      &lt;
+      </button>
+
+      <!-- Page Numbers -->
+      <button
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      class="page-button"
+      [class.active]="i + 1 === currentPage"
+      (click)="changePage(i + 1)">
+      {{ i + 1 }}
+      </button>
+
+      <!-- Next Arrow -->
+      <button
+      class="page-button"
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)">
+      &gt;
+      </button>
+    </div>
+    </div>
+  </div>
+</div>

@@ -25,13 +25,15 @@ export class OrdonnanceComponent {
   }
   ordonnance: Ordonnance = {
       id: '1',
-      date: '25/12/2024',
+      date_debut: '25/12/2024',
+      date_fin: '25/12/2024',
       estValide: false,
       consultation: '1',
       pharmacien_id: 'Khelifati Amine',
       patient_id: 'Khelifati Amine',
       medecin_id: 'Khelifati Amine',
-      termine : false
+      termine : false,
+      etablissement: 'CHU de Tlemcen',
     };
   medicaments: Medicament[] = [
     {
