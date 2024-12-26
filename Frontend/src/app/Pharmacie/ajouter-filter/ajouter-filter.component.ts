@@ -13,6 +13,11 @@ export class AjouterFilterComponent {
   @Output() closePanel = new EventEmitter<void>();
   @Output() filledFieldsCountChange = new EventEmitter<number>();
   @Output() applyFilter = new EventEmitter<any>();
+  @Input() set shouldReset(value: boolean) {
+    if (value) {
+      this.filterForm.reset();
+    }
+  }
 
   filterForm: FormGroup;
   filledFieldsCount: number = 0; // To persist the count

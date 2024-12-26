@@ -273,5 +273,10 @@ export class RadiologueComponent {
       get totalPages() {
         return Math.ceil(this.filteredBilans.length / this.pageSize);
       }
+      onResetFilter() {
+        this.filteredBilans = [...this.bilans];
+        this.currentPage = 1;  // Reset to first page
+
+      }
 
 }

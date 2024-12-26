@@ -25,7 +25,9 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
+
     },
     {
       id: '1',
@@ -36,7 +38,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -47,7 +50,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -58,7 +62,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -69,7 +74,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -80,7 +86,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -91,7 +98,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -102,7 +110,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -113,7 +122,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -124,7 +134,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -135,7 +146,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -146,7 +158,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -157,7 +170,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -168,7 +182,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -179,7 +194,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -190,7 +206,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     },
     {
       id: '1',
@@ -201,7 +218,8 @@ export class LaborantinComponent {
     est_resultat: false,
     medecin: '',
     Consultation:  null,
-    etablissement: 'CHU'
+    etablissement: 'CHU',
+    patient: '1'
     }
   ];
   filteredBilans: BilanBio[] = [...this.bilans]; // Holds the filtered results
@@ -251,6 +269,11 @@ export class LaborantinComponent {
 
     get totalPages() {
       return Math.ceil(this.filteredBilans.length / this.pageSize);
+    }
+    onResetFilter() {
+      this.filteredBilans = [...this.bilans];
+      this.currentPage = 1;  // Reset to first page
+
     }
 
 }

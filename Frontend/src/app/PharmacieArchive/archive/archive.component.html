@@ -10,7 +10,8 @@
     <div class="content">
       <app-archive-header
     [ordonnances]="ordonnances"
-    (applyFilter)="onFilterApply($event)">
+    (applyFilter)="onFilterApply($event)"
+    (resetFilter)="onResetFilter()">
     </app-archive-header>
       <div class="cards">
         <app-ordonnance-card

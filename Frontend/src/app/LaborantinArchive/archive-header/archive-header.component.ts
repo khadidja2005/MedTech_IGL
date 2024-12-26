@@ -12,10 +12,16 @@ export class ArchiveHeaderComponent {
   @Input() bilans!: BilanBio[];
       filledFieldsCount: number = 0;
       @Output() applyFilter = new EventEmitter<any>(); // Add this output
+      @Output() resetFilter = new EventEmitter<void>();
 
 
-      isAddPanelVisible = false;
-      isPopupVisible = false;
+  isAddPanelVisible = false;
+  isPopupVisible = false;
+
+  onReset() {
+    this.filledFieldsCount = 0;
+    this.resetFilter.emit();
+  }
 
       onFilterApply(filterValues: any) {
         this.applyFilter.emit(filterValues);

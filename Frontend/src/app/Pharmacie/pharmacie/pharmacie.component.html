@@ -10,7 +10,8 @@
     <div class="content">
       <app-pharma-header
     [ordonnances]="ordonnances"
-    (applyFilter)="onFilterApply($event)">
+    (applyFilter)="onFilterApply($event)"
+    (resetFilter)="onResetFilter()">
     </app-pharma-header>
       <div class="cards">
         <app-ordonnance-card

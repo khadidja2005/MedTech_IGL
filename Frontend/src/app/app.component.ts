@@ -1,6 +1,6 @@
-import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 
 @Component({
   selector: 'app-root',

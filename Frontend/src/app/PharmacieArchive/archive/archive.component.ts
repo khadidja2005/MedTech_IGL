@@ -260,5 +260,11 @@ export class ArchiveComponent {
     get totalPages() {
       return Math.ceil(this.filteredOrdonnances.length / this.pageSize);
     }
+    onResetFilter() {
+      this.filteredOrdonnances = [...this.ordonnances];
+      this.currentPage = 1;  // Reset to first page
+
+    }
+
 
 }

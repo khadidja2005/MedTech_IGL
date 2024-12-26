@@ -6,10 +6,11 @@
     </button>
     <app-ajouter-filter
   [isVisible]="isAddPanelVisible"
+  [shouldReset]="filledFieldsCount === 0"
   (closePanel)="closeAddPanel()"
   (applyFilter)="onFilterApply($event)"
   (filledFieldsCountChange)="updateFilledCount($event)">
 </app-ajouter-filter>
-   <button class="reinit-button">reinitialiser</button>
+   <button class="reinit-button" (click)="onReset()">reinitialiser</button>
   </div>
 </div>

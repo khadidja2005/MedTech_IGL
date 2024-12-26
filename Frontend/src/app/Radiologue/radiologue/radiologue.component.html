@@ -10,7 +10,8 @@
     <div class="content">
       <app-radio-header
       [bilans]="bilans"
-      (applyFilter)="onFilterApply($event)">
+      (applyFilter)="onFilterApply($event)"
+      (resetFilter)="onResetFilter()">
     </app-radio-header>
       <div class="cards">
         <app-bilan-radio-card

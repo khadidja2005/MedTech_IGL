@@ -10,7 +10,8 @@
     <div class="content">
       <app-labo-header
       [bilans]="bilans"
-      (applyFilter)="onFilterApply($event)">
+      (applyFilter)="onFilterApply($event)"
+      (resetFilter)="onResetFilter()">
     </app-labo-header>
       <div class="cards">
         <app-bilan-bio-card
