@@ -7,4 +7,5 @@ export interface BilanBio {
     est_resultat: boolean;
     medecin: string; // Foreign key to PersonnelMedical
     Consultation: string | null; // Foreign key to Consultation, nullable
+    etablissement: string; // Foreign key to Etablissement
 }
