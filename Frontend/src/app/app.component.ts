@@ -1,11 +1,11 @@
+import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ArchiveComponent } from './RadiologueArchive/archive/archive.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ArchiveComponent],
+  imports: [RouterOutlet, BilanBioComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

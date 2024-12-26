@@ -8,4 +8,5 @@ export interface BilanBio {
     medecin: string; // Foreign key to PersonnelMedical
     Consultation: string | null; // Foreign key to Consultation, nullable
     etablissement: string; // Foreign key to Etablissement
+    patient: string; // Foreign key to Patient
 }

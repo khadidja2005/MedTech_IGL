@@ -24,13 +24,6 @@ export class AjouterMedicamentComponent {
       });
     }
 
-    private convertDateToDisplayFormat(dateStr: string): string {
-      // Convert from YYYY-MM-DD to DD/MM/YYYY
-      if (!dateStr) return '';
-      const [year, month, day] = dateStr.split('-');
-      return `${day}/${month}/${year}`;
-    }
-
     onSubmit() {
       if (this.ajoutForm.valid) {
         const formValue = this.ajoutForm.value;
