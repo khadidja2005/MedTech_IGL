@@ -2,16 +2,21 @@ from django.db import models
 
 
 class Etablissement(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
+    class TypeChoices(models.TextChoices):
+        HOPITAL = "HOPITAL", "Hopital"
+        CLINIQUE = "CLINIQUE", "Clinique"
+        CABINET_MEDICAL = "CABINET MEDICAL", "Cabinet Medical"
+
     nom_etablissement = models.CharField(max_length=200)
     adresse = models.CharField(max_length=100)
     telephone = models.IntegerField()
     email = models.EmailField(max_length=100)
-    type = models.CharField(max_length=50)
+    type = models.CharField(
+        max_length=50, choices=TypeChoices.choices, default=TypeChoices.HOPITAL
+    )
 
 
 class Admin(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     nom_complet = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     password = models.CharField(max_length=100)
@@ -26,7 +31,6 @@ class PersonnelMedical(models.Model):
         INFIRMIER = "INFIRMIER", "Infirmier"
         PHARMACIEN = "PHARMACIEN", "Pharmacien"
 
-    id = models.CharField(max_length=100, primary_key=True)
     lienPhoto = models.URLField()
     nom_complet = models.CharField(max_length=200)
     email = models.EmailField(max_length=100)
@@ -41,13 +45,11 @@ class PersonnelMedical(models.Model):
 
 
 class etablissement_personnel_medical(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     etablissement = models.ForeignKey(Etablissement, on_delete=models.CASCADE)
     personnel_medical = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
 
 
 class Patient(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     nss = models.CharField(max_length=100)
     nom_complet = models.CharField(max_length=200)
     date_naissance = models.DateField()
@@ -62,27 +64,25 @@ class Patient(models.Model):
 
 
 class Mutuelle(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
     nom = models.CharField(max_length=100)
     numero_adherent = models.IntegerField()
     type_couverture = models.CharField(max_length=100)
-    telephone = models.IntegerField()
+    telephone = models.CharField(max_length=15)
     email = models.EmailField()
 
 
 class Contact(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     nom_complet = models.CharField(max_length=200)
     relation = models.CharField(max_length=100)
+    priorite = models.IntegerField(default=0)
     telephone = models.IntegerField()
     adresse = models.CharField(max_length=100)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    email = models.EmailField()
+    email = models.EmailField(null=True)
 
 
 class DPI(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     date_creation = models.DateField()
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -91,25 +91,22 @@ class DPI(models.Model):
 
 
 class Antecedent(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, null=True)
     nom = models.CharField(max_length=50)
-    description = models.TextField()
-    date_debut = models.DateField()
-    date_fin = models.DateField()
+    description = models.TextField(null=True)
+    date_debut = models.DateField(null=True)
+    date_fin = models.DateField(null=True)
     DPI_id = models.ForeignKey(DPI, on_delete=models.CASCADE)
 
 
 class Hospitalisation(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     date_debut = models.DateField()
-    date_fin = models.DateField()
+    date_fin = models.DateField(null=True)
     DPI = models.ForeignKey(DPI, on_delete=models.CASCADE)
     medecin_responsable = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
 
 
 class Consultation(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     resume = models.TextField()
     date = models.DateField()
     Hospitalisation = models.ForeignKey(Hospitalisation, on_delete=models.CASCADE)
@@ -117,15 +114,15 @@ class Consultation(models.Model):
 
 
 class Ordonnance(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    date = models.DateField()
     estValide = models.BooleanField(default=False)
+    estTerminer = models.BooleanField(default=False)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
-    pharmacien_id = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
+    pharmacien_id = models.ForeignKey(
+        PersonnelMedical, on_delete=models.CASCADE, null=True
+    )
 
 
 class Medicament(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     nom = models.CharField(max_length=100)
     dosage = models.CharField(max_length=100)
     duree = models.CharField(max_length=100)
@@ -146,7 +143,6 @@ class Soins(models.Model):
 
         AUTRES = "AUTRES", "Autres"
 
-    id = models.CharField(max_length=100, primary_key=True)
     date = models.DateField()
     heure = models.TimeField()
     type_soins = models.CharField(
@@ -155,7 +151,6 @@ class Soins(models.Model):
         default=typeSoinsChoices.INFIRMIER,
     )
     description = models.TextField(null=True)
-    etat_patient = models.CharField(max_length=100)
     medicament = models.CharField(max_length=100, null=True)
     dose = models.CharField(max_length=100, null=True)
     hospitalisation = models.ForeignKey(Hospitalisation, on_delete=models.CASCADE)
@@ -165,18 +160,15 @@ class Soins(models.Model):
 
 
 class BilanBio(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     date_debut = models.DateField()
-    date_fin = models.DateField()
-    parametres = models.TextField()
+    date_fin = models.DateField(null=True)
+    parametres = models.TextField(null=True)
     est_complet = models.BooleanField(default=False)
     est_resultat = models.BooleanField(default=False)
-    medecin = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
     Consultation = models.ForeignKey(Consultation, on_delete=models.SET_NULL, null=True)
 
 
 class ResultatBio(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
     valeur_mesure = models.CharField(max_length=100)
     date_mesure = models.DateField()
     heure_mesure = models.TimeField()
@@ -187,15 +179,14 @@ class ResultatBio(models.Model):
 
 
 class ResultatRadio(models.Model):
-    id = models.CharField(max_length=100, primary_key=True)
-    description = models.TextField()
     piece_jointe = models.TextField()
     date = models.DateField()
-    compte_rendu = models.TextField()
+    compte_rendu = models.TextField(null=True)
     radiologue_compte_rendu = models.ForeignKey(
         PersonnelMedical,
         on_delete=models.CASCADE,
         related_name="radiologue_compte_rendu",
+        null=True,
     )
     radiologue = models.ForeignKey(
         PersonnelMedical, on_delete=models.CASCADE, related_name="radiologue"
@@ -208,9 +199,8 @@ class BilanRadio(models.Model):
         SCANNER = "SCANNER", "Scanner"
         IRM = "IRM", "IRM"
 
-    id = models.CharField(max_length=100, primary_key=True)
     date_debut = models.DateField()
-    date_fin = models.DateField()
+    date_fin = models.DateField(null=True)
     type_radio = models.CharField(
         max_length=10,
         choices=typeRadioChoices.choices,
@@ -219,6 +209,5 @@ class BilanRadio(models.Model):
     est_complet = models.BooleanField(default=False)
     est_resultat = models.BooleanField(default=False)
     description = models.TextField()
-    medecin = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
     Consultation = models.ForeignKey(Consultation, on_delete=models.SET_NULL, null=True)
-    resultat_id = models.ForeignKey(ResultatRadio, on_delete=models.CASCADE)
+    resultat_id = models.ForeignKey(ResultatRadio, on_delete=models.CASCADE, null=True)
