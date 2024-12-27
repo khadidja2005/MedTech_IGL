@@ -4,7 +4,7 @@
         <span> Consultation :&nbsp;</span>
         <span>{{ consultation.id}}</span>
       </div>
-      <div class="flex justify-between gap-4 w-full">
+      <div *ngIf="canEditConsultation" class="flex justify-between gap-4 w-full">
         <button class="w-full" (click)="modifyConsultation()">
           <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1">
             <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">

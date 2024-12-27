@@ -7,12 +7,18 @@ import {DpiInfoComponent} from "./PDI/dpi-info/dpi-info.component";
 import { DpiComponent } from "./PDI/dpi/dpi.component";
 import { ConsultationInfoComponent } from "./Consultation/consultation-info/consultation-info.component";
 import { EstablishmentsComponent } from "./dashboard-etablissement/establishments/establishments.component";
+import { PersonnalsMedicauxComponent } from "./etab-personnals-medicaux/personnals-medicaux/personnals-medicaux.component";
+import { EmployeInfComponent } from "./Employe/employe-inf/employe-inf.component";
+import { BddComponent } from "./controle-bdd/bdd/bdd.component";
+import { PageListEtablissemetsComponent } from "./dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component";
+import { DoctorEstablishmentsComponent } from "./dashboard-medecin/doctor-establishments/doctor-establishments.component";
+import { DPIManagementComponent } from "./dashboard-medecin/dpimanagement/dpimanagement.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true, 
-  imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent],  
+  imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent],  
 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
