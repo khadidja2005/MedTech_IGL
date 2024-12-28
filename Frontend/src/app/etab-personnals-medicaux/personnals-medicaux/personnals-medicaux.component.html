@@ -1,0 +1,585 @@
+<div class="grid grid-cols-12 gap-2 p-4 font-poppins relative">
+    <div class="consultation flex-col col-span-3 p-4">
+      <!-- Etablissement Header -->
+      <div class="flex font-bold mb-6 text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
+        <span>Etablissement &nbsp;</span>
+        <span>{{ Etablissement.id}}</span>
+      </div>
+  
+      <!-- Edit/Delete Buttons -->
+      <div *ngIf="canEditEtablissement()" class="flex justify-between gap-4 w-full">
+        <button class="w-full" (click)="modifyEtablissement()">
+          <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1">
+            <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">
+            <p class="text-lg font-semibold text-[#FCBC05] ml-2">modifier</p>
+          </div>
+        </button>
+        
+        <button class="w-full" (click)="deleteEtablissement()">
+          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1">
+            <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
+            <p class="text-lg font-semibold text-[#FF3E3E]">supprimer</p>
+          </div>
+        </button>
+      </div>
+    </div>
+</div>
+      <!-- Menu Tabs -->
+      <div class="flex text-[#4B6386]  text-[35px] p-2 rounded-lg border-b border-gray-200">
+        <div class="flex w-full justify-between">
+          <div 
+            class="menu-item text-center py-2 flex-1 cursor-pointer"
+            [ngClass]="{'!text-[#3A8EF6] !border-b-2 !border-[#3A8EF6] pb-2': selectedMenu === 1}"
+            (click)="selectMenu(1)">
+            Personnals médicaux
+          </div>
+          <div 
+            class="menu-item text-center py-2 flex-1 cursor-pointer"
+            [ngClass]="{'!text-[#3A8EF6] !border-b-2 !border-[#3A8EF6] pb-2': selectedMenu === 2}"
+            (click)="selectMenu(2)">
+            PDI
+          </div>
+        </div>
+      </div>
+  
+      <!-- Modify Etablissement Modal -->
+      <div *ngIf="showModifyModal" class="fixed bottom-0 h-[700px] right-0 bg-white rounded-xl shadow-lg !p-6 w-[500px] z-50">
+        <div class="flex justify-between items-center mb-4">
+          <img 
+            src="assets/images/goBack.png" 
+            alt="return" 
+            class="cursor-pointer" 
+            (click)="closeModifyModal()">
+          <h2 class="text-xl font-semibold text-[#0C2757]">
+            Modifier établissement
+          </h2>
+        </div>
+      
+        <!-- Nom Input -->
+        <div class="mt-6">
+          <label class="block font-medium text-xl mb-2">
+            Nom
+          </label>
+          <input
+            value={{Etablissement.nom_etablissement}}
+            type="text"
+            [(ngModel)]="newEstablishment.nom_etablissement"
+            class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+          >
+          <p *ngIf="EtablissementValidationErrors.nom_etablissement" class="text-red-500 text-sm mt-1">
+            {{ EtablissementValidationErrors.nom_etablissement }}
+          </p>
+        </div>
+      
+        <!-- Adresse Input -->
+        <div class="mt-6">
+          <label class="block font-medium text-xl mb-2">
+            Adresse
+          </label>
+          <input
+            value={{Etablissement.adresse}}
+            type="text"
+            [(ngModel)]="newEstablishment.adresse"
+            class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+          >
+          <p *ngIf="EtablissementValidationErrors.adresse" class="text-red-500 text-sm mt-1">
+            {{ EtablissementValidationErrors.adresse }}
+          </p>
+        </div>
+      
+        <!-- Email Input -->
+        <div class="mt-6">
+          <label class="block font-medium text-xl mb-2">
+            Email
+          </label>
+          <input
+            value={{Etablissement.email}}
+            type="text"
+            [(ngModel)]="newEstablishment.email"
+            class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+          >
+          <p *ngIf="EtablissementValidationErrors.email" class="text-red-500 text-sm mt-1">
+            {{ EtablissementValidationErrors.email }}
+          </p>
+        </div>
+      
+        <!-- Téléphone Input -->
+        <div class="mt-6">
+          <label class="block font-medium text-xl mb-2">
+            Téléphone
+          </label>
+          <input
+            value={{Etablissement.telephone}}
+            type="text"
+            [(ngModel)]="newEstablishment.telephone"
+            class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+          >
+          <p *ngIf="EtablissementValidationErrors.telephone" class="text-red-500 text-sm mt-1">
+            {{ EtablissementValidationErrors.telephone }}
+          </p>
+        </div>
+      
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-3 m-10 mt-14">
+          <button 
+            (click)="modifyEstablishment()"
+            class="px-4 py-2 bg-[#3A8EF6] font-semibold font-poppins text-white rounded-2xl text-xl"
+          >
+            Modifier
+          </button>
+        </div>
+      </div>
+  
+      <!-- Content Sections -->
+      <div class="mt-6">
+        <!-- Personnel Medical Section -->
+        <div *ngIf="selectedMenu === 1" class="w-full px-10">
+          <div class="flex mb-6">
+            <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
+            <button *ngIf="canEditEtablissement()" 
+                    class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+                    (click)="togglePersonnelSelectionModal()">
+              <img src="assets/images/plus.png" alt="ml-14" class="">
+              Ajouter un personnel médical
+            </button>
+          </div>
+  
+          <!-- Personnel List Headers -->
+          <div class="flex !py-5 bg-white !my-4">
+            <div class="w-1/12 m-6"></div>
+            <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Nom</div>
+            <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Email</div>
+            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Role</div>
+            <div class="w-3/12"></div>
+          </div>
+  
+              <!-- Personnel List -->
+      <div class="!space-y-4">
+        <div *ngFor="let person of getPersonnelsForCurrentEtablissement()" class="flex py-5 bg-white items-center">
+          <div class="w-1/12 text-center m-6">
+            <img src="assets/images/doctor.png" alt="">
+          </div>
+          <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">
+            {{person.nom_complet}}
+          </div>
+          <div class="w-4/12 !text-[25px] !text-[#0C2757]">
+            {{person.email}}
+          </div>
+          <div class="w-3/12 text-center">
+            <span [ngClass]="{
+              'px-3 py-1 rounded-lg !text-[25px] ': true,
+              'bg-[#D865ED1A] text-[#D865ED]': person.role === 'MEDECIN',
+              'bg-[#47F6A21A] text-[#0CF045]': person.role === 'RADIOLOGUE',
+              'bg-[#FF34A01A] text-[#FF34A0]': person.role === 'LABORANTIN',
+              'bg-[#FFA5001A] text-[#FFA500]': person.role === 'INFIRMIER',
+              'bg-[#3A8EF61A] text-[#3A8EF6]': !['MEDECIN', 'RADIOLOGUE', 'LABORATIN', 'INFIRMIER'].includes(person.role)
+            }">
+              {{person.role}}
+            </span>
+          </div>
+          <div class="w-3/12 text-center">
+            <button *ngIf="!canEditEtablissement"
+            class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+              Consulter
+            </button>
+            <button *ngIf="canEditEtablissement()" 
+            (click)="createNewPersonnel('edit', person)" class="p-2">
+            <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+          </button>
+          <button *ngIf="canEditEtablissement()" 
+          (click)="deleteEmploye(person.id)" class="p-2">
+            <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10">
+          </button>
+          </div>
+        </div>
+      </div>
+      </div>
+  
+        <!-- DPI Section -->
+        <div *ngIf="selectedMenu === 2">
+          <div class="flex ml-10 mb-6">
+            <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[650px]">Liste des PDI</h1>  
+            <button *ngIf="canEditEtablissement()" 
+                    class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+                    (click)="toggleDPIModal('add')">
+              <img src="assets/images/plus.png" alt="" class="pr-4">
+              Ajouter un PDI
+            </button>
+          </div>
+  
+          <!-- DPI List Headers -->
+          <div class="flex py-5 bg-white mx-6">
+            
+            <div class="w-3/12 !text-[#0C2757] !text-[25px] ml-14 ">Nom</div>
+            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">NSS</div>
+            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Patient</div>
+            <div class="w-2/12"></div>
+          </div>
+  
+          <!-- DPI List -->
+          <div class="space-y-4 px-6">
+            <div *ngFor="let dpi of getDPIsForCurrentEtablissement()" class="flex py-5 bg-white items-center">
+              <div class="w-1/12 ml-14">
+                <img src="assets/images/folder.png" alt="" class="w-14 h-14">
+              </div>
+              <div class="w-2/12 !text-[#0C2757] !text-[25px] ">
+                {{dpi.id}}
+              </div>
+              <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">
+                12345678901234
+              </div>
+              <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">
+                {{dpi.patient}}
+              </div>
+              <div class="w-2/12 text-center">
+                <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+                  Consulter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="showPersonnelSelectionModal" class="fixed bottom-0 right-0 h-[700px] bg-white rounded-xl shadow-lg p-6 w-[500px] z-50">
+        <div class="flex justify-between items-center mb-4">
+          <img 
+          src="assets/images/goBack.png" 
+          alt="return" 
+          class="cursor-pointer"
+          (click)="togglePersonnelModal('back')">
+            <h2 class="text-xl font-semibold text-[#0C2757]">
+                Ajouter Personnel medical
+            </h2>
+        </div>
+    
+        <div class="flex flex-col gap-4 mt-6">
+          <select 
+          [(ngModel)]="sselectedExistingPersonnel" 
+          class="w-full p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg">
+          <option value="">les personnels médicaux déjà existants</option>
+          <option *ngFor="let person of personnels" [value]="person.id">{{person.nom_complet}}</option>
+        </select>
+        
+        <p *ngIf="existingPersonnelError" class="text-red-500 text-sm mt-1">
+          {{ existingPersonnelError }}
+        </p>
+        
+        <button
+          (click)="addExistingPersonnel()" 
+          class="w-full py-3 mt-4 bg-[#3A8EF6] text-white rounded-xl text-lg hover:bg-blue-500">
+          Ajouter
+        </button>
+    
+            <div class="text-center font-medium text-[#0C2757] mt-[100px] my-4">
+                OU
+            </div>
+    
+            <button
+                (click)="createNewPersonnel('add')" 
+                class="w-full py-3 bg-[#3A8EF6] text-white rounded-xl text-lg hover:bg-blue-500">
+                Creer un nouveau personnel
+            </button>
+        </div>
+    </div>
+      
+  
+    <!-- Add Personnel Modal -->
+    <div *ngIf="showPersonnelModal" class="fixed bottom-0 h-[700px] right-0 bg-white rounded-xl shadow-lg !p-6 w-[500px] z-50">
+      <div class="flex justify-between items-center mb-4">
+        <img 
+          src="assets/images/goBack.png" 
+          alt="return" 
+          class="cursor-pointer" 
+          (click)="togglePersonnelModal('backToSelection')">
+        <h2 class="text-xl font-semibold text-[#0C2757]">
+          Ajouter personnel médical
+        </h2>
+      </div>
+    
+      <!-- Nom Complet Input -->
+      <div class="mt-6">
+        <label class="block font-medium text-xl mb-2">
+          Nom Complet
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="newPersonnel.nom_complet"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+        <p *ngIf="PersonnelValidationErrors.nom_complet" class="text-red-500 text-sm mt-1">
+          {{ PersonnelValidationErrors.nom_complet }}
+        </p>
+      </div>
+    
+      <!-- Email Input -->
+      <div class="mt-6">
+        <label class="block font-medium text-xl mb-2">
+          Email
+        </label>
+        <input
+          type="email"
+          [(ngModel)]="newPersonnel.email"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+        <p *ngIf="PersonnelValidationErrors.email" class="text-red-500 text-sm mt-1">
+          {{ PersonnelValidationErrors.email }}
+        </p>
+      </div>
+    
+      <!-- Telephone Input -->
+      <div class="mt-6">
+        <label class="block font-medium text-xl mb-2">
+          Téléphone
+        </label>
+        <input
+          type="number"
+          [(ngModel)]="newPersonnel.telephone"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+        <p *ngIf="PersonnelValidationErrors.telephone" class="text-red-500 text-sm mt-1">
+          {{ PersonnelValidationErrors.telephone }}
+        </p>
+      </div>
+    
+      <!-- Role Input -->
+      <div class="mt-6">
+        <label class="block font-medium text-xl mb-2">
+          Rôle
+        </label>
+        <select
+          [(ngModel)]="newPersonnel.role"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+          <option value="">Sélectionner un rôle</option>
+          <option value="MEDECIN">Médecin</option>
+          <option value="RADIOLOGUE">Radiologue</option>
+          <option value="INFIRMIER">Infirmier</option>
+        </select>
+        <p *ngIf="PersonnelValidationErrors.role" class="text-red-500 text-sm mt-1">
+          {{ PersonnelValidationErrors.role }}
+        </p>
+      </div>
+    
+      <!-- Specialité Input -->
+      <div class="mt-6">
+        <label class="block font-medium text-xl mb-2">
+          Spécialité
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="newPersonnel.specialite"
+          class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+        >
+        <p *ngIf="PersonnelValidationErrors.specialite" class="text-red-500 text-sm mt-1">
+          {{ PersonnelValidationErrors.specialite }}
+        </p>
+      </div>
+    
+      <!-- Submit Button -->
+      <div class="flex justify-end gap-3 m-10 mt-14">
+        <button 
+          (click)="submitNewPersonnel()"
+          class="px-4 py-2 bg-[#3A8EF6] font-semibold font-poppins text-white rounded-2xl text-xl"
+        >
+          Ajouter
+        </button>
+      </div>
+    </div>
+    
+
+  <!-- Add DPI Modal -->
+<!-- DPI Modal -->
+<div *ngIf="showDPIModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded-lg w-[1200px] p-6">
+    <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
+      Ajouter un DPI
+    </h1>
+    
+    <!-- First line -->
+    <div class="flex justify-between mx-8 mt-8">
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Nom Complet</label>
+        <input
+          [(ngModel)]="patient.nom_complet"
+          name="nom_complet"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.patient" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.patient }}
+        </p>
+      </div>
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Date de Naissance</label>
+        <input
+          type="date"
+          [(ngModel)]="patient.date_naissance"
+          name="date_naissance"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.date_naissance" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.date_naissance }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Second line -->
+    <div class="flex justify-between mx-8 mt-8">
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">NSS</label>
+        <input
+          [(ngModel)]="patient.nss"
+          name="nss"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.nss" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.nss }}
+        </p>
+      </div>
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Email</label>
+        <input
+          type="email"
+          [(ngModel)]="patient.email"
+          name="email"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.email" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.email }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Third line -->
+    <div class="flex justify-between mx-8 mt-8">
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Téléphone</label>
+        <input
+          [(ngModel)]="patient.telephone"
+          name="telephone"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.telephone" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.telephone }}
+        </p>
+      </div>
+      <div class="w-[500px]">
+        <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Adresse</label>
+        <input
+          [(ngModel)]="patient.adresse"
+          name="adresse"
+          class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        <p *ngIf="DPIValidationErrors.adresse" class="text-red-500 text-sm mt-1">
+          {{ DPIValidationErrors.adresse }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end mt-10 mx-8">
+      <button (click)="returnFirst()" class="border-2 border-[#3A8EF6] text-[#3A8EF6] font-semibold text-xl rounded-xl px-8 mx-4 py-3">
+        Retour
+      </button>
+      <button 
+        (click)="nextStep()"
+        class="bg-[#3A8EF6] text-white font-semibold text-xl rounded-xl px-8 py-3">
+        Suivant
+      </button>
+    </div>
+  </div>
+</div>
+  
+<div *ngIf="showDPIModal && showMutuelleStep" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded-lg w-[1200px] p-6">
+    <div>
+      <!-- Mutuelle 1 Section -->
+      <h2 class="text-[#4B6386] text-2xl font-semibold ml-8 ">Mutuelle 1:</h2>
+      <div class="flex flex-wrap mx-8 mt-4">
+        <div class="w-1/2 pr-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Nom Complet</label>
+          <input [(ngModel)]="mutuelle1.nom" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pl-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Telephone</label>
+          <input [(ngModel)]="mutuelle1.telephone" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pr-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Email</label>
+          <input [(ngModel)]="mutuelle1.email" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pl-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Type de couverture</label>
+          <input [(ngModel)]="mutuelle1.type_couverture" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+      </div>
+
+      <!-- Mutuelle 2 Section -->
+      <h2 class="text-[#4B6386] text-2xl font-semibold ml-8 mt-6">Mutuelle 2:</h2>
+      <div class="flex flex-wrap mx-8 mt-4">
+        <div class="w-1/2 pr-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Nom Complet</label>
+          <input [(ngModel)]="mutuelle2.nom" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pl-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Telephone</label>
+          <input [(ngModel)]="mutuelle2.telephone" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pr-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Email</label>
+          <input [(ngModel)]="mutuelle2.email" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+        <div class="w-1/2 pl-4 mb-4">
+          <label class="block text-[#0C2757] text-[20px] font-semibold font-poppins">Type de couverture</label>
+          <input [(ngModel)]="mutuelle2.type_couverture" class="w-full bg-[#F3F8FF] h-[65px] !border-2 !border-[#3A8EF6] rounded-xl p-2 mt-2">
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-4 mt-10 mx-8">
+      <button (click)="cancelMutuelle()" class="border-2 border-[#3A8EF6] text-[#3A8EF6] font-semibold text-xl rounded-xl px-8 py-3">
+        Retour
+      </button>
+      <button (click)="saveDPIWithMutuelle()" class="bg-[#3A8EF6] text-white font-semibold text-xl rounded-xl px-8 py-3">
+        Sauvegarder
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteConfirmation" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-[400px]">
+      <h2 class="text-xl font-semibold text-[#0C2757] mb-4">Confirmer la suppression</h2>
+      <p class="text-[#4B6386] mb-6">Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+      <div class="flex justify-end gap-4">
+        <button 
+          (click)="cancelDelete()"
+          class="px-4 py-2 text-[#3A8EF6] border-2 border-[#3A8EF6] rounded-xl"
+        >
+          Annuler
+        </button>
+        <button 
+          (click)="confirmDelete()"
+          class="px-4 py-2 bg-[#FF3E3E] text-white rounded-xl"
+        >
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div *ngIf="showSuccessToast" 
+       class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <span>Opération réussie !</span>
+  </div>
+
+  <!-- Error Toast -->
+  <div *ngIf="showErrorToast" 
+       class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <span>Une erreur est survenue</span>
+  </div>
+

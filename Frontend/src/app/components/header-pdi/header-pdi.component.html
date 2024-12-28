@@ -1,0 +1,12 @@
+<header class="flex-1 w-full flex justify-between items-center p-4 header header-shadow">
+  <div class="flex items-center">
+    <a href="" class="logo">Medtech</a>
+  </div>
+  <div class="flex items-center space-x-4">
+    <div>
+      <p class="doctor-name">{{ user1.name }}</p>
+      <p *ngIf="user1.Admin" class="admin">Admin</p>
+    </div>
+    <img [src]="user1.image" alt="Doctor Image" class="doctor-image border-[#3A8EF6] border-2">
+  </div>
+</header>

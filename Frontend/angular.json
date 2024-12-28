@@ -21,6 +21,7 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+
               "src/assets",
               "src/favicon.ico",
               {
@@ -28,6 +29,7 @@
                 "input": "public"
               }
             ],
+
             "styles": [
               "src/styles.css"
             ],
