@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator
 
 
 class Etablissement(models.Model):
@@ -9,7 +10,7 @@ class Etablissement(models.Model):
 
     nom_etablissement = models.CharField(max_length=200)
     adresse = models.CharField(max_length=100)
-    telephone = models.IntegerField()
+    telephone = models.CharField(max_length=10)
     email = models.EmailField(max_length=100)
     type = models.CharField(
         max_length=50, choices=TypeChoices.choices, default=TypeChoices.HOPITAL
@@ -19,6 +20,10 @@ class Etablissement(models.Model):
 class Admin(models.Model):
     nom_complet = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
+    telephone = models.CharField(
+        max_length=10,
+        null=True,
+    )
     password = models.CharField(max_length=100)
     lienPhoto = models.URLField()
 
@@ -35,7 +40,7 @@ class PersonnelMedical(models.Model):
     nom_complet = models.CharField(max_length=200)
     email = models.EmailField(max_length=100)
     specialite = models.CharField(max_length=100)
-    telephone = models.IntegerField()
+    telephone = models.CharField(max_length=10)
     password = models.CharField(max_length=100)
     role = models.CharField(
         max_length=10,
@@ -52,15 +57,15 @@ class etablissement_personnel_medical(models.Model):
 class Patient(models.Model):
     nss = models.CharField(max_length=100)
     nom_complet = models.CharField(max_length=200)
-    date_naissance = models.DateField()
-    adresse = models.CharField(max_length=100)
-    telephone = models.IntegerField()
-    email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=100)
+    date_naissance = models.DateField(null=True)
+    adresse = models.CharField(max_length=100, null=True)
+    telephone = models.CharField(max_length=10, null=True)
+    email = models.EmailField(max_length=100, null=True)
+    password = models.CharField(max_length=100, null=True)
     lienPhoto = models.URLField()
-    lieu_naissance = models.CharField(max_length=100)
-    genre = models.CharField(max_length=100)
-    statueMatrimonial = models.CharField(max_length=100)
+    lieu_naissance = models.CharField(max_length=100, null=True)
+    genre = models.CharField(max_length=100, null=True)
+    statueMatrimonial = models.CharField(max_length=100, null=True)
 
 
 class Mutuelle(models.Model):
@@ -68,7 +73,7 @@ class Mutuelle(models.Model):
     nom = models.CharField(max_length=100)
     numero_adherent = models.IntegerField()
     type_couverture = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=15)
+    telephone = models.CharField(max_length=10)
     email = models.EmailField()
 
 
@@ -76,7 +81,7 @@ class Contact(models.Model):
     nom_complet = models.CharField(max_length=200)
     relation = models.CharField(max_length=100)
     priorite = models.IntegerField(default=0)
-    telephone = models.IntegerField()
+    telephone = models.CharField(max_length=10)
     adresse = models.CharField(max_length=100)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     email = models.EmailField(null=True)

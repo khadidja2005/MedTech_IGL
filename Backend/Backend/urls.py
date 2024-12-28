@@ -26,10 +26,14 @@ from Cloudinary.urls import urlpatterns as cloudinary_urls
 from Recherche.urls import urlpatterns as recherche_urls
 from Hospitalisation.urls import urlpatterns as hospitalisation_urls
 from BilanBio.urls import urlpatterns as bilan_bio_urls
-from ArchivePharmacie.urls import urlpatterns as archive_pharmacie_urls
-from ArchiveLabo.urls import urlpatterns as archive_labo_urls
-from ArchiveRadio.urls import urlpatterns as archive_radio_urls
+from Pharmacie.urls import urlpatterns as pharmacie_urls
+from Laboratoire.urls import urlpatterns as laboratoire_urls
+from Radiologie.urls import urlpatterns as radiologie_urls
 from BilanRadio.urls import urlpatterns as bilan_radio_urls
+from Consultation.urls import urlpatterns as consultation_urls
+from Ordonnance.urls import urlpatterns as ordonnance_urls
+from Parametres.urls import urlpatterns as parametres_urls
+from Landing.urls import urlpatterns as landing_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -42,8 +46,12 @@ urlpatterns = [
     path("recherche/", include(recherche_urls)),
     path("hospitalisation/", include(hospitalisation_urls)),
     path("bilanbio/", include(bilan_bio_urls)),
-    path("pharmacie/archive", include(archive_pharmacie_urls)),
-    path("labo/archive", include(archive_labo_urls)),
-    path("radio/archive", include(archive_radio_urls)),
+    path("pharmacie/", include(pharmacie_urls)),
+    path("laboratoire/", include(laboratoire_urls)),
+    path("radiologie/", include(radiologie_urls)),
     path("bilanradio/", include(bilan_radio_urls)),
+    path("consultation/", include(consultation_urls)),
+    path("ordonnance/", include(ordonnance_urls)),
+    path("parametres/", include(parametres_urls)),
+    path("contact-us/", include(landing_urls)),
 ]

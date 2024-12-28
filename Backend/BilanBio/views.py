@@ -128,7 +128,7 @@ def terminer(request):
 
 @csrf_exempt
 def supprimer_bilan_bio(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         if not bilan_id:
@@ -196,7 +196,7 @@ def modifier_parametre(request):
 
 @csrf_exempt
 def supprimer_parametre(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         parametre = data.get("parametre")
@@ -328,7 +328,7 @@ def modifier_resultat_bio(request):
 
 @csrf_exempt
 def supprimer_resultat_bio(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         parametre = data.get("parametre")
