@@ -1,9 +1,10 @@
 export interface Contact {
-    id: string;
-    nom_complet: string;
-    relation: string;
-    telephone: number;
-    adresse: string;
-    patient: string; // Foreign key to Patient
-    email: string;
+  id: number;
+  nom_complet: string;
+  relation: string;
+  telephone: number;
+  priorite: number;
+  adresse: string;
+  patient: string; // Foreign key to Patient
+  email: string | null;
 }
