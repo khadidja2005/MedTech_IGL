@@ -6,5 +6,6 @@ export interface ResultatBio {
     parametre: string;
     norme: string;
     bilan_bio: string; // Foreign key to BilanBio
-    laborantin: string; // Foreign key to PersonnelMedical
+    laborantin: string; 
+   
 }

@@ -16,6 +16,7 @@ module.exports = {
         radiologue: '#47F6A2',
         laborantin: '#FF34A0',
         blue_light: '#d0f0f4',
+        
       },
     },
   },

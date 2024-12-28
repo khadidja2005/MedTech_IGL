@@ -10,5 +10,7 @@ export interface BilanRadio {
     description: string;
     medecin: string; // Foreign key to PersonnelMedical
     Consultation: string | null; // Foreign key to Consultation, nullable
-    resultat_id: string; // Foreign key to ResultatRadio
+    resultat_id: string; 
+    etablissement:string;
+    patient:string;
 }

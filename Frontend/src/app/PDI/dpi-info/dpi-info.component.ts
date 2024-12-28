@@ -479,13 +479,15 @@ deleteAntecedent(id: string) {
       id: 'BR001',
       date_debut: '2024-12-01',
       date_fin: '2024-12-05',
-      type_radio: 'IRM', 
+      type_radio: 'IRM',
       est_complet: true,
       est_resultat: true,
       description: 'IRM cérébrale pour évaluation neurologique',
       medecin: 'MED001',
       Consultation: 'CONS001',
       resultat_id: 'RES001',
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'BR002',
@@ -498,6 +500,8 @@ deleteAntecedent(id: string) {
       medecin: 'MED002',
       Consultation: null, // Pas associé à une consultation
       resultat_id: 'RES002',
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'BR003',
@@ -510,6 +514,8 @@ deleteAntecedent(id: string) {
       medecin: 'MED003',
       Consultation: 'CONS003',
       resultat_id: 'RES003',
+      etablissement: '',
+      patient: ''
     },
   ];
 
@@ -522,7 +528,9 @@ deleteAntecedent(id: string) {
       est_complet: true,
       est_resultat: true,
       medecin: 'MED001',
-      Consultation: 'CONS002'
+      Consultation: 'CONS002',
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'BB002',
@@ -532,7 +540,9 @@ deleteAntecedent(id: string) {
       est_complet: false,
       est_resultat: false,
       medecin: 'MED003',
-      Consultation: null
+      Consultation: null,
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'BB003',
@@ -542,13 +552,13 @@ deleteAntecedent(id: string) {
       est_complet: true,
       est_resultat: true,
       medecin: 'MED002',
-      Consultation: 'CONS004'
+      Consultation: 'CONS004',
+      etablissement: '',
+      patient: ''
     }
   ];
 
  
-
-  // Update filter properties
   showFilterModal = false;
   filterCriteria = {
     type: '',
@@ -902,7 +912,6 @@ addMutuelle() {
 }
 showTypeDropdown = false;
 
-// Add these new methods
 toggleTypeDropdown() {
   this.showTypeDropdown = !this.showTypeDropdown;
 }

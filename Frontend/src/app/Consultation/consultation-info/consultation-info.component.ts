@@ -251,7 +251,9 @@ export class ConsultationInfoComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001'
+      resultat_id: 'RES001',
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'RAD002',
@@ -263,7 +265,9 @@ export class ConsultationInfoComponent {
       description: 'Scanner thoracique',
       medecin: 'Dr. Leila Hamdi',
       Consultation: 'CONS002',
-      resultat_id: 'RES002'
+      resultat_id: 'RES002',
+      etablissement: '',
+      patient: ''
     }
   ];
 
@@ -276,7 +280,9 @@ export class ConsultationInfoComponent {
       est_resultat: true,
       parametres: 'Glycémie, HbA1c, Créatinine',
       medecin: 'Dr. Souad Khelifi',
-      Consultation: 'CONS004'
+      Consultation: 'CONS004',
+      etablissement: '',
+      patient: ''
     },
     {
       id: 'BIO002',
@@ -286,7 +292,9 @@ export class ConsultationInfoComponent {
       est_resultat: true,
       parametres: 'NFS, Plaquettes, VS',
       medecin: 'Dr. Mohamed Reda',
-      Consultation: 'CONS005'
+      Consultation: 'CONS005',
+      etablissement: '',
+      patient: ''
     }
   ];
 
