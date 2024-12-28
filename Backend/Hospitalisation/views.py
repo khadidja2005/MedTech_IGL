@@ -304,7 +304,7 @@ def ajouter_soin(request):
 
 @csrf_exempt
 def supprimer(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         hospitalisation_id = data.get("hospitalisation_id")
         if not hospitalisation_id:

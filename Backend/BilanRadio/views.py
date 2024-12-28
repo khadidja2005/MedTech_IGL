@@ -133,7 +133,7 @@ def terminer(request):
 
 @csrf_exempt
 def supprimer_bilan_radio(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         if not bilan_id:
@@ -230,7 +230,7 @@ def ajouter_resultat_radio_compte_rendu(request):
 
 @csrf_exempt
 def supprimer_resultat_radio_compte_rendu(request):
-    if request.method == "POST":
+    if request.method == "DELETE":
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         radiologue_id = data.get("radiologue_id")
