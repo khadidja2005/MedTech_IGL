@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ArchivelaboConfig(AppConfig):
+class RadiologieConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ArchiveLabo'
+    name = 'Radiologie'

@@ -54,13 +54,13 @@ INSTALLED_APPS = [
     "Hospitalisation",
     "DashboardAdmin",
     "BilanBio",
-    "ArchiveRadio",
     "BilanRadio",
     "Consultation",
     "Ordonnance",
     "Parametres",
     "Pharmacie",
     "Laboratoire",
+    "Radiologie",
 ]
 
 MIDDLEWARE = [

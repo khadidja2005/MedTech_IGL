@@ -5,33 +5,33 @@ from django.views.decorators.http import require_http_methods
 from BDD.models import (
     PersonnelMedical,
     etablissement_personnel_medical,
-    BilanBio,
+    BilanRadio,
 )
 
 
 @csrf_exempt
 @require_http_methods(["GET"])
-def archive_labo(request):
+def archive_radio(request):
     if request.method == "GET":
         data = json.loads(request.body)
-        laborantin = data.get("laborantin")
-        if not laborantin:
-            return JsonResponse({"error": "Laborantin not provided"}, status=400)
+        Radiologue = data.get("Radiologue")
+        if not Radiologue:
+            return JsonResponse({"error": "Radiologue not provided"}, status=400)
         try:
-            laborantin = PersonnelMedical.objects.get(id=laborantin)
+            Radiologue = PersonnelMedical.objects.get(id=Radiologue)
         except PersonnelMedical.DoesNotExist:
-            return JsonResponse({"error": "Laborantin not found"}, status=404)
-        if laborantin.role != "LABORANTIN":
-            return JsonResponse({"error": "Personnel is not a laborantin"}, status=400)
+            return JsonResponse({"error": "Radiologue not found"}, status=404)
+        if Radiologue.role != "RADIOLOGUE":
+            return JsonResponse({"error": "Personnel is not a Radiologue"}, status=400)
         etab_perso = etablissement_personnel_medical.objects.filter(
-            personnel_medical=laborantin
+            personnel_medical=Radiologue
         )
         etablissement = []
         count = 0
         for ep in etab_perso:
             etablissement.append(ep.etablissement)
         bilans = []
-        for bilan in BilanBio.objects.all():
+        for bilan in BilanRadio.objects.all():
             etab = bilan.Consultation.Hospitalisation.DPI.etablissement_id
             if etab in etablissement and bilan.est_resultat:
                 count += 1
@@ -47,27 +47,27 @@ def archive_labo(request):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
-def get_bilans(request):
+def get_radios(request):
     if request.method == "GET":
         data = json.loads(request.body)
-        laborantin = data.get("laborantin")
-        if not laborantin:
-            return JsonResponse({"error": "Laborantin not provided"}, status=400)
+        Radiologue = data.get("Radiologue")
+        if not Radiologue:
+            return JsonResponse({"error": "Radiologue not provided"}, status=400)
         try:
-            laborantin = PersonnelMedical.objects.get(id=laborantin)
+            Radiologue = PersonnelMedical.objects.get(id=Radiologue)
         except PersonnelMedical.DoesNotExist:
-            return JsonResponse({"error": "Laborantin not found"}, status=404)
-        if laborantin.role != "LABORANTIN":
-            return JsonResponse({"error": "Personnel is not a laborantin"}, status=400)
+            return JsonResponse({"error": "Radiologue not found"}, status=404)
+        if Radiologue.role != "RADIOLOGUE":
+            return JsonResponse({"error": "Personnel is not a Radiologue"}, status=400)
         etab_perso = etablissement_personnel_medical.objects.filter(
-            personnel_medical=laborantin
+            personnel_medical=Radiologue
         )
         etablissement = []
         count = 0
         for ep in etab_perso:
             etablissement.append(ep.etablissement)
         bilans = []
-        for bilan in BilanBio.objects.all():
+        for bilan in BilanRadio.objects.all():
             etab = bilan.Consultation.Hospitalisation.DPI.etablissement_id
             if etab in etablissement and not bilan.est_resultat:
                 count += 1
