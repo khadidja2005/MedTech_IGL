@@ -1,4 +1,11 @@
-from BDD.models import DPI, Etablissement, Patient, Admin, PersonnelMedical
+from BDD.models import (
+    DPI,
+    Etablissement,
+    Patient,
+    Admin,
+    PersonnelMedical,
+    etablissement_personnel_medical,
+)
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -150,25 +157,50 @@ def creer_DPI(request):
             return JsonResponse(
                 {"error": "Etablissement with the provided ID not found."}, status=404
             )
-
+        # check if the DPI already exists
+        try:
+            dpi = DPI.objects.get(patient=patient, etablissement_id=etablissement)
+            return JsonResponse(
+                {
+                    "error": "DPI already exists for the given patient and etablissement."
+                },
+                status=400,
+            )
+        except DPI.DoesNotExist:
+            pass
         # Retrieve the Admin by ID
         try:
             createur = Admin.objects.get(id=createur_id)
+            # Create a new DPI
+            new_dpi = DPI.objects.create(
+                patient=patient,
+                etablissement_id=etablissement,
+                createur_id=createur,
+                date_creation=datetime.now(),
+            )
         except Admin.DoesNotExist:
             try:
                 createur = PersonnelMedical.objects.get(id=createur_id)
                 if createur.role != "MEDECIN":
                     return JsonResponse({"error": "User not allowed"}, status=404)
+                # check si createur appartient a l'etablissemnt
+                try:
+                    check = etablissement_personnel_medical.objects.get(
+                        etablissement_id=etablissement, personnel_medical_id=createur
+                    )
+                except etablissement_personnel_medical.DoesNotExist:
+                    return JsonResponse(
+                        {"error": "medecin not dans etablissement"}, status=404
+                    )
+                # Create a new DPI
+                new_dpi = DPI.objects.create(
+                    patient=patient,
+                    etablissement_id=etablissement,
+                    medecin_id=createur,
+                    date_creation=datetime.now(),
+                )
             except PersonnelMedical.DoesNotExist:
                 return JsonResponse({"error": "User not allowed"}, status=404)
-
-        # Create a new DPI
-        new_dpi = DPI.objects.create(
-            patient=patient,
-            etablissement_id=etablissement,
-            createur_id=createur,
-            date_creation=datetime.now(),
-        )
 
         # Return the newly created DPI data
         return JsonResponse(
@@ -179,3 +211,45 @@ def creer_DPI(request):
         )
     else:
         return JsonResponse({"error": "Invalid request method."}, status=405)
+
+
+def get_etablissements(request):
+    if request.method == "GET":
+        data = json.loads(request.body)
+        personnel_id = data.get("personnel_id")
+        if not personnel_id:
+            return JsonResponse({"error": "Personnel ID is required."}, status=400)
+        try:
+            personnel = PersonnelMedical.objects.get(id=personnel_id)
+            etabs = etablissement_personnel_medical.objects.filter(
+                personnel_medical_id=personnel
+            )
+            respose_data = []
+            for etab in etabs:
+                respose_data.append(
+                    {
+                        "etablissement_id": etab.etablissement.id,
+                        "etablissement_nom": etab.etablissement.nom_etablissement,
+                    }
+                )
+        except PersonnelMedical.DoesNotExist:
+            try:
+                personnel = Admin.objects.get(id=personnel_id)
+                # Get all etablissements in the database
+                all_etablissements = Etablissement.objects.all()
+                respose_data = []
+                for etablissement in all_etablissements:
+                    respose_data.append(
+                        {
+                            "etablissement_id": etablissement.id,
+                            "etablissement_nom": etablissement.nom_etablissement,
+                        }
+                    )
+            except Admin.DoesNotExist:
+                return JsonResponse(
+                    {"error": "Personnel with the provided ID not found."}, status=404
+                )
+        # Return the etablissements as a JSON response
+        return JsonResponse({"all_etablissements": respose_data})
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
