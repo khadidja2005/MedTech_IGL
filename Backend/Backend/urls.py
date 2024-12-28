@@ -27,7 +27,7 @@ from Recherche.urls import urlpatterns as recherche_urls
 from Hospitalisation.urls import urlpatterns as hospitalisation_urls
 from BilanBio.urls import urlpatterns as bilan_bio_urls
 from Pharmacie.urls import urlpatterns as pharmacie_urls
-from ArchiveLabo.urls import urlpatterns as archive_labo_urls
+from Laboratoire.urls import urlpatterns as laboratoire_urls
 from ArchiveRadio.urls import urlpatterns as archive_radio_urls
 from BilanRadio.urls import urlpatterns as bilan_radio_urls
 from Consultation.urls import urlpatterns as consultation_urls
@@ -46,7 +46,7 @@ urlpatterns = [
     path("hospitalisation/", include(hospitalisation_urls)),
     path("bilanbio/", include(bilan_bio_urls)),
     path("pharmacie/", include(pharmacie_urls)),
-    path("labo/archive", include(archive_labo_urls)),
+    path("laboratoire/", include(laboratoire_urls)),
     path("radio/archive", include(archive_radio_urls)),
     path("bilanradio/", include(bilan_radio_urls)),
     path("consultation/", include(consultation_urls)),
