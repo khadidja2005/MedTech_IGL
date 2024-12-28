@@ -57,15 +57,15 @@ class etablissement_personnel_medical(models.Model):
 class Patient(models.Model):
     nss = models.CharField(max_length=100)
     nom_complet = models.CharField(max_length=200)
-    date_naissance = models.DateField()
-    adresse = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=10)
-    email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=100)
+    date_naissance = models.DateField(null=True)
+    adresse = models.CharField(max_length=100, null=True)
+    telephone = models.CharField(max_length=10, null=True)
+    email = models.EmailField(max_length=100, null=True)
+    password = models.CharField(max_length=100, null=True)
     lienPhoto = models.URLField()
-    lieu_naissance = models.CharField(max_length=100)
-    genre = models.CharField(max_length=100)
-    statueMatrimonial = models.CharField(max_length=100)
+    lieu_naissance = models.CharField(max_length=100, null=True)
+    genre = models.CharField(max_length=100, null=True)
+    statueMatrimonial = models.CharField(max_length=100, null=True)
 
 
 class Mutuelle(models.Model):
