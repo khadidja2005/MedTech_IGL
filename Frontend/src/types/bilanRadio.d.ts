@@ -14,3 +14,4 @@ export interface BilanRadio {
     etablissement:string;
     patient:string;
 }
+
