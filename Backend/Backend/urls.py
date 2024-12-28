@@ -33,6 +33,7 @@ from BilanRadio.urls import urlpatterns as bilan_radio_urls
 from Consultation.urls import urlpatterns as consultation_urls
 from Ordonnance.urls import urlpatterns as ordonnance_urls
 from Parametres.urls import urlpatterns as parametres_urls
+from Landing.urls import urlpatterns as landing_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -52,4 +53,5 @@ urlpatterns = [
     path("consultation/", include(consultation_urls)),
     path("ordonnance/", include(ordonnance_urls)),
     path("parametres/", include(parametres_urls)),
+    path("contact-us/", include(landing_urls)),
 ]
