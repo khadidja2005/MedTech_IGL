@@ -130,7 +130,7 @@ def modifier_consultation(request):
                 {"error": "Medecin with the provided id not found."}, status=404
             )
         consultation.Medecin = medecin
-        consultation.date = datetime.strptime(date, "%Y/%m/%d").strftime("%Y-%m-%d")
+        consultation.date = datetime.strptime(date, "%Y-%m-%d")
         consultation.save()
         return JsonResponse({"success": "Consultation updated successfully."})
     else:

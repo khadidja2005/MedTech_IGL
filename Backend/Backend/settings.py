@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "ArchiveRadio",
     "BilanRadio",
     "Consultation",
+    "Ordonnance",
 ]
 
 MIDDLEWARE = [

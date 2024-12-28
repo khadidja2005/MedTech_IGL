@@ -2,8 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # DPI recherche
-    path("", views.get_infos, name="recherche_get_consultation_infos"),
+    path("", views.get_infos, name="get_consultation_infos"),
     path("modifier/", views.modifier_consultation, name="modifier_consultation"),
     path("medecins/", views.get_medecins, name="get_medecins"),
     path("modifier/resume/", views.modifier_resume, name="modifier_resume"),

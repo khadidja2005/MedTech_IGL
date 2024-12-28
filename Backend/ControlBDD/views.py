@@ -208,7 +208,7 @@ def seed_database_func():
             if estValide:
                 estTerminer = True
             else:
-                estTerminer = False
+                estTerminer = fake.boolean()
         Ordonnance.objects.create(
             estValide=estValide,
             estTerminer=estTerminer,
