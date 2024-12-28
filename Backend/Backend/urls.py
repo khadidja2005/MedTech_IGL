@@ -32,6 +32,7 @@ from ArchiveRadio.urls import urlpatterns as archive_radio_urls
 from BilanRadio.urls import urlpatterns as bilan_radio_urls
 from Consultation.urls import urlpatterns as consultation_urls
 from Ordonnance.urls import urlpatterns as ordonnance_urls
+from Parametres.urls import urlpatterns as parametres_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -50,4 +51,5 @@ urlpatterns = [
     path("bilanradio/", include(bilan_radio_urls)),
     path("consultation/", include(consultation_urls)),
     path("ordonnance/", include(ordonnance_urls)),
+    path("parametres/", include(parametres_urls)),
 ]

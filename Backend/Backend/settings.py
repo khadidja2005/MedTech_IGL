@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "BilanRadio",
     "Consultation",
     "Ordonnance",
+    "Parametres",
 ]
 
 MIDDLEWARE = [

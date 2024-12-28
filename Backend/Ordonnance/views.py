@@ -2,13 +2,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.views.decorators.http import require_http_methods
-from datetime import datetime
 from BDD.models import (
     Ordonnance,
     Medicament,
-    Consultation,
     PersonnelMedical,
-    etablissement_personnel_medical,
 )
 
 

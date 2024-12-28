@@ -54,7 +54,7 @@ def seed_database_func():
         etablissement = Etablissement.objects.create(
             nom_etablissement=fake.company(),
             adresse=fake.address(),
-            telephone="".join([str(random.randint(0, 9)) for _ in range(5)]),
+            telephone="".join([str(random.randint(0, 9)) for _ in range(10)]),
             email=fake.email(),
             type=random.choice(["HOPITAL", "CLINIQUE", "CABINET"]),
         )
@@ -66,6 +66,7 @@ def seed_database_func():
             nom_complet=fake.name(),
             email=fake.email(),
             password=fake.password(),
+            telephone="".join([str(random.randint(0, 9)) for _ in range(10)]),
             lienPhoto=fake.url(),
         )
 
@@ -75,7 +76,7 @@ def seed_database_func():
         personnel = PersonnelMedical.objects.create(
             nom_complet=fake.name(),
             email=fake.email(),
-            telephone="".join([str(random.randint(0, 9)) for _ in range(5)]),
+            telephone="".join([str(random.randint(0, 9)) for _ in range(10)]),
             password=fake.password(),
             role=random.choice(
                 ["MEDECIN", "INFIRMIER", "PHARMACIEN", "RADIOLOGUE", "LABORANTIN"]
