@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 export class AjouterParamComponent {
   @Input() isVisible: boolean = false;
       @Output() closePanel = new EventEmitter<void>();
-      @Output() saveConsultation = new EventEmitter<ResultatBio>();  // Emit the added consultation
+      @Output() saveParam = new EventEmitter<ResultatBio>();  // Emit the added consultation
 
       ajoutForm: FormGroup;
 
@@ -39,7 +39,7 @@ export class AjouterParamComponent {
           };
 
           // Emit the new consultation to the parent
-          this.saveConsultation.emit(newParam);
+          this.saveParam.emit(newParam);
           this.closePanel.emit();  // Close the panel after adding the consultation
           this.ajoutForm.reset();  // Reset the form
         }

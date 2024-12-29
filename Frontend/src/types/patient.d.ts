@@ -11,4 +11,5 @@ export interface Patient {
     lieu_naissance: string;
     genre: string;
     statueMatrimonial: string;
+    etablissement: string;
 }

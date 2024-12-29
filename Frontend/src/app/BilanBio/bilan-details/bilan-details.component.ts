@@ -41,7 +41,7 @@ export class BilanDetailsComponent {
       }
 
       // Method to add a param (called when the new param is emitted from the form)
-      addMedicament(newParam: ResultatBio) {
+      addParam(newParam: ResultatBio) {
         newParam.id = ((this.params.length)+1).toString();
         newParam.bilan_bio = this.bilan.id;  // Set the bilan ID
         this.params.push(newParam);  // Add the new param to the list
