@@ -1,0 +1,22 @@
+.app-layout {
+  @apply flex flex-col h-screen; /* Full screen layout with vertical flex */
+}
+
+.header {
+  @apply w-full flex bg-white shadow-md p-4 h-screen ; /* Full-width header */
+}
+
+.main-section {
+  @apply flex h-screen; /* Remaining space divided horizontally */
+}
+
+.sidebar {
+  @apply shadow-md;
+}
+
+.content {
+  @apply flex-col flex-1 overflow-y-auto bg-blue_lighter p-6;
+}
+.content > app-ordonnace-details {
+  @apply mb-12 p-8;
+}

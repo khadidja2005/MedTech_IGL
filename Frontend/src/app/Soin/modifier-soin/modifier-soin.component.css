@@ -1,0 +1,52 @@
+/* Right panel */
+
+.right-panel {
+  @apply fixed bottom-0 right-0 w-[400px] h-[80%] bg-white shadow-[2px_0_5px_rgba(0,0,0,0.1)] z-[1000] animate-slideIn;
+}
+
+.close-button {
+  @apply cursor-pointer text-main_color w-5 h-5;
+}
+/* Panel content */
+.panel-content {
+  @apply p-5 h-full overflow-y-auto;
+}
+
+/* Panel header */
+.panel-header {
+  @apply mb-5 pb-3 border-b border-gray-200 flex justify-between;
+}
+
+/* Panel title */
+.panel-title {
+  @apply m-0 text-sm font-medium text-second;
+}
+
+/* Form group */
+.form-group {
+  @apply mb-5;
+}
+
+.form-group label {
+  @apply block mb-2 text-sm text-main_color font-bold;
+}
+
+/* Form control */
+.form-control {
+  @apply w-full p-2 border border-blue rounded-md text-sm bg-blue_lighter;
+}
+
+.form-control:focus {
+  @apply border-blue outline-none;
+}
+
+/* Form actions */
+.form-actions {
+  @apply mt-7;
+}
+
+/* Buttons */
+.btn {
+  @apply px-4 py-2 rounded-md border h-10 w-36 bg-blue text-white ml-auto;
+}
+

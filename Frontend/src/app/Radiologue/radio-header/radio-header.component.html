@@ -1,0 +1,16 @@
+<div class="header-container">
+  <div class="text"> Il existe {{bilans.length}} bilans radiologiques</div>
+  <div class="buttons">
+    <button class="filter-button" (click)="openAddPanel()">
+      <img src="/assets/images/filter.png" class="icon"> Filter <span class="nb-filter">({{ filledFieldsCount }})</span>
+    </button>
+    <app-ajouter-filter
+  [isVisible]="isAddPanelVisible"
+  [shouldReset]="filledFieldsCount === 0"
+  (closePanel)="closeAddPanel()"
+  (applyFilter)="onFilterApply($event)"
+  (filledFieldsCountChange)="updateFilledCount($event)">
+</app-ajouter-filter>
+   <button class="reinit-button" (click)="onReset()">reinitialiser</button>
+  </div>
+</div>

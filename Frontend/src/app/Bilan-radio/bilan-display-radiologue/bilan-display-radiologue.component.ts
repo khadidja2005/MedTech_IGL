@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class BilanDisplayRadiologueComponent {
   bilan: BilanRadio = {
-    id: '1',
+    id: 1,
     description: "This is a comprehensive description of the bilan, providing detailed insights into the patient's radio diagnosis process.",
     date_debut: '2024-12-01',
     date_fin: '2024-12-10',
@@ -27,7 +27,7 @@ export class BilanDisplayRadiologueComponent {
   };
 
   result: ResultatRadio = {
-    id: 'R1',
+    id: 1,
     description: 'The radiology report indicates a mild inflammation in the lower chest region.',
     piece_jointe: '',  // Initially empty until PDF is uploaded
     date: '2024-12-11',
@@ -50,12 +50,12 @@ export class BilanDisplayRadiologueComponent {
 
   ImporterPDF(event: any): void {
     const file = event.target.files[0];
-    
+
     if (!file) {
       alert('Aucun fichier sélectionné');
       return;
     }
-    
+
     if (file.type !== 'application/pdf') {
       alert('Veuillez sélectionner un fichier PDF valide');
       return;
@@ -64,7 +64,7 @@ export class BilanDisplayRadiologueComponent {
     try {
       // Store the PDF locally
       this.selectedPDF = file;
-      
+
       // Update local state
       this.result.piece_jointe = file.name;
       this.bilan.est_complet = true;
@@ -72,7 +72,7 @@ export class BilanDisplayRadiologueComponent {
 
       // Optional: Show success message
       alert('PDF importé avec succès');
-      
+
     } catch (error) {
       console.error('Error handling PDF:', error);
       this.resetPDFState();
@@ -133,7 +133,7 @@ export class BilanDisplayRadiologueComponent {
 
   openViewCompteRendu(): void {
     this.viewMode = 'compteRendu';
-    this.viewOnlyCompteRendu = this.result.compte_rendu;
+    this.viewOnlyCompteRendu = this.result.compte_rendu || '';
     this.showViewModal = true;
   }
 
@@ -144,7 +144,7 @@ export class BilanDisplayRadiologueComponent {
   }
 
   modifyCompteRendu(): void {
-    this.editedCompteRendu = this.result.compte_rendu;
+    this.editedCompteRendu = this.result.compte_rendu || '';
     this.showEditModal = true;
   }
 

@@ -1,0 +1,15 @@
+<div class="app-layout">
+  <!-- Header -->
+  <app-header-pdi class="header"></app-header-pdi>
+
+  <!-- Main Content -->
+  <div class="main-section">
+    <!-- Sidebar -->
+    <app-sidebar class="sidebar" activeItem="DPI"></app-sidebar>
+
+    <!-- Hospitalisation Details -->
+    <div class="content">
+      <app-hospitalisation-details [consultations]="consultations" [hospitalisation]="hospitalisation" [soins]="soins" [medecins]="medecins" [infermiers]="infermiers"></app-hospitalisation-details>
+    </div>
+  </div>
+</div>

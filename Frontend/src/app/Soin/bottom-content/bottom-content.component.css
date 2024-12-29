@@ -1,0 +1,38 @@
+/* Card Styling */
+.container {
+  @apply flex gap-4 justify-between; /* or any gap value you prefer */
+}
+.card {
+  @apply p-4 space-y-4 font-poppins;
+}
+
+/* Row Styling */
+.row {
+  @apply flex items-start mb-6 mx-6 bg-white rounded-lg py-2 px-2; /* Aligns items horizontally */
+}
+
+/* Label Styling */
+.label {
+  @apply font-bold text-main_color w-auto; /* Dynamically sized label */
+}
+
+/* Text Styling */
+.text {
+  @apply text-second resize-none px-4 flex flex-col; /* Ensures wrapping inside the allocated space */
+}
+
+/* Icon Container */
+.icons {
+  @apply flex gap-2; /* Keeps the icons aligned horizontally */
+}
+
+/* Button Styling */
+button {
+  @apply flex items-center justify-center w-8 h-8 bg-transparent rounded-full;
+}
+
+/* Button Images */
+button img {
+  @apply w-5 h-5;
+}
+

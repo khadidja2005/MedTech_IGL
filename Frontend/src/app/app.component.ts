@@ -21,8 +21,8 @@ import { BilanDisplayMedValidComponent } from "./Bilan-radio/bilan-display-med-v
 
 @Component({
   selector: 'app-root',
-  standalone: true, 
-  imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],  
+  standalone: true,
+  imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],
 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

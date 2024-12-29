@@ -14,7 +14,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class BilanDisplayMedValidComponent {
 
 bilan: BilanRadio = {
-    id: '1',
+    id: 1,
     description: "This is a comprehensive description of the bilan, providing detailed insights into the patient's radio diagnosis process.",
     date_debut: '2024-12-01',
     date_fin: '2024-12-10',
@@ -29,7 +29,7 @@ bilan: BilanRadio = {
   };
 
   result: ResultatRadio = {
-    id: 'R1',
+    id: 1,
     description: 'The radiology report indicates a mild inflammation in the lower chest region.',
     piece_jointe: 'report.pdf',
     date: '2024-12-11',
@@ -52,7 +52,7 @@ bilan: BilanRadio = {
  showViewModal = false;
  showEditModal = false;
  viewMode: 'description' | 'compteRendu' = 'description';
- 
+
  // Modal content
  viewOnlyDescription = '';
  viewOnlyCompteRendu = '';
@@ -67,7 +67,7 @@ bilan: BilanRadio = {
 
  openViewCompteRendu(): void {
    this.viewMode = 'compteRendu';
-   this.viewOnlyCompteRendu = this.result.compte_rendu;
+   this.viewOnlyCompteRendu = this.result.compte_rendu ?? '';
    this.showViewModal = true;
  }
 
@@ -79,7 +79,7 @@ bilan: BilanRadio = {
 
  // Edit Modal Functions
  modifyCompteRendu(): void {
-   this.editedCompteRendu = this.result.compte_rendu;
+   this.editedCompteRendu = this.result.compte_rendu ?? '';
    this.showEditModal = true;
  }
 
@@ -92,7 +92,7 @@ bilan: BilanRadio = {
    try {
      // Update local state
      this.result.compte_rendu = this.editedCompteRendu;
-     
+
      // Update backend
      await this.http.patch(`YOUR_API_ENDPOINT/resultats/${this.result.id}`, {
        compte_rendu: this.editedCompteRendu
@@ -111,7 +111,7 @@ bilan: BilanRadio = {
      try {
        // Update local state
        this.result.compte_rendu = '';
-       
+
        // Update backend
        await this.http.patch(`YOUR_API_ENDPOINT/resultats/${this.result.id}`, {
          compte_rendu: ''
@@ -134,24 +134,24 @@ bilan: BilanRadio = {
         this.selectedPDF = file;
         const formData = new FormData();
         formData.append('pdf', file);
-        formData.append('bilanId', this.bilan.id);
-  
+        formData.append('bilanId', this.bilan.id.toString());
+
         // Upload the PDF file first
         await this.http.post('YOUR_API_ENDPOINT/upload-pdf', formData).toPromise();
-  
+
         // Only update the local state after successful upload
         this.result.piece_jointe = file.name;
-        
+
         // Update the bilan status
         await this.http.patch(`YOUR_API_ENDPOINT/bilans/${this.bilan.id}`, {
           est_complet: true,
           piece_jointe: file.name
         }).toPromise();
-  
+
         // Update local state last
         this.bilan.est_complet = true;
         this.importedPDF = true;
-  
+
       } catch (error) {
         console.error('Error uploading PDF:', error);
         // Reset states on error
@@ -165,7 +165,7 @@ bilan: BilanRadio = {
       alert('Veuillez sélectionner un fichier PDF valide');
     }
   }
-  
+
   async viewPDF(): Promise<void> {
     if (this.importedPDF || this.result.piece_jointe) {  // Changed condition
       try {
@@ -173,7 +173,7 @@ bilan: BilanRadio = {
           `YOUR_API_ENDPOINT/pdf/${this.bilan.id}`,
           { responseType: 'blob' }
         ).toPromise();
-        
+
         if (response) {
           const blob = new Blob([response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
@@ -198,7 +198,7 @@ bilan: BilanRadio = {
     if (!this.BilanNonComplet()) {  // Check if bilan is complete
       try {
         this.bilan.est_resultat = true;
-        
+
         await this.http.patch(`YOUR_API_ENDPOINT/bilans/${this.bilan.id}`, {
           est_resultat: true
         }).toPromise();
