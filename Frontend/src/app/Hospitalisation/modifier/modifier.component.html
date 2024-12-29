@@ -1,0 +1,43 @@
+<div *ngIf="isVisible" class="right-panel">
+  <div class="panel-content">
+    <div class="panel-header">
+      <button class="close-button" (click)="closePopup.emit()">
+        <img src="/assets/images/close.png" class="h-5 w-5" />
+      </button>
+      <span class="panel-title">Modifier hospitalisation</span>
+    </div>
+
+    <form [formGroup]="hospitalisationForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="medecin_responsable">Medecin responsable:</label>
+        <select id="medecin_responsable" formControlName="medecin_responsable" class="form-control">
+          <option *ngFor="let medecin of medecins" [value]="medecin">{{ medecin }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="date_debut">Date Debut:</label>
+        <input id="date_debut" type="date" formControlName="date_debut" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="status">Etat:</label>
+        <select id="status" formControlName="status" class="form-control">
+          <option value="en cours">en cours</option>
+          <option value="fini">fini</option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="showEndDate">
+        <label for="date_fin">Date fin:</label>
+        <input id="date_fin" type="date" formControlName="date_fin" class="form-control" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="hospitalisationForm.invalid">
+          Sauvegarder
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
