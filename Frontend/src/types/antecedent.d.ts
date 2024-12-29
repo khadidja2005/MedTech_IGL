@@ -5,5 +5,5 @@ export interface Antecedent {
   description: string | null;
   date_debut: string | null; // ISO date string
   date_fin: string | null; // ISO date string
-  DPI_id: string; // Foreign key to DPI
+  DPI_id: number; // Foreign key to DPI
 }

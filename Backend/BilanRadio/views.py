@@ -41,8 +41,8 @@ def get_info_bilan_radio(request):
                 "description": bilan.description,
                 "est_complet": bilan.est_complet,
                 "est_resultat": bilan.est_resultat,
-                "medecin_id": bilan.medecin.id,
-                "medecin": bilan.medecin.nom_complet,
+                "medecin_id": bilan.Consultation.Medecin.id,
+                "medecin": bilan.Consultation.Medecin.nom_complet,
                 "resultats": resultat_response,
             }
         )

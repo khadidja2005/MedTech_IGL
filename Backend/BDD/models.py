@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import MaxValueValidator
 
 
 class Etablissement(models.Model):
@@ -89,10 +88,12 @@ class Contact(models.Model):
 
 class DPI(models.Model):
     date_creation = models.DateField()
-
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     etablissement_id = models.ForeignKey(Etablissement, on_delete=models.CASCADE)
     createur_id = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True)
+    medecin_id = models.ForeignKey(
+        PersonnelMedical, on_delete=models.SET_NULL, null=True
+    )
 
 
 class Antecedent(models.Model):

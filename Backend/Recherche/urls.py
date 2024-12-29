@@ -8,4 +8,5 @@ urlpatterns = [
     path("DPI/", views.get_DPI, name="recherche_get_DPI"),
     path("NumDPIS", views.get_num_DPIS, name="get_number_DPIS"),
     path("creerDPI", views.creer_DPI, name="creerDPI"),
+    path("get-etablissements", views.get_etablissements, name="get_etablissements"),
 ]

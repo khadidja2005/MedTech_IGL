@@ -3,5 +3,5 @@ export interface Medicament {
   nom: string;
   dosage: string;
   duree: string;
-  ordonnance: string; // Foreign key to Ordonnance
+  ordonnance: number; // Foreign key to Ordonnance
 }

@@ -3,8 +3,6 @@ export interface Ordonnance {
   estValide: boolean;
   estTerminer: boolean;
   consultation: string; // Foreign key to Consultation
-  pharmacien_id: string; // Foreign key to PersonnelMedical
-  medecin_id: string; // Foreign key to PersonnelMedical
-  termine : boolean;
-  etablissement : string;
+  pharmacien_id: number | null; // Foreign key to PersonnelMedical
+  etablissement: number;
 }
