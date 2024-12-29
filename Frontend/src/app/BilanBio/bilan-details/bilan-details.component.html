@@ -1,0 +1,60 @@
+<div class="ordonnance-container">
+  <!-- Ordonnance Title -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h6 class="soin-title mb-4">Bilan n° {{ bilan.id }}</h6>
+
+      <!-- Action Buttons -->
+      <div *ngIf="(role === 'admin' || role === 'medecin')&&!bilan.est_complet" class="actions mb-4">
+        <button class="delete-button flex items-center gap-1">
+          <img src="/assets/images/delete.png" class="h-5 w-5">
+          Supprimer
+        </button>
+      </div>
+      <!--etablissement-->
+      <div *ngIf="role === 'laborantin'">
+        <p class="text-sm text-second">etablissement : {{bilan.etablissement}}</p>
+      </div>
+
+    </div>
+    <!-- Details Section -->
+    <div class="details justify-end">
+      <div class="flex items-center justify-center gap-4">
+        <span>
+          <span class="label text-lg">Date :</span>
+          <span class="value text-lg">{{ bilan.date_debut }}</span>
+        </span>
+        <span>
+        <span class="label text-lg">Etat :</span>
+          <span *ngIf="!bilan.est_resultat" class="text-lg text-red font-semibold"> non valide </span>
+          <span *ngIf="bilan.est_resultat" class="text-lg text-etat font-semibold"> valide </span>
+        </span>
+      </div>
+      <div class="flex items-center justify-center gap-4">
+        <span *ngIf="role=='laborantin'" class="label text-lg items-center">Medecin :</span>
+        <span *ngIf="role=='laborantin'" class="value text-lg items-center">{{ bilan.medecin }}</span>
+        <span class="label text-lg">Patient :</span>
+        <span class="value text-lg">{{ bilan.patient }}</span>
+      </div>
+    </div>
+  </div>
+  <!-- Footer Section -->
+  <div class="footer">
+    <div *ngIf="role=='medecin' && !bilan.est_complet" class="buttons-container">
+      <button class="add-button" (click)="openAddPanel()">
+        <img src="/assets/images/ajouter.png" class="h-5 w-5 items-center"> Ajouter un paramètre</button>
+        <app-ajouter-param
+        [isVisible]="isAddPanelVisible"
+        (closePanel)="closeAddPanel()"
+        (saveParam)="addParam($event)">
+        </app-ajouter-param>
+      <button class="terminer-button" (click)="terminate()">
+        terminer
+      </button>
+    </div>
+    <div *ngIf="role=='laborantin'&& !bilan.est_resultat" class="buttons-container">
+      <button class="valider-button" (click)="valider()">
+        valider le Bilan
+      </button>
+    </div>
+</div>

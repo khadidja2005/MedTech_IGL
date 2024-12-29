@@ -22,7 +22,7 @@ export class BilanDisplayComponent {
 
 
   bilan: BilanRadio = {
-    id: '1',
+    id: 1,
     description: "This is a comprehensive description of the bilan, providing detailed insights into the patient's radio diagnosis process.",
     date_debut: '2024-12-01',
     date_fin: '2024-12-10',
@@ -37,14 +37,14 @@ export class BilanDisplayComponent {
   };
 
   result: ResultatRadio = {
-    id: 'R1',
+    id: 1,
     description: 'The radiology report indicates a mild inflammation in the lower chest region.',
     piece_jointe: 'report.pdf',
     date: '2024-12-11',
     compte_rendu: 'Further tests are recommended to confirm the diagnosis.',
     radiologue_compte_rendu: 'Reviewed by Dr. Amine Mansouri',
     radiologue: 'Dr. Amine Mansouri',
-    
+
   };
 
 showTypeModal = false;

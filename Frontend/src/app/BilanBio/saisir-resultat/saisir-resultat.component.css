@@ -1,0 +1,59 @@
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000];
+}
+
+.modal-content {
+  @apply bg-white max-w-full w-1/2 max-h-full h-3/4 shadow-lg rounded-lg p-6 font-poppins;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.panel-header {
+  @apply relative flex items-center p-4 mb-6;
+}
+
+.panel-title {
+  @apply text-second text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2;
+}
+
+.close-button {
+  @apply text-main_color hover:text-second cursor-pointer;
+}
+
+
+.form-group {
+  @apply mb-3;
+}
+
+.form-group label {
+  @apply block mb-3 font-semibold text-xl text-main_color;
+}
+
+.form-control {
+  @apply w-full p-3 border border-blue rounded-md text-sm text-second bg-blue_lighter mb-3;
+}
+
+.form-actions {
+  @apply flex justify-center mt-2;
+}
+
+.btn {
+  @apply px-6 py-2 bg-blue text-white rounded-md hover:bg-blue_light;
+  @apply transition duration-200 ease-in-out;
+}
+
+.btn2
+{
+  @apply px-6 py-2 bg-white text-blue rounded-md hover:bg-blue_light;
+  @apply transition duration-200 ease-in-out;
+}

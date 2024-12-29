@@ -10,4 +10,3 @@ export interface BilanBio {
     etablissement:string;
     patient:string;
 }
-

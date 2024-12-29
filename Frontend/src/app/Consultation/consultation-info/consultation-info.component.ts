@@ -17,7 +17,7 @@ interface BaseBilan {
 
 type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
 
-type CombinedBilan = 
+type CombinedBilan =
   | (BaseBilan & {
       type: 'radio';
       type_radio: TypeRadio;
@@ -103,7 +103,7 @@ export class ConsultationInfoComponent {
 
     this.consultation.Medecin = this.selectedMedecin;
     this.consultation.date = new Date(this.selectedDate).toISOString();
-    
+
     alert('Consultation modifiée avec succès');
     this.showModifyModal = false;
     this.selectedMedecin = null;
@@ -141,14 +141,14 @@ export class ConsultationInfoComponent {
 
   Ordonnances: Ordonnance[] = [
     {
-      id: '1',
+      id: 1,
       date: '2024-12-24T10:30:00Z',
       estValide: true,
       consultation: '1',
       pharmacien_id: 'Amine Bensalem'
     },
     {
-      id: '2',
+      id: 2,
       date: '2024-12-24T11:30:00Z',
       estValide: false,
       consultation: '1',
@@ -157,7 +157,7 @@ export class ConsultationInfoComponent {
   ];
 
   newOrdonnance: Partial<Ordonnance> = {
-    id: '',
+    id: 0,
     date: '',
     estValide: false,
     consultation: '',
@@ -347,10 +347,10 @@ export class ConsultationInfoComponent {
   addBilan() {
     if (this.validateBilan()) {
       const newId = this.getNextBilanId(this.newBilan.type as 'bio' | 'radio');
-      const bilan = this.newBilan.type === 'bio' 
+      const bilan = this.newBilan.type === 'bio'
         ? { ...this.createNewBilanBio(this.newBilan), id: newId }
         : { ...this.createNewBilanRadio(this.newBilan), id: newId };
-      
+
       this.combinedBilans.push(bilan);
       alert('Bilan ajouté avec succès');
       this.toggleBilanModal();
@@ -370,7 +370,7 @@ export class ConsultationInfoComponent {
     if (!this.showBilanModal) {
       this.addBilanModalMode = mode;
       this.BilanValidationErrors = { type: '' };
-      
+
       if (mode === 'view' && bilan) {
         this.selectedBilan = bilan;
         this.newBilan = { ...bilan };
@@ -403,7 +403,7 @@ export class ConsultationInfoComponent {
 
   // Utility methods
   getBilanTypeStyle(type: 'radio' | 'bio') {
-    return type === 'bio' 
+    return type === 'bio'
       ? { color: '#FF34A0', backgroundColor: '#FF34A033' }
       : { color: '#0CF045', backgroundColor: '#0CF04533' };
   }
@@ -460,17 +460,17 @@ export class ConsultationInfoComponent {
       })),
       ...this.staticBioBilans.map(bilan => ({
         ...bilan,
-        type: 'bio' as const  
+        type: 'bio' as const
       }))
     ];
   }
- 
+
   private getNextBilanId(type: 'bio' | 'radio'): string {
     const prefix = type === 'bio' ? 'BIO' : 'RAD';
     const existingIds = this.combinedBilans
       .filter(bilan => bilan.type === type)
       .map(bilan => parseInt(bilan.id.replace(prefix, ''), 10));
-    
+
     const maxId = Math.max(0, ...existingIds);
     const nextNumber = (maxId + 1).toString().padStart(3, '0');
     return `${prefix}${nextNumber}`;

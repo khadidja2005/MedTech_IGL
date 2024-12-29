@@ -1,6 +1,7 @@
 export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
 
 export interface BilanRadio {
+
     id: string;
     date_debut: string; // ISO date string
     date_fin: string; // ISO date string
