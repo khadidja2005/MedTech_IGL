@@ -38,11 +38,12 @@ module.exports = {
         blue_lighter: '#f8fcfc',
         autre: '#0535dc',
         autre_light: '#3D7FF41A',
-        blue_gray: '#8B9BB3',
         grayish: '#7C7C7C'
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-filters'),
+  ],
 }
 
