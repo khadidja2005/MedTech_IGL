@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "Pharmacie",
     "Laboratoire",
     "Radiologie",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+# Allow CORS for all origins
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = "Backend.urls"
 
