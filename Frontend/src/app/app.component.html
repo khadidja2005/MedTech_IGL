@@ -1,4 +1,9 @@
-
-<router-outlet>
- <app-landing-page></app-landing-page>
-</router-outlet>
+ 
+ <!-- Main content -->
+  <app-header-pdi></app-header-pdi>
+ <div class="layout flex pt-[60px]"> <!-- Add padding-top for spacing below the fixed header -->
+  <app-sidebar></app-sidebar>
+  <div class="bg-[#F3F8FF] flex-1 ml-52 mt-3"> <!-- Adjusted for sidebar width -->
+  <app-bilan-display-radiologue></app-bilan-display-radiologue>
+  </div>
+</div>

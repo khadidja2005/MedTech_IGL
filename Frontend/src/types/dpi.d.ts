@@ -1,3 +1,5 @@
+import { Patient } from "./patient";
+
 export interface DPI {
   id: number;
   date_creation: string; // ISO date string

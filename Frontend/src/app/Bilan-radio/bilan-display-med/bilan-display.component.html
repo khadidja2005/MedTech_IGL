@@ -1,0 +1,172 @@
+<div class="flex p-4 font-poppins relative w-full">
+    <div class="consultation flex-col col-span-3 p-4">
+      <!-- Etablissement Header -->
+      <div class="flex font-bold text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
+        <span>Bilan n°</span>
+        <span>{{ bilan.id }}</span>
+      </div>
+  
+      <!-- Delete Button -->
+      <div *ngIf="caneditBilanMed()" class="mt-2">
+        <button (click)="deleteBilan()">
+          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1">
+            <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
+            <p class="text-lg font-semibold text-[#FF3E3E]">Supprimer</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Info Section for Users with Edit Permission -->
+    <div *ngIf="caneditBilanMed()" class="etab-createur col-span-5 p-4 text-[24px] ml-[800px]">
+      <div class="mb-4">
+        <span class="font-bold">date: </span>
+        <span class="text-[#4B6386] font-bold">{{bilan.date_debut}}</span>
+      </div>
+      <div>
+        <span class="font-bold">Patient: </span>
+        <span class="text-[#4B6386] font-bold">({{bilan.patient}})</span>
+      </div>
+    </div>
+  
+    <!-- Info Section for Users without Edit Permission -->
+    <div *ngIf="canNOTeditBilanMed()" class="etab-createur col-span-5 p-4 text-[24px] !ml-[550px]">
+      <div class="text-[#FF3E3E] text-center font-bold mb-4">Resultas non encors pretes</div>
+      <div>
+        <span class="font-bold">Patient: </span>
+        <span class="text-[#4B6386] font-bold mr-8">({{bilan.patient}})</span>
+        <span class="font-bold">date: </span>
+        <span class="text-[#4B6386] font-bold">{{bilan.date_debut}}</span>
+      </div>
+    </div>
+
+    <button *ngIf="caneditBilanMed()" 
+    (click)="saveBilan()"
+    class="absolute top-[175px] right-14 rounded-2xl px-16 py-2 bg-[#3A8EF6] text-white  text-2xl font-semibold">
+    terminer
+   </button>
+  </div>
+  
+  <!-- Type Section -->
+  <div class="flex w-full max-w-[800px] px-4 py-2 mx-6 mt-6 bg-white rounded-lg shadow-lg">
+    <p class="text-[24px] font-poppins font-bold pr-10 bg-white whitespace-nowrap">Type:</p>
+    <div class="w-full max-w-[400px]">
+      <p class="text-[24px] font-poppins font-bold text-[#4B6386] px-10 break-words overflow-hidden">
+        {{bilan.type_radio}}
+      </p>
+    </div>
+    <div class="flex flex-shrink-0" *ngIf="caneditBilanMed()">
+      <button (click)="modifyType()" class="p-2">
+        <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+      </button>
+    </div>
+  </div>
+
+  <!-- Description section -->
+  <div class="flex">
+    <div class="flex w-full max-w-[800px] p-6 mx-6 mt-6 bg-white rounded-lg shadow-lg">
+      <p class="text-[24px] font-poppins font-bold pr-10 bg-white whitespace-nowrap">Description:</p>
+      <div class="w-full max-w-[400px]">
+        <p class="text-[24px] font-poppins font-bold text-[#4B6386] px-10 break-words overflow-hidden cursor-pointer max-h-[200px] line-clamp-[8] hover:bg-gray-50"
+           (click)="openViewDescription()">
+          {{bilan.description}}
+        </p>
+      </div>
+      <div class="flex flex-shrink-0" *ngIf="caneditBilanMed()">
+        <button (click)="modifyDescription()" class="p-2">
+          <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+        </button>
+        <button (click)="deleteDescription()" class="p-2">
+          <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10">
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- View-only Modal -->
+  <div *ngIf="showViewModal" 
+       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg w-[800px] p-6">
+      <div class="flex items-center mb-4 w-full">
+        <img src="assets/images/cancel.png" 
+             (click)="closeViewModal()" 
+             alt="return"
+             class="cursor-pointer w-8 h-8">
+        <h2 class="block !text-4xl font-poppins !text-[#4B6386] mx-auto">
+          Description
+        </h2>
+      </div>
+  
+      <div class="mt-6">
+        <div class="w-full bg-[#F3F8FF] text-2xl min-h-[200px] border-2 border-[#3A8EF6] rounded-xl px-4 py-2">
+          {{viewOnlyDescription}}
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  
+  <!-- Description Edit Modal -->
+  <div *ngIf="showDescriptionModal('edit')"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg w-[800px] p-6">
+      <div class="flex items-center mb-4 w-full">
+        <img src="assets/images/cancel.png" (click)="showResumeModal = false" alt="return"
+          class="cursor-pointer w-8 h-8">
+        <h2 class="block !text-4xl font-poppins !text-[#4B6386] mx-auto">
+          Description
+        </h2>
+      </div>
+  
+      <div class="mt-6">
+        <textarea [(ngModel)]="editedDescription"
+          class="w-full bg-[#F3F8FF] text-2xl min-h-[200px] border-2 border-[#3A8EF6] rounded-xl px-4 py-2 resize-none"
+          placeholder="Entrez la description..."
+          maxlength="900"></textarea>
+        <div class="text-right text-sm text-gray-500">
+          {{editedDescription.length}}/900 caractères
+        </div>
+      </div>
+  
+      <div class="flex justify-end gap-3 mt-6">
+        <button (click)="saveDescription()"
+          class="px-4 py-2 bg-[#3A8EF6] text-white rounded-lg">
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Type Modal -->
+  <div *ngIf="showTypeModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg w-[800px] !p-10">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-center w-full text-4xl font-semibold font-poppins mb-8 !text-[#4B6386]">
+          {{addTypeModalMode === 'add' ? 'Modifier le Type' : 'Voir Type'}}
+        </h2>
+        <img src="assets/images/cancel.png" alt="close" class="cursor-pointer w-8 h-8" (click)="toggleTypeModal()">
+      </div>
+  
+      <div class="flex flex-col items-center w-full">
+        <div class="mb-4 w-full max-w-[500px]">
+          <label class="block text-xl font-semibold mb-2 text-left">Type</label>
+          <select [(ngModel)]="bilan.type_radio" [disabled]="addTypeModalMode === 'view'"
+            class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
+            <option value="">Sélectionner un type</option>
+            <option value="SCANNER">SCANNER</option>
+            <option value="IRM">IRM</option>
+            <option value="RADIO">RADIO</option>
+          </select>
+        </div>
+  
+        <div class="mt-6 w-full max-w-[500px] flex justify-center">
+          <button *ngIf="addTypeModalMode === 'add'" (click)="addType()"
+            class="px-8 py-3 font-semibold text-2xl bg-[#3A8EF6] text-white rounded-lg">
+            Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
