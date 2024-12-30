@@ -1,11 +1,11 @@
 /* Sidebar container */
 .sidebar {
-  @apply h-screen w-52 flex flex-col shadow-lg;
+  @apply h-screen w-52 flex flex-col shadow-lg top-[65px] left-0 z-20 bg-white; /* Assuming header height is 64px */
 }
 
 /* Menu styling */
 .menu {
-  @apply flex-grow;
+  @apply flex-grow mt-2 overflow-y-auto; /* Adds vertical scrolling for long menus */
 }
 
 /* Menu item base styling */
@@ -25,10 +25,9 @@
 
 /* Footer section */
 .footer {
-  @apply border-none;
+  @apply border-none ; /* Keeps the footer at the bottom of the sidebar */
 }
 
 .footer .menu-item {
   @apply flex items-center px-4 py-3 text-second hover:bg-blue hover:text-white font-poppins;
 }
-

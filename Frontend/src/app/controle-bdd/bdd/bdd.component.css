@@ -1,0 +1,24 @@
+.dashboard {
+    @apply  bg-[#f8f9ff] min-h-screen ;
+  }
+  
+  .cards-container {
+    @apply flex gap-8 justify-start;
+  }
+  
+  .card {
+    @apply bg-white  p-8 w-[300px] flex flex-col items-center gap-6 cursor-pointer transition-transform duration-200 ease-in-out transform shadow-[0_2px_4px_rgba(0,0,0,0.05)];
+  }
+  
+  .card:hover {
+    @apply translate-y-[-2px] shadow-[0_4px_8px_rgba(0,0,0,0.1)];
+  }
+  
+  .card img {
+    @apply  object-contain;
+  }
+  
+  .card h2 {
+    @apply text-[#1a1a1a] text-xl font-medium font-semibold font-poppins text-center;
+  }
+  

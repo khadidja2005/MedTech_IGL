@@ -1,0 +1,162 @@
+<div  class="w-full px-10 mt-4">
+    <div class="flex mb-6">
+      <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
+      <button *ngIf="canEditEmploye()" 
+              class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+              (click)="createNewPersonnel('add')">
+        <img src="assets/images/plus.png" alt="ml-14" class="">
+        Ajouter un personnel médical
+      </button>
+    </div>
+     <!-- Personnel List Headers -->
+     <div class="flex !py-5 bg-white !my-4">
+        <div class="w-1/12 m-6"></div>
+        <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Nom</div>
+        <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Email</div>
+        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Role</div>
+        <div class="w-3/12"></div>
+      </div>
+
+      <!-- Personnel List -->
+      <div class="!space-y-4">
+        <div *ngFor="let person of personnels" class="flex py-5 bg-white items-center">
+          <div class="w-1/12 text-center m-6">
+            <img src="assets/images/doctor.png" alt="">
+          </div>
+          <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">
+            {{person.nom_complet}}
+          </div>
+          <div class="w-4/12 !text-[25px] !text-[#0C2757]">
+            {{person.email}}
+          </div>
+          <div class="w-3/12 text-center">
+            <span [ngClass]="{
+              'px-3 py-1 rounded-lg !text-[25px] ': true,
+              'bg-[#D865ED1A] text-[#D865ED]': person.role === 'MEDECIN',
+              'bg-[#47F6A21A] text-[#0CF045]': person.role === 'RADIOLOGUE',
+              'bg-[#FF34A01A] text-[#FF34A0]': person.role === 'LABORANTIN',
+              'bg-[#FFA5001A] text-[#FFA500]': person.role === 'INFIRMIER',
+              'bg-[#3A8EF61A] text-[#3A8EF6]': !['MEDECIN', 'RADIOLOGUE', 'LABORATIN', 'INFIRMIER'].includes(person.role)
+            }">
+              {{person.role}}
+            </span>
+          </div>
+          <div class="w-3/12 text-center">
+            <button *ngIf="!canEditEmploye"
+            class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+              Consulter
+            </button>
+            <button *ngIf="canEditEmploye()" 
+            (click)="createNewPersonnel('edit', person)" class="p-2">
+            <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+          </button>
+          <button *ngIf="canEditEmploye()" 
+          (click)="deleteEmploye(person.id)" class="p-2">
+            <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10">
+          </button>
+          </div>
+        </div>
+      </div>
+      </div>
+
+<div *ngIf="showPersonnelModal" class="fixed bottom-0 h-[740px] right-0 bg-white rounded-xl shadow-lg !p-6 w-[500px] z-50">
+    <div class="flex justify-between items-center mb-4">
+      <img 
+        src="assets/images/goBack.png" 
+        alt="return" 
+        class="cursor-pointer" 
+        (click)="togglePersonnelModal('backToSelection')">
+        <h2 class="text-xl font-semibold text-[#0C2757]">
+            {{editMode ? 'Modifier personnel médical' : 'Ajouter personnel médical'}}
+          </h2>
+    </div>
+  
+    <!-- Nom Complet Input -->
+    <div class="mt-5">
+      <label class="block font-medium text-xl mb-2">
+        Nom Complet
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="newPersonnel.nom_complet"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+      >
+      <p *ngIf="PersonnelValidationErrors.nom_complet" class="text-red-500 text-sm mt-1">
+        {{ PersonnelValidationErrors.nom_complet }}
+      </p>
+    </div>
+  
+    <!-- Email Input -->
+    <div class="mt-5">
+      <label class="block font-medium text-xl mb-2">
+        Email
+      </label>
+      <input
+        type="email"
+        [(ngModel)]="newPersonnel.email"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+      >
+      <p *ngIf="PersonnelValidationErrors.email" class="text-red-500 text-sm mt-1">
+        {{ PersonnelValidationErrors.email }}
+      </p>
+    </div>
+  
+    <!-- Telephone Input -->
+    <div class="mt-5">
+      <label class="block font-medium text-xl mb-2">
+        Téléphone
+      </label>
+      <input
+        type="number"
+        [(ngModel)]="newPersonnel.telephone"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+      >
+      <p *ngIf="PersonnelValidationErrors.telephone" class="text-red-500 text-sm mt-1">
+        {{ PersonnelValidationErrors.telephone }}
+      </p>
+    </div>
+  
+    <!-- Role Input -->
+    <div class="mt-5">
+      <label class="block font-medium text-xl mb-2">
+        Rôle
+      </label>
+      <select
+        [(ngModel)]="newPersonnel.role"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+      >
+        <option value="">Sélectionner un rôle</option>
+        <option value="MEDECIN">Médecin</option>
+        <option value="RADIOLOGUE">Radiologue</option>
+        <option value="INFIRMIER">Infirmier</option>
+      </select>
+      <p *ngIf="PersonnelValidationErrors.role" class="text-red-500 text-sm mt-1">
+        {{ PersonnelValidationErrors.role }}
+      </p>
+    </div>
+  
+    <!-- Specialité Input -->
+    <div class="mt-5">
+      <label class="block font-medium text-xl mb-2">
+        Spécialité
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="newPersonnel.specialite"
+        class="w-full bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4"
+      >
+      <p *ngIf="PersonnelValidationErrors.specialite" class="text-red-500 text-sm mt-1">
+        {{ PersonnelValidationErrors.specialite }}
+      </p>
+    </div>
+  
+    <!-- Submit Button -->
+    <div class="flex justify-end gap-3 m-10 mt-6">
+        <button 
+        (click)="submitNewPersonnel()"
+        class="px-4 py-2 bg-[#3A8EF6] font-semibold font-poppins text-white rounded-2xl text-xl"
+      >
+        {{editMode ? 'Modifier' : 'Ajouter'}}
+      </button>
+    </div>
+  </div>

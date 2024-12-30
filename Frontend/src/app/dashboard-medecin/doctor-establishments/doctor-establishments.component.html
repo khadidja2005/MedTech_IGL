@@ -1,0 +1,77 @@
+<div class="p-8">
+    <!-- Search and Info Section -->
+    <div class="justify-between mb-8">
+        <div class="relative mb-8">
+            <input
+              type="text"
+              placeholder="Rechercher un établissement"
+              class="w-[1250px] h-[55px] !text-[#4B6386] font-poppins text-xl pl-4 pr-14 py-2 rounded-2xl border-2 border-[#c7dfff]
+               focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-[#4B6386] placeholder-shown:font-semibold"
+              [(ngModel)]="searchTerm"
+              (input)="onSearch($event)"
+            />
+            <div class="absolute right-0 top-0 h-full flex items-center bg-[#3A8EF6] rounded-r-2xl px-3">
+              <img
+                src="assets/images/loupe.png"
+                alt="Search Icon"
+                class="h-10 w-10 text-white"
+              />
+            </div>
+        </div>
+  
+        <div class="flex gap-[590px]">
+            <div class="!text-[#4B6386] font-poppins font-semibold text-xl">
+                <!-- Doctor info -->
+                <div class="flex items-center gap-4 mb-4">
+                    <img [src]="currentDoctor.lienPhoto" 
+                         alt="Doctor photo" 
+                         class="w-12 h-12 rounded-full object-cover"
+                    >
+                    <div>
+                        <span class="font-bold">{{currentDoctor.nom_complet}}</span>
+                        <span class="mx-2">|</span>
+                        <span>{{currentDoctor.specialite}}</span>
+                    </div>
+                </div>
+                Il existe {{filteredEstablishments.length}} établissements
+            </div>
+        </div>
+    </div>
+  
+    <!-- Establishments Grid -->
+    <div class="h-[420px]">
+        <div class="grid grid-cols-3 gap-10">
+            <div
+                *ngFor="let establishment of currentEstablishments"
+                class="p-4 border-2 border-[#3A8EF6] h-[200px] rounded-2xl hover:border-blue-400 bg-white transition-colors"
+            >
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-3xl font-semibold font-poppins mr-3 m-2">{{establishment.nom_etablissement}}</h3>
+                    <div class="gap-2">
+                        <div class="text-[#3A8EF6] font-poppins text-center font-semibold text-xl">500</div>
+                        <div class="text-[#3A8EF6] font-poppins text-center text-lg">employés</div>
+                    </div>
+                </div>
+                <div class="text-[#4B6386] text-xl font-poppins mb-7">{{establishment.email}}</div>
+                <div class="text-lg text-[#4B6386] font-poppins-thin">
+                    <div>{{establishment.adresse}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-8 gap-3">
+        <button
+            *ngFor="let page of getPageArray()"
+            (click)="setPage(page)"
+            class="px-4 py-2 rounded"
+            [ngClass]="{
+                'bg-[#3A8EF633] text-[#3A8EF6] border-2 border-[#3A8EF6]': currentPage === page,
+                'bg-white text-[#7C7C7C] border-[2px] border-[#7C7C7C]': currentPage !== page
+            }"
+        >
+            {{page}}
+        </button>
+    </div>
+</div>
