@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Ordonnance } from '../../../types/ordonance';
 import { AjouterFilterComponent } from "../ajouter-filter/ajouter-filter.component";
+import { OrdonnancePharma } from '../pharmacie/pharmacie.component';
 @Component({
   selector: 'app-pharma-header',
   imports: [AjouterFilterComponent],
@@ -8,7 +9,7 @@ import { AjouterFilterComponent } from "../ajouter-filter/ajouter-filter.compone
   styleUrl: './pharma-header.component.css'
 })
 export class PharmaHeaderComponent {
-  @Input() ordonnances!: Ordonnance[];
+  @Input() ordonnances!: OrdonnancePharma[];
   filledFieldsCount: number = 0;
   @Output() applyFilter = new EventEmitter<any>(); // Add this output
   @Output() resetFilter = new EventEmitter<void>();

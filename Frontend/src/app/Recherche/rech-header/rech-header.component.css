@@ -1,0 +1,15 @@
+.header-container {
+  @apply flex justify-between items-center py-10 mb-4 font-poppins;
+}
+
+/* Text styling */
+.text {
+  @apply text-second;
+}
+
+.add-button {
+  @apply px-4 py-2 flex justify-between items-center gap-2 font-medium rounded-lg bg-blue text-white hover:bg-blue_light;
+}
+.footer {
+  @apply flex justify-between items-center p-4;
+}

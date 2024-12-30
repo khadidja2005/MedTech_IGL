@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Soins } from '../../../types/soins';
+import { Infermier, Soin } from '../soin/soin.component';
 import { FormsModule } from '@angular/forms';
 import { ModifierSoinComponent } from '../modifier-soin/modifier-soin.component';
 @Component({
@@ -10,11 +10,17 @@ import { ModifierSoinComponent } from '../modifier-soin/modifier-soin.component'
   styleUrl: './top-content.component.css'
 })
 export class TopContentComponent {
-  @Input() soin!:Soins;
+  @Input() soin!:Soin;
   @Input() role!: string;
     isAddPanelVisible = false;  // Flag to control the visibility of the "Add Consultation" panel
     isPopupVisible = false;
-    @Input() infermiers: string[] = [];
+    @Input() infermiers: Infermier[] = [];
+
+    getInfermierName(infermierId: number): string {
+      const infermier = this.infermiers.find(i => i.id === infermierId);
+      return infermier ? infermier.nom : 'Unknown Infermier';
+    }
+
 
     // Method to open the "Add Consultation" panel
     openAddPanel() {
@@ -35,7 +41,7 @@ export class TopContentComponent {
     }
 
     // Method to update soin
-    updateSoin(updatedData: Partial<Soins>) {
+    updateSoin(updatedData: Partial<Soin>) {
       this.soin = {
         ...this.soin,
         infermier: updatedData.infermier || this.soin.infermier,

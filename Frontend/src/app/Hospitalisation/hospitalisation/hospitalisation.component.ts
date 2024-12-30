@@ -4,7 +4,30 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HospitalisationDetailsComponent } from '../hospitalisation-details/hospitalisation-details.component';
 import { Consultation } from '../../../types/consultation';
 import { Hospitalisation } from '../../../types/hospitalisation';
-import { Soins } from '../../../types/soins';
+import { TypeSoins } from '../../../types/soins';
+import { Infermier } from '../../Soin/soin/soin.component';
+
+export interface SoinPageHospitalisation {
+  type_soins: TypeSoins;
+  infermier : number;
+  date: string;
+  heure: string;
+}
+export interface ConsultationPageHospitalisation {
+  date : string;
+  medecin : number;
+}
+export interface HospitalisationPage {
+  ordre: number;
+  date_debut: string;
+  date_fin: string | null;
+  medecin: string;
+}
+export interface medecin {
+  nom: string;
+  id: number;
+}
+
 @Component({
   selector: 'app-hospitalisation',
   imports: [HeaderPDIComponent,SidebarComponent, HospitalisationDetailsComponent],
@@ -12,116 +35,104 @@ import { Soins } from '../../../types/soins';
   styleUrl: './hospitalisation.component.css'
 })
 export class HospitalisationComponent {
-  medecins = ['Khelifati Amine', 'Bouzidi Ahmed', 'Bouzidi Mohamed', 'Bouzidi Sarah'];
-  infermiers = ['Khelifati Amine', 'Bouzidi Ahmed', 'Bouzidi Mohamed', 'Bouzidi Sarah'];
-  soins: Soins[] = [
+  medecins : medecin[] = [
+    {
+      nom: 'Khelifati Amine',
+      id: 1
+    },
+    {
+      nom: 'Bouzidi Ahmed',
+      id: 2
+    },
+    {
+      nom: 'Bouzidi Mohamed',
+      id: 3
+    },
+    {
+      nom: 'Bouzidi Sarah',
+      id: 4
+    }
+  ];
+
+  infermiers : Infermier[] = [
+    {
+      nom: 'Khelifati Amine',
+      id: 1
+    },
+    {
+      nom: 'Bouzidi Ahmed',
+      id: 2
+    },
+    {
+      nom: 'Bouzidi Mohamed',
+      id: 3
+    },
+    {
+      nom: 'Bouzidi Sarah',
+      id: 4
+    }
+  ];
+  soins: SoinPageHospitalisation[] = [
       {
-        id: '1',
         date: '12/12/2024',
         heure: '15:30',
-        type_soins: 'SOIN INFERMIER',
-        description: '',
-        etat_patient: '',
-        medicament: '',
-        dose: '',
-        hospitalisation: '',
-        infermier: 'Khalifa Mohamed',
+        type_soins: 'INFIRMIER',
+        infermier: 1
       },
       {
-        id: '2',
         date: '13/12/2024',
         heure: '7:30',
         type_soins: 'AUTRE',
-        description: '',
-        etat_patient: '',
-        medicament: '',
-        dose: '',
-        hospitalisation: '',
-        infermier: 'Khalifa Mohamed',
+        infermier: 2,
       },
 
       {
-        id: '3',
         date: '15/12/2024',
         heure: '13:30',
         type_soins: 'ADMINISTRATION DE MEDICAMENT',
-        description: '',
-        etat_patient: '',
-        medicament: '',
-        dose: '',
-        hospitalisation: '',
-        infermier: 'Khalifa Mohamed',
+        infermier: 1,
       },
 
       {
-        id: '4',
         date: '21/12/2024',
         heure: '21:30',
-        type_soins: 'OBSERVATION DETAT',
-        description: '',
-        etat_patient: '',
-        medicament: '',
-        dose: '',
-        hospitalisation: '',
-        infermier: 'Khalifa Mohamed',
+        type_soins: 'OBSERVATION D\'ETAT',
+        infermier: 3,
       },
       {
-        id: '5',
         date: '22/12/2024',
         heure: '16:30',
-        type_soins: 'SOIN INFERMIER',
-        description: '',
-        etat_patient: '',
-        medicament: '',
-        dose: '',
-        hospitalisation: '',
-        infermier: 'Khalifa Mohamed',
+        type_soins: 'INFIRMIER',
+        infermier: 4
       },
     ];
-  consultations: Consultation[] = [
+  consultations: ConsultationPageHospitalisation[] = [
     {
-      id: '1',
-      resume: '',
       date: '12/12/2024',
-      Hospitalisation: '1',
-      Medecin: 'Khalifa Mohamed',
+      medecin: 1
     },
     {
-      id: '2',
-      resume: '',
       date: '12/12/2024',
-      Hospitalisation: '1',
-      Medecin: 'Khalifa Mohamed',
+      medecin: 1,
     },
     {
-      id: '3',
-      resume: '',
       date: '13/12/2024',
-      Hospitalisation: '1',
-      Medecin: 'Khalifa Mohamed',
+      medecin: 2,
     },
     {
-      id: '4',
-      resume: '',
       date: '12/12/2024',
-      Hospitalisation: '1',
-      Medecin: 'Khalifa Mohamed',
+      medecin: 3,
     },
     {
-      id: '5',
-      resume: '',
       date: '13/12/2024',
-      Hospitalisation: '1',
-      Medecin: 'Khalifa Mohamed',
+      medecin: 4,
     }
   ];
-  hospitalisation: Hospitalisation = {
-        id: '1',
-        date_debut: '12/12/2024', // ISO date string
-        date_fin: '', // ISO date string
-        DPI: '1', // Foreign key to DPI
-        medecin_responsable: 'Khelifati Amine', // Foreign key to PersonnelMedical
-        status : 'en cours',
+  hospitalisation: HospitalisationPage = {
+        ordre : 1,
+         date_debut: '12/12/2024',
+        medecin: 'Khelifati Amine',
+        date_fin: null
     };
   }
 

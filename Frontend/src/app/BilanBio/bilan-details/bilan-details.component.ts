@@ -3,6 +3,10 @@ import { Component, Input } from '@angular/core';
 import { BilanBio } from '../../../types/bilanbio';
 import { ResultatBio } from '../../../types/resultatbio';
 import { AjouterParamComponent } from '../ajouter-param/ajouter-param.component';
+import { bilan, labo, Resultat } from '../bilan-bio/bilan-bio.component';
+import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
+import { Patient } from '../../Ordonnance/ordonnance/ordonnance.component';
+import { medecin } from '../../Hospitalisation/hospitalisation/hospitalisation.component';
 
 @Component({
   selector: 'app-bilan-details',
@@ -11,8 +15,12 @@ import { AjouterParamComponent } from '../ajouter-param/ajouter-param.component'
   styleUrl: './bilan-details.component.css'
 })
 export class BilanDetailsComponent {
-  @Input() bilan!: BilanBio;
-  @Input() params!: ResultatBio[];
+  @Input() bilan!: bilan;
+  @Input() params!: Resultat[];
+  @Input() etablissements !: Etab[];
+  @Input() labos!: labo[];
+  @Input() patients!: Patient[];
+  @Input() medecins!: medecin[];
   @Input() role!: string;
 
   isAddPanelVisible = false;
@@ -41,11 +49,19 @@ export class BilanDetailsComponent {
       }
 
       // Method to add a param (called when the new param is emitted from the form)
-      addParam(newParam: ResultatBio) {
-        newParam.id = ((this.params.length)+1).toString();
-        newParam.bilan_bio = this.bilan.id;  // Set the bilan ID
+      addParam(newParam: Resultat) {
         this.params.push(newParam);  // Add the new param to the list
         this.isAddPanelVisible = false;  // Close the panel after adding
+      }
+
+      getPatientName(patientId: number): string {
+        return this.patients.find(p => p.id === patientId)?.nom || '';
+      }
+      getMedecinName(medecinId: number): string {
+        return this.medecins.find(m => m.id === medecinId)?.nom || '';
+      }
+      getEtabName(etabId: number):string {
+        return this.etablissements.find(e => e.id === etabId)?.nom || '';
       }
 
 

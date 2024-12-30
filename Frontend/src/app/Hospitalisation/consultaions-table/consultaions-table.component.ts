@@ -1,6 +1,8 @@
+import { medecin } from './../hospitalisation/hospitalisation.component';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Consultation } from '../../../types/consultation';
+import { ConsultationPageHospitalisation } from '../hospitalisation/hospitalisation.component';
 
 @Component({
   selector: 'app-consultaions-table',
@@ -10,12 +12,19 @@ import { Consultation } from '../../../types/consultation';
   styleUrl: './consultaions-table.component.css'
 })
 export class ConsultaionsTableComponent {
-  @Input() consultations!: Consultation[];
+  @Input() consultations!: ConsultationPageHospitalisation[];
+  @Input() medecins!:medecin[];
 
+  getMedecinName(medecinId: number): string {
+    // Convert infermierId to number since it might be coming as a string
+    const id = Number(medecinId);
+    const medecin = this.medecins.find(i => i.id === id);
+    return medecin ? medecin.nom : 'Unknown Infermier';
+}
   ngOnInit(): void {}
 
-  onConsult(consultation: Consultation): void {
-    console.log('Consulting:', consultation);
+  onConsult(consultation: ConsultationPageHospitalisation): void {
+
     // Add your consultation logic here
   }
   getFormattedDate(date: Date): string {

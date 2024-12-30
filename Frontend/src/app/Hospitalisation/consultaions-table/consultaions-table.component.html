@@ -8,17 +8,17 @@
       </div>
 
     <!-- Consultation Rows -->
-    <div *ngFor="let consultation of consultations"
+    <div *ngFor="let consultation of consultations let i = index"
          class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <!-- Icon and Reference -->
       <div class="flex items-center gap-4 text-left">
         <span><img src='/assets/images/Consultation.png' class="w-6 h-6"> </span>
-        <span class=" text-main_color">Consultation {{ consultation.id  }}</span>
+        <span class=" text-main_color">Consultation {{ i+1  }}</span>
       </div>
 
       <!-- Medecin -->
       <div class="text-main_color text-center">
-        {{ consultation.Medecin }}
+        {{ getMedecinName(consultation.medecin) }}
       </div>
 
       <!-- Date -->

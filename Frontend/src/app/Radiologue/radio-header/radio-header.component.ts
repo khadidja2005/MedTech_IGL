@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BilanRadio } from '../../../types/bilanRadio';
 import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-filter.component';
+import { Bilan } from '../radiologue/radiologue.component';
 
 @Component({
   selector: 'app-radio-header',
@@ -9,7 +10,7 @@ import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-f
   styleUrl: './radio-header.component.css'
 })
 export class RadioHeaderComponent {
-  @Input() bilans!: BilanRadio[];
+  @Input() bilans!: Bilan[];
       filledFieldsCount: number = 0;
       @Output() applyFilter = new EventEmitter<any>(); // Add this output
       @Output() resetFilter = new EventEmitter<void>();

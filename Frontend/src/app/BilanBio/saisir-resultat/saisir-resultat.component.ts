@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { labo, Resultat } from '../bilan-bio/bilan-bio.component';
 
 @Component({
   selector: 'app-saisir-resultat',
@@ -12,9 +13,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class SaisirResultatComponent {
   @Input() isVisible: boolean = false;
-      @Input() param !: ResultatBio;
+      @Input() param !: Resultat;
       @Output() closePanel = new EventEmitter<void>();
-      @Output() saveChanges = new EventEmitter<Partial<ResultatBio>>();
+      @Output() saveChanges = new EventEmitter<Partial<Resultat>>();
       saisirForm: FormGroup;
 
 

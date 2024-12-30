@@ -3,17 +3,16 @@
   @apply flex gap-4 justify-between; /* or any gap value you prefer */
 }
 .card {
-  @apply p-4 space-y-4 font-poppins;
+  @apply flex rounded-lg; /* Ensure the card spans the full height */
 }
 
-/* Row Styling */
 .row {
-  @apply flex items-start mb-6 mx-6 bg-white rounded-lg py-2 px-2; /* Aligns items horizontally */
+  @apply flex items-start mb-6 mx-6 bg-white rounded-lg py-2; /* Allow the row to grow and take up remaining height */
 }
 
 /* Label Styling */
 .label {
-  @apply font-bold text-main_color w-auto; /* Dynamically sized label */
+  @apply font-bold text-main_color w-auto px-2; /* Dynamically sized label */
 }
 
 /* Text Styling */
@@ -23,7 +22,7 @@
 
 /* Icon Container */
 .icons {
-  @apply flex gap-2; /* Keeps the icons aligned horizontally */
+  @apply flex gap-2 px-2; /* Keeps the icons aligned horizontally */
 }
 
 /* Button Styling */

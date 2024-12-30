@@ -1,4 +1,4 @@
-import { RadiologueComponent } from './../../Radiologue/radiologue/radiologue.component';
+import { Bilan, RadiologueComponent } from './../../Radiologue/radiologue/radiologue.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { BilanRadio } from '../../../types/bilanRadio';
@@ -6,6 +6,7 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { BilanRadioCardComponent } from '../../Radiologue/bilan-radio-card/bilan-radio-card.component';
 import { ArchiveHeaderComponent } from '../archive-header/archive-header.component';
+import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 
 
 @Component({
@@ -17,217 +18,125 @@ import { ArchiveHeaderComponent } from '../archive-header/archive-header.compone
 export class ArchiveComponent {
   role='radiologue';
     activeItem='Bilans';
-    bilans: BilanRadio[] = [
+
+    getNameEtablissemnt(id : number) : string {
+      return this.etablissements.find(e => e.id === id)?.nom || 'Inconnu';
+    }
+
+    etablissements : Etab[] = [
+        {
+          nom : 'Etablissement 1',
+          id : 1
+        },
+        {
+          nom : 'Etablissement 2',
+          id : 2
+        },
+        {
+          nom : 'Etablissement 3',
+          id : 3
+        },
+        {
+          nom : 'Etablissement 4',
+          id : 4
+        },
+        {
+          nom : 'Etablissement 5',
+          id : 5
+        },
+        {
+          nom : 'Etablissement 6',
+          id : 6
+        },
+        {
+          nom : 'Etablissement 7',
+          id : 7
+        }
+      ];
+
+    bilans: Bilan[] = [
       {
-        id: '1',
-      date_debut: '01/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '01/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 1,
       },
       {
-        id: '1',
-        date_debut: '02/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '02/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 2,
       },
       {
-        id: '1',
-      date_debut: '03/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '03/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 1,
       },
       {
-        id: '1',
-        date_debut: '04/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '04/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 2,
       },
       {
-        id: '1',
-      date_debut: '05/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '05/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 3,
       },
       {
-        id: '1',
-        date_debut: '06/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '06/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 3,
       },
       {
-        id: '1',
-      date_debut: '07/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '07/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 3,
       },
       {
-        id: '1',
-        date_debut: '08/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        date_debut : '08/12/2024',
+        date_fin : '25/12/2024',
+        etablissement : 4,
       },
       {
-        id: '1',
-      date_debut: '10/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-        date_debut: '11/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-      date_debut: '12/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-        date_debut: '13/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-      date_debut: '14/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-        date_debut: '15/12/2024',
-        date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
-      date_debut: '16/12/2024',
-      date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
-      },
-      {
-        id: '1',
         date_debut: '09/12/2024',
         date_fin: '25/12/2024',
-      type_radio: 'IRM',
-      est_complet: false,
-      est_resultat: false,
-      description: '',
-      medecin: '',
-      Consultation: '',
-      resultat_id: '',
-      etablissement: 'CHU'
+        etablissement : 5,
+      },
+      {
+        date_debut: '10/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 1,
+      },
+      {
+        date_debut: '11/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 6,
+      },
+      {
+        date_debut: '12/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 7,
+      },
+      {
+        date_debut: '13/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 7
+      },
+      {
+        date_debut: '14/12/2024',
+        date_fin: '24/12/2024',
+        etablissement : 6
+      },
+      {
+        date_debut: '15/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 5
+      },
+      {
+        date_debut: '16/12/2024',
+        date_fin: '25/12/2024',
+        etablissement : 4
       },
     ];
-    filteredBilans: BilanRadio[] = [...this.bilans]; // Holds the filtered results
+    filteredBilans: Bilan[] = [...this.bilans]; // Holds the filtered results
 
         pageSize = 12; // Items per page
         currentPage = 1;
@@ -251,9 +160,8 @@ export class ArchiveComponent {
             }
 
             if (filterValues.etablissement?.trim()) {
-              matchesEtablissement = bilan.etablissement
-                .toLowerCase()
-                .includes(filterValues.etablissement.toLowerCase().trim());
+              matchesEtablissement = this.getNameEtablissemnt(bilan.etablissement).toLowerCase()==filterValues.etablissement.toLowerCase();
+
             }
 
             return matchesDateDebut || matchesDateFin || matchesEtablissement;

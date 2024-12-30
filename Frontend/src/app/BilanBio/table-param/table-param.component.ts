@@ -1,8 +1,9 @@
+import { labo } from './../bilan-bio/bilan-bio.component';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { BilanBio } from '../../../types/bilanbio';
 import { ResultatBio } from '../../../types/resultatbio';
 import { SaisirResultatComponent } from '../saisir-resultat/saisir-resultat.component';
+import {  Resultat } from '../bilan-bio/bilan-bio.component';
 
 @Component({
   selector: 'app-table-param',
@@ -11,14 +12,14 @@ import { SaisirResultatComponent } from '../saisir-resultat/saisir-resultat.comp
   styleUrl: './table-param.component.css'
 })
 export class TableParamComponent {
-  @Input() bilan!: BilanBio;
-  @Input() user!: string;
-  @Input() params!: ResultatBio[];
+  @Input() params!: Resultat[]
+  @Input() labos!: labo[];
+  @Input() user!: labo;
   @Input() role!: string;
   index=0;
 
     isPopupVisible = false;
-    currentParam: ResultatBio | null = null; // Stores the param being modified
+    currentParam: Resultat | null = null; // Stores the param being modified
     currentIndex: number | null = null; // Stores the index of the param being modified
 
 
@@ -27,7 +28,7 @@ export class TableParamComponent {
      * @param medicament The medicament to modify
      * @param index The index of the medicament in the list
      */
-    openPopup(param: ResultatBio, index: number) {
+    openPopup(param: Resultat, index: number) {
       this.currentParam = { ...param }; // Clone the medicament to avoid direct mutation
       this.currentIndex = index;
       this.isPopupVisible = true;
@@ -46,16 +47,20 @@ export class TableParamComponent {
      * Updates a medicament in the list.
      * @param updatedParam The updated medicament data
      */
-    updateParam(updatedParam: Partial<ResultatBio>) {
+    updateParam(updatedParam: Partial<Resultat>) {
       if(this.currentIndex !== null && this.currentParam) {
       this.params[this.currentIndex] = {
         ...this.params[this.currentIndex],
         norme : updatedParam.norme || this.params[this.currentIndex].norme,
         valeur_mesure: updatedParam.valeur_mesure || this.params[this.currentIndex].valeur_mesure,
-        laborantin: this.user
+        laborantin: this.user.id
       };
       this.isPopupVisible = false;  // Close the panel after saving the data
     }
+  }
+  getLaboName(id: number | null): string {
+    const labo = this.labos.find(labo => labo.id === id);
+    return labo ? labo.nom : '';
   }
 
 }
