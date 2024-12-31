@@ -1,5 +1,5 @@
 export interface ResultatBio {
-  id: string;
+  id: number;
   valeur_mesure: string;
   date_mesure: string; // ISO date string
   heure_mesure: string; // ISO time string

@@ -10,18 +10,18 @@
       </div>
 
       <!-- Consultation Rows -->
-      <div *ngFor="let soin of soins"
+      <div *ngFor="let soin of soins let i = index"
          class="grid grid-cols-6 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
       <!-- Icon and Reference -->
       <div class="flex items-center gap-4 text-left">
         <span><img src='/assets/images/Consultation.png' class="w-6 h-6"> </span>
-        <span class=" text-main_color">Soins {{ soin.id  }}</span>
+        <span class=" text-main_color">Soins {{ i+1  }}</span>
       </div>
       <!-- Type -->
-      <div *ngIf="soin.type_soins=='SOIN INFERMIER'" class="text-infermier text-center bg-infermier_light">
+      <div *ngIf="soin.type_soins=='INFIRMIER'" class="text-infermier text-center bg-infermier_light">
         Soin infermier
       </div>
-      <div *ngIf="soin.type_soins=='OBSERVATION DETAT'" class="text-etat text-center bg-etat_light">
+      <div *ngIf="soin.type_soins=='OBSERVATION D\'ETAT'" class="text-etat text-center bg-etat_light">
         Observation d'etat
       </div>
       <div *ngIf="soin.type_soins=='ADMINISTRATION DE MEDICAMENT'" class="text-admin text-center bg-admin_light">
@@ -34,7 +34,7 @@
       <!-- Medecin -->
 
       <div class="text-main_color text-center">
-        {{ soin.infermier }}
+        {{ getInfermierName(soin.infermier) }}
       </div>
 
       <!-- Date -->

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Soins } from '../../../types/soins';
 import { CommonModule } from '@angular/common';
 import { ModifierDetailsComponent } from '../modifier-details/modifier-details.component';
+import { Soin } from '../soin/soin.component';
 
 @Component({
   selector: 'app-bottom-content',
@@ -10,12 +11,11 @@ import { ModifierDetailsComponent } from '../modifier-details/modifier-details.c
   styleUrls: ['./bottom-content.component.css']
 })
 export class BottomContentComponent {
-  @Input() soin!: Soins;
+  @Input() soin!: Soin;
   @Input() role!: string;
 
   medicament: string = 'Medicament';
   dose: string = 'Dose';
-  etat: string = 'Etat';
   description: string = 'Description';
 
   activeField: string | null = null; // Track which popup is visible
@@ -31,7 +31,7 @@ export class BottomContentComponent {
     this.currentDetail = ''; // Reset the current detail
   }
 
-  updateField(field: string, updatedData: Partial<String>) {
+  updateField(field: string, updatedData: Partial<String> ) {
     if (!this.soin || !updatedData) return;
 
     // Update the relevant field in the `soin` object
@@ -41,9 +41,6 @@ export class BottomContentComponent {
         break;
       case 'dose':
         this.soin.dose = String(updatedData);
-        break;
-      case 'etat':
-        this.soin.etat_patient = String(updatedData);
         break;
       case 'description':
         this.soin.description = String(updatedData);

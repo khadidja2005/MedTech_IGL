@@ -1,3 +1,4 @@
+import { HospitalisationPage, medecin } from './../hospitalisation/hospitalisation.component';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Hospitalisation } from '../../../types/hospitalisation';
@@ -13,10 +14,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ModifierComponent implements OnInit {
   @Input() isVisible: boolean = false;
-  @Input() hospitalisation!: Hospitalisation;
+  @Input() hospitalisation!: HospitalisationPage;
   @Output() closePopup = new EventEmitter<void>();
-  @Output() saveChanges = new EventEmitter<Partial<Hospitalisation>>();
-  @Input() medecins: string[] = [];
+  @Output() saveChanges = new EventEmitter<Partial<HospitalisationPage>>();
+  @Input() medecins: medecin[] = [];
   hospitalisationForm: FormGroup;
 
   showEndDate: boolean = false;
@@ -62,24 +63,23 @@ export class ModifierComponent implements OnInit {
       const formattedStartDate = this.convertDateToInputFormat(this.hospitalisation.date_debut);
 
       this.hospitalisationForm.patchValue({
-        medecin_responsable: this.hospitalisation.medecin_responsable,
+        medecin_responsable: this.hospitalisation.medecin,
         date_debut: formattedStartDate,
-        status: this.hospitalisation.status,
+        status: this.hospitalisation.date_fin ? 'en cours' : 'fini',
         date_fin: this.hospitalisation.date_fin ? this.convertDateToInputFormat(this.hospitalisation.date_fin) : ''
       });
 
-      this.showEndDate = this.hospitalisation.status === 'fini';
+      this.showEndDate = this.hospitalisation.date_fin != null;
     }
   }
 
   onSubmit() {
     if (this.hospitalisationForm.valid) {
       const formValue = this.hospitalisationForm.value;
-      const updatedData: Partial<Hospitalisation> = {
-        medecin_responsable: formValue.medecin_responsable,
+      const updatedData: Partial<HospitalisationPage> = {
+        medecin: formValue.medecin_responsable,
         date_debut: this.convertDateToDisplayFormat(formValue.date_debut),
-        status: formValue.status,
-        date_fin: formValue.date_fin ? this.convertDateToDisplayFormat(formValue.date_fin) : ''
+        date_fin: formValue.date_fin ? this.convertDateToDisplayFormat(formValue.date_fin) : null,
       };
       this.saveChanges.emit(updatedData);
     }

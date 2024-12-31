@@ -11,7 +11,7 @@
       <div class="form-group">
         <label for="infermier">Infermier</label>
         <select id="infermier" formControlName="infermier" class="form-control">
-          <option *ngFor="let infermier of infermiers" [value]="infermier">{{ infermier }}</option>
+          <option *ngFor="let infermier of infermiers" [value]="infermier.id">{{ infermier.nom }}</option>
         </select>
       </div>
 
@@ -29,26 +29,24 @@
         <label for="type">Type:</label>
         <select id="type" formControlName="type" class="form-control"
         [ngClass]="{
-        'text-infermier': soinForm.value.type === 'SOIN INFERMIER',
-        'text-etat': soinForm.value.type === 'OBSERVATION DETAT',
-        'text-admin': soinForm.value.type === 'ADMINISTRATION DE MEDICAMENT',
-        'text-autre': soinForm.value.type === 'AUTRE'}">
-          <option value="SOIN INFERMIER" class="text-infermier">Soin infermier</option>
-          <option value="OBSERVATION DETAT" class="text-etat">Observation d'etat</option>
-          <option value="ADMINISTRATION DE MEDICAMENT" class="text-admin">Administration de medicament</option>
+          'text-infermier': soinForm.value.type === 'INFIRMIER',
+          'text-etat': soinForm.value.type === 'OBSERVATION D\'ETAT',
+          'text-admin': soinForm.value.type === 'ADMINISTRATION DE MEDICAMENT',
+          'text-autre': soinForm.value.type === 'AUTRE'
+        }">
+          <option value="INFIRMIER" class="text-infermier">Soin infermier</option>
+          <option value="OBSERVATION D'ETAT" class="text-etat">Observation d'état</option>
+          <option value="ADMINISTRATION DE MEDICAMENT" class="text-admin">Administration de médicament</option>
           <option value="AUTRE" class="text-autre">Autre</option>
         </select>
       </div>
 
       <div class="form-group" *ngIf="showDescription">
-        <label for="descrip">Description</label>
+        <label *ngIf="soinForm.value.type=='INFIRMIER' || soinForm.value.type=='AUTRE'" for="descrip">Description</label>
+        <label *ngIf="soinForm.value.type=='OBSERVATION D\'ETAT'" for="descrip">Etat Patient :</label>
         <textarea id="descrip" formControlName="descrip" class="form-control"></textarea>
       </div>
 
-      <div class="form-group" *ngIf="showEtat">
-        <label for="etat">Etat Patient</label>
-        <textarea id="etat" formControlName="etat" class="form-control"></textarea>
-      </div>
 
       <div class="form-group" *ngIf="showMedicamentDose">
         <label for="medic">Medicament</label>

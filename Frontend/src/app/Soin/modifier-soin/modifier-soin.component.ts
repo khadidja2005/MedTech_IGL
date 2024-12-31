@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Soins } from '../../../types/soins';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Infermier, Soin } from '../soin/soin.component';
 
 @Component({
   selector: 'app-modifier-soin',
@@ -12,10 +12,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ModifierSoinComponent {
   @Input() isVisible: boolean = false;
-    @Input() soin!: Soins;
+    @Input() soin!: Soin;
     @Output() closePopup = new EventEmitter<void>();
-    @Output() saveChanges = new EventEmitter<Partial<Soins>>();
-    @Input() infermiers: string[] = [];
+    @Output() saveChanges = new EventEmitter<Partial<Soin>>();
+    @Input() infermiers: Infermier[] = [];
     soinForm: FormGroup;
 
     showEndDate: boolean = false;
@@ -43,13 +43,18 @@ export class ModifierSoinComponent {
       return `${day}/${month}/${year}`;
     }
 
+    getInfermierName(infermierId: number): string {
+      const infermier = this.infermiers.find(i => i.id === infermierId);
+      return infermier ? infermier.nom : 'Unknown Infermier';
+    }
+
 
     ngOnInit() {
       if (this.soin) {
         const formattedStartDate = this.convertDateToInputFormat(this.soin.date);
 
         this.soinForm = this.fb.group({
-          infermier: [this.soin.infermier || '', Validators.required], // Set the initial value
+          infermier: [this.soin.infermier, Validators.required], // Use ID
           date: [formattedStartDate, Validators.required],
           heure: [this.soin.heure || '', Validators.required],
         });
@@ -60,12 +65,15 @@ export class ModifierSoinComponent {
       if (this.soinForm.valid) {
         const formValue = this.soinForm.value;
 
-        const updatedData: Partial<Soins> = {
-          infermier: formValue.infermier,
+        const updatedData: Partial<Soin> = {
+          infermier: formValue.infermier, // Send the ID
           date: this.convertDateToDisplayFormat(formValue.date),
           heure: formValue.heure,
         };
+
         this.saveChanges.emit(updatedData);
+        this.closePopup.emit(); // Close the popup after submission
       }
     }
+
 }

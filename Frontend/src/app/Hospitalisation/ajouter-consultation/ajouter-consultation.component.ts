@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Consultation } from '../../../types/consultation';
 import { CommonModule } from '@angular/common';
+import { ConsultationPageHospitalisation, medecin } from '../hospitalisation/hospitalisation.component';
 
 @Component({
   selector: 'app-ajouter-consultation',
@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
 })
 export class AjouterConsultationComponent {
   @Input() isVisible: boolean = false;
-  @Input() medecins: string[] = [];
+  @Input() medecins: medecin[] = [];
   @Output() closePanel = new EventEmitter<void>();
-  @Output() saveConsultation = new EventEmitter<Consultation>();  // Emit the added consultation
+  @Output() saveConsultation = new EventEmitter<ConsultationPageHospitalisation>();  // Emit the added consultation
 
   consultationForm: FormGroup;
 
@@ -36,12 +36,9 @@ export class AjouterConsultationComponent {
       const formValue = this.consultationForm.value;
 
       // Create the new consultation object
-      const newConsultation: Consultation = {
-        id: '',  // Example ID generation
-        Medecin: formValue.medecin,
+      const newConsultation: ConsultationPageHospitalisation = {
+        medecin: formValue.medecin,
         date: this.convertDateToDisplayFormat(formValue.date),
-        resume: '',
-        Hospitalisation: '',  // Set this according to your data structure
       };
 
       // Emit the new consultation to the parent

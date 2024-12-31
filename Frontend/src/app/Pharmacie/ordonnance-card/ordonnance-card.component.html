@@ -1,5 +1,5 @@
 <div class="card-container">
-    <div class="title">Ordonnance n° {{ordonnance.id}}</div>
+    <div class="title">Ordonnance n° {{i+1}}</div>
     <div class="date">{{ordonnance.date_debut}}</div>
-    <div class="etablissement">{{ordonnance.etablissement}}</div>
+    <div class="etablissement">{{getEtablissementName(ordonnance.etablissement)}}</div>
 </div>

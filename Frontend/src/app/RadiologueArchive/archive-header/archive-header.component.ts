@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { BilanRadio } from '../../../types/bilanRadio';
 import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-filter.component';
+import { Bilan } from '../../Radiologue/radiologue/radiologue.component';
 @Component({
   selector: 'app-archive-header',
   imports: [AjouterFilterComponent],
@@ -8,7 +8,7 @@ import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-f
   styleUrl: './archive-header.component.css'
 })
 export class ArchiveHeaderComponent {
-   @Input() bilans!: BilanRadio[];
+   @Input() bilans!: Bilan[];
         filledFieldsCount: number = 0;
         @Output() applyFilter = new EventEmitter<any>(); // Add this output
         @Output() resetFilter = new EventEmitter<void>();

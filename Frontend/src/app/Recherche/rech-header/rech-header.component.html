@@ -1,0 +1,32 @@
+<div class="header-container"></div>
+<!-- Search Section -->
+<div class="flex items-center border border-gray-300 rounded-lg bg-white justify-between mb-6">
+  <input
+    type="text"
+    placeholder="Rechercher un dossier médical"
+    class=" rounded-lg px-4 py-2 flex-grow text-sm focus:outline-none focus:ring focus:ring-blue-300"
+  />
+  <button class="ml-2 p-2 bg-white hover:bg-blue_lighter flex" (click)="openScannerPanel()">
+    <img src="/assets/images/QR.png" class="h-6 w-6" />
+  </button>
+  <app-scanner
+    [isVisible]="isScannerPanelVisible"
+  ></app-scanner>
+  <button class="ml-2 p-2 bg-blue text-white rounded-r-lg hover:bg-blue_light flex" >
+    <img src="/assets/images/rech.png" class="h-6 w-6 " />
+  </button>
+</div>
+  <!-- Footer Section -->
+  <div class="footer">
+    <div class="text"> Il existe {{dpis.length}} dossiers medicales</div>
+    <div *ngIf="role=='medecin' || role=='admin'" class="buttons-container">
+      <button class="add-button" (click)="openAddPanel()">
+        <img src="/assets/images/ajoute.png" class="h-5 w-5 items-center text-white"> Ajouter un dossier medical</button>
+        <app-ajouter-dpi
+        [etablissements]="etablissements"
+        [isVisible]="isAddPanelVisible"
+        (closePanel)="closeAddPanel()"
+        (saveDpi)="addDpiCard($event)">
+        </app-ajouter-dpi>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 //import { LandingPageComponent } from './LandingPage/landing-page/landing-page.component';
 // import { HeaderPDIComponent } from './components/header-pdi/header-pdi.component';
 // import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -22,7 +23,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   // imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],
-  imports: [RouterOutlet],
+  imports: [RouterOutlet  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
