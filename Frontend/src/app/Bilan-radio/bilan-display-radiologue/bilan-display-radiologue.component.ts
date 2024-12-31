@@ -1,8 +1,40 @@
-import { Component } from '@angular/core';
-import { BilanRadio } from '../../../types/bilanRadio';
-import { ResultatRadio } from '../../../types/resultatradio';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Routes } from '@angular/router';
+import { PageBilanComponent } from '../page-bilan/page-bilan.component';
+
+
+
+export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
+
+
+export interface BilanRadio {
+  id: number;
+  date_debut: string; // ISO date string
+  date_fin: string; // ISO date string
+  type_radio: TypeRadio;
+  est_complet: boolean;
+  est_resultat: boolean;
+  description: string;
+  Consultation: string; // Foreign key to Consultation, nullable
+  resultat_id: number | null;
+  etablissement: number;
+  medecin:string;
+  patient:string;
+
+}
+export interface ResultatRadio {
+  id: number;
+  description: string;
+  piece_jointe: string;
+  date: string; // ISO date string
+  compte_rendu: string;
+  radiologue_compte_rendu: number | null; // Foreign key to PersonnelMedical
+  radiologue: number | null; // Foreign key to PersonnelMedical
+}
+
+
 
 @Component({
   selector: 'app-bilan-display-radiologue',
@@ -11,37 +43,17 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './bilan-display-radiologue.component.css'
 })
 export class BilanDisplayRadiologueComponent {
-  bilan: BilanRadio = {
-    id: '1',
-    description: "This is a comprehensive description of the bilan, providing detailed insights into the patient's radio diagnosis process.",
-    date_debut: '2024-12-01',
-    date_fin: '2024-12-10',
-    type_radio: 'RADIO',
-    est_complet: false,  // Initially false until PDF is uploaded
-    est_resultat: false,
-    medecin: 'Sarah Bensaid',
-    Consultation: 'description',
-    resultat_id: 'R1',
-    etablissement: 'Clinique El-Amel',
-    patient: 'Amina khelifi'
-  };
 
-  result: ResultatRadio = {
-    id: 'R1',
-    description: 'The radiology report indicates a mild inflammation in the lower chest region.',
-    piece_jointe: '',  // Initially empty until PDF is uploaded
-    date: '2024-12-11',
-    compte_rendu: 'Further tests are recommended to confirm the diagnosis.',
-    radiologue_compte_rendu: 'Reviewed by Dr. Amine Mansouri',
-    radiologue: 'Amine Mansouri',
-  };
+  @Input() bilan!: BilanRadio ;
+  @Input() result!: ResultatRadio;
+
 
   showViewModal = false;
   showEditModal = false;
   viewMode: 'description' | 'compteRendu' = 'description';
   viewOnlyDescription = '';
-  viewOnlyCompteRendu = '';
-  editedCompteRendu = '';
+  viewOnlyCompteRendu:string|null = '';
+  editedCompteRendu  = '';
   selectedPDF: File | null = null;
   importedPDF = false;
 
@@ -151,5 +163,34 @@ export class BilanDisplayRadiologueComponent {
   closeEditModal(): void {
     this.showEditModal = false;
     this.editedCompteRendu = '';
+  }
+
+  ngOnInit() {
+    if (!this.bilan || !this.result) {
+      this.bilan = {
+        id: 0,
+        description: "This is a comprehensive description...",
+        date_debut: '2024-12-01',
+        date_fin: '2024-12-10',
+        type_radio: 'RADIO',
+        est_complet: false,
+        est_resultat: false,
+        medecin: 'Sarah Bensaid',
+        Consultation: 'description',
+        resultat_id: 0,
+        etablissement: 2,
+        patient: 'Amina khelifi'
+      };
+
+      this.result = {
+        id: 0,
+        description: 'The radiology report...',
+        piece_jointe: '',
+        date: '2024-12-11',
+        compte_rendu: 'Further tests...',
+        radiologue_compte_rendu: 1,
+        radiologue: 2,
+      };
+    }
   }
 }

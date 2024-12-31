@@ -1,9 +1,38 @@
-import { Component } from '@angular/core';
-import { BilanRadio } from '../../../types/bilanRadio';
-import { ResultatRadio } from '../../../types/resultatradio';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+
+
+export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
+
+export interface BilanRadio {
+  id: number;
+  date_debut: string; // ISO date string
+  date_fin: string; // ISO date string
+  type_radio: TypeRadio;
+  est_complet: boolean;
+  est_resultat: boolean;
+  description: string;
+  Consultation: string; // Foreign key to Consultation, nullable
+  resultat_id: number | null;
+  etablissement: number;
+  medecin:string;
+  patient:string;
+
+}
+export interface ResultatRadio {
+  id: number;
+  description: string;
+  piece_jointe: string;
+  date: string; // ISO date string
+  compte_rendu: string;
+  radiologue_compte_rendu: number | null; // Foreign key to PersonnelMedical
+  radiologue: number | null; // Foreign key to PersonnelMedical
+}
+
+
 
 @Component({
   selector: 'app-bilan-display-med-valid',
@@ -13,30 +42,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class BilanDisplayMedValidComponent {
 
-bilan: BilanRadio = {
-    id: '1',
-    description: "This is a comprehensive description of the bilan, providing detailed insights into the patient's radio diagnosis process.",
-    date_debut: '2024-12-01',
-    date_fin: '2024-12-10',
-    type_radio: 'RADIO',
-    est_complet: true,
-    est_resultat: false,
-    medecin: 'Sarah Bensaid',
-    Consultation: 'description',
-    resultat_id: 'R1',
-    etablissement: 'Clinique El-Amel',
-    patient: 'Amina khelifi'
-  };
+   @Input() bilan!: BilanRadio ;
+   @Input() result!: ResultatRadio;
 
-  result: ResultatRadio = {
-    id: 'R1',
-    description: 'The radiology report indicates a mild inflammation in the lower chest region.',
-    piece_jointe: 'report.pdf',
-    date: '2024-12-11',
-    compte_rendu: 'Further tests are recommended to confirm the diagnosis.',
-    radiologue_compte_rendu: 'Reviewed by Dr. Amine Mansouri',
-    radiologue: 'Amine Mansouri',
-  };
 
   showCompteRenduModal = false;
   importedPDF = false;
@@ -55,8 +63,8 @@ bilan: BilanRadio = {
  
  // Modal content
  viewOnlyDescription = '';
- viewOnlyCompteRendu = '';
- editedCompteRendu = '';
+ viewOnlyCompteRendu :string| null = null;
+ editedCompteRendu ='' ;
 
  // View Modal Functions
  openViewDescription(): void {
@@ -134,27 +142,22 @@ bilan: BilanRadio = {
         this.selectedPDF = file;
         const formData = new FormData();
         formData.append('pdf', file);
-        formData.append('bilanId', this.bilan.id);
-  
-        // Upload the PDF file first
+        formData.append('bilanId', this.bilan.id.toString()); // Convert ID to string for FormData
+
         await this.http.post('YOUR_API_ENDPOINT/upload-pdf', formData).toPromise();
-  
-        // Only update the local state after successful upload
+
         this.result.piece_jointe = file.name;
         
-        // Update the bilan status
         await this.http.patch(`YOUR_API_ENDPOINT/bilans/${this.bilan.id}`, {
           est_complet: true,
           piece_jointe: file.name
         }).toPromise();
-  
-        // Update local state last
+
         this.bilan.est_complet = true;
         this.importedPDF = true;
-  
+
       } catch (error) {
         console.error('Error uploading PDF:', error);
-        // Reset states on error
         this.selectedPDF = null;
         this.importedPDF = false;
         this.result.piece_jointe = '';
@@ -209,6 +212,35 @@ bilan: BilanRadio = {
       }
     } else {
       alert('Veuillez importer un PDF avant de valider le bilan');
+    }
+  }
+
+  ngOnInit() {
+    if (!this.bilan || !this.result) {
+      this.bilan = {
+        id: 0,
+        description: "This is a comprehensive description...",
+        date_debut: '2024-12-01',
+        date_fin: '2024-12-10',
+        type_radio: 'RADIO',
+        est_complet: false,
+        est_resultat: false,
+        medecin: 'Sarah Bensaid',
+        Consultation: 'description',
+        resultat_id: 0,
+        etablissement: 2,
+        patient: 'Amina khelifi'
+      };
+
+      this.result = {
+        id: 0,
+        description: 'The radiology report...',
+        piece_jointe: '',
+        date: '2024-12-11',
+        compte_rendu: 'Further tests...',
+        radiologue_compte_rendu: 1,
+        radiologue: 2,
+      };
     }
   }
 }

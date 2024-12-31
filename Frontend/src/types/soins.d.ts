@@ -12,6 +12,6 @@ export interface Soins {
   description: string;
   medicament: string;
   dose: string;
-  hospitalisation: string; // Foreign key to Hospitalisation
-  infermier: string | null; // Foreign key to PersonnelMedical, nullable
+  hospitalisation: number; // Foreign key to Hospitalisation
+  infermier: number | null; // Foreign key to PersonnelMedical, nullable
 }

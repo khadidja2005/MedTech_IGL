@@ -1,32 +1,50 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {LandingPageComponent} from './LandingPage/landing-page/landing-page.component';
-import {HeaderPDIComponent} from './components/header-pdi/header-pdi.component';
-import { SidebarComponent } from "./components/sidebar/sidebar.component";
-import {DpiInfoComponent} from "./PDI/dpi-info/dpi-info.component";
+// app.routes.ts
+import { Routes } from '@angular/router';
+import { LandingPageComponent } from './LandingPage/landing-page/landing-page.component';
 import { DpiComponent } from "./PDI/dpi/dpi.component";
-import { ConsultationInfoComponent } from "./Consultation/consultation-info/consultation-info.component";
-import { EstablishmentsComponent } from "./dashboard-etablissement/establishments/establishments.component";
-import { PersonnalsMedicauxComponent } from "./etab-personnals-medicaux/personnals-medicaux/personnals-medicaux.component";
-import { EmployeInfComponent } from "./Employe/employe-inf/employe-inf.component";
 import { BddComponent } from "./controle-bdd/bdd/bdd.component";
 import { PageListEtablissemetsComponent } from "./dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component";
 import { DoctorEstablishmentsComponent } from "./dashboard-medecin/doctor-establishments/doctor-establishments.component";
 import { DPIManagementComponent } from "./dashboard-medecin/dpimanagement/dpimanagement.component";
-import { BilanListComponent } from "./Bilan-radio/bilan-list/bilan-list.component";
-import { BilanDisplayComponent } from "./Bilan-radio/bilan-display-med/bilan-display.component";
-import { BilanDisplayRadiologueComponent } from "./Bilan-radio/bilan-display-radiologue/bilan-display-radiologue.component";
-import { BilanDisplayMedValidComponent } from "./Bilan-radio/bilan-display-med-valid/bilan-display-med-valid.component";
+import { ConsultationPageComponent } from './Consultation/consultation-page/consultation-page.component';
+import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/page-affichage-etablissement/page-affichage-etablissement.component';
+import { PageEmployesComponent } from './Employe/page-employes/page-employes.component';
+import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
 
+export const routes: Routes = [
+  //Landing page route 
+  { path: '', redirectTo: '/landing', pathMatch: 'full' },
+  { path: 'landing', component: LandingPageComponent },
+  
+  // DPI Routes
+  { path: 'dpi', component: DpiComponent },
+  
+  // Consultation Routes
+  { path: 'consultation/:id', component: ConsultationPageComponent },
+  
+ // route d'affichage d'unne liste des etablissements 
+  { path: 'establishments-list', component: PageListEtablissemetsComponent},
+  
+  // route d'affichage d'un seul etablissement 
+  { path: 'establishment', component: PageAffichageEtablissementComponent},
+  
+  // route d'affichage de la liste des tous les employes
+  { path: 'employee-list', component: PageEmployesComponent },
+  
+  // Doctor Dashboard Routes
 
-@Component({
-  selector: 'app-root',
-  standalone: true, 
-  imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],  
+  //Affichage d'une liste des etablissement d'un doctor
+  { path: 'doctor-establishments', component: DoctorEstablishmentsComponent },
+  //Affichage des dpi d'un médecin
+  { path: 'doctor-dpi-management', component: DPIManagementComponent },
+  
+  // Radiology Report Routes
 
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  title = 'Medtech';
-}
+  {path: 'bilan-radio',component:PageBilanComponent},
+  
+  // Database Control
+  { path: 'database-control', component: BddComponent },
+  
+  // Wildcard route for 404
+  { path: '**', redirectTo: '/landing' }
+];

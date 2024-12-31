@@ -268,8 +268,8 @@ class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-5
           [(ngModel)]="newOrdonnance.date"
           [disabled]="addOrdonnanceModalMode === 'view'"
           class="w-full text-xl bg-[#F3F8FF] h-12 border-2 border-[#3A8EF6] rounded-xl px-4">
-   <div *ngIf="OrdonnanceValidationErrors.date" class="text-red-500 text-sm mt-1">
-     {{OrdonnanceValidationErrors.date}}
+   <div *ngIf="OrdonnanceValidationErrors['date']" class="text-red-500 text-sm mt-1">
+     {{OrdonnanceValidationErrors['date']}}
    </div>
  </div>
 
@@ -284,8 +284,8 @@ class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-5
        {{pharmacien}}
      </option>
    </select>
-   <div *ngIf="OrdonnanceValidationErrors.pharmacien_id" class="text-red-500 text-sm mt-1">
-     {{OrdonnanceValidationErrors.pharmacien_id}}
+   <div *ngIf="OrdonnanceValidationErrors['pharmacien_id']" class="text-red-500 text-sm mt-1">
+     {{OrdonnanceValidationErrors['pharmacien_id']}}
    </div>
  </div>
 
@@ -358,8 +358,8 @@ class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-5
                 <option value="bio">Biologique</option>
                 <option value="radio">Radiologique</option>
               </select>
-              <div *ngIf="BilanValidationErrors.type" class="text-red-500 text-sm mt-1">
-                {{BilanValidationErrors.type}}
+              <div *ngIf="BilanValidationErrors['type']" class="text-red-500 text-sm mt-1">
+                {{BilanValidationErrors['type']}}
               </div>
             </div>
       
