@@ -72,7 +72,7 @@ def seed_database_func():
 
     # Create medical personnel and link to establishments without duplicates
     personnel_list = []
-    for _ in range(20):
+    for _ in range(50):
         personnel = PersonnelMedical.objects.create(
             nom_complet=fake.name(),
             email=fake.email(),
@@ -111,10 +111,18 @@ def seed_database_func():
         # Create range of three DPI per patient
         x = random.randint(1, 3)
         for _ in range(x):  # Repeat the process three times
+            createur = random.choice(Admin.objects.all())
+            createur = random.choice([createur, None])
+            if not createur:
+                medecin = random.choice(PersonnelMedical.objects.filter(role="MEDECIN"))
+            else:
+                medecin = None
             DPI.objects.create(
                 date_creation=fake.date(),
                 patient=patient,  # Directly associate with the just-created patient
                 etablissement_id=random.choice(Etablissement.objects.all()),
+                createur_id=createur,
+                medecin_id=medecin,
             )
 
         for _ in range(3):
@@ -216,7 +224,6 @@ def seed_database_func():
             pharmacien_id=pharmacien,
             consultation=consultationh,
         )
-
     for _ in range(70):
         Medicament.objects.create(
             nom=fake.word(),
@@ -265,8 +272,7 @@ def seed_database_func():
             medicament=med,
             description=fake.text(),
         )
-
-    for _ in range(30):
+    for _ in range(15):
         bilanBioh = BilanBio.objects.create(
             date_debut=fake.date(),
             date_fin=None,
@@ -305,7 +311,6 @@ def seed_database_func():
             bilanBioh.est_resultat = fake.boolean()
             if bilanBioh.est_resultat:
                 bilanBioh.date_fin = fake.date()
-
             bilanBioh.save()
 
     for _ in range(15):

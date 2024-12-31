@@ -1,0 +1,67 @@
+<div class="card flex flex-col">
+  <!-- Row for 'Nom Medicament' -->
+  <div *ngIf="soin.type_soins == 'ADMINISTRATION DE MEDICAMENT' && soin.medicament && soin.dose" class="container">
+    <span class="row">
+      <label class="label" for="medic">Nom Medicament:</label>
+      <textarea class="text" id="medic" readonly>{{ soin.medicament }}</textarea>
+      <div *ngIf="role == 'admin' || role == 'infermierResponsable'" class="icons">
+        <button (click)="openPopup('medicament', soin.medicament)" class="button">
+          <img src="/assets/images/modifier.png" alt="Edit" />
+        </button>
+        <app-modifier-details
+          [isVisible]="activeField === 'medicament'"
+          [label]="'Nom Medicament'"
+          [detail]="soin.medicament"
+          (closePopup)="closePopup()"
+          (saveChanges)="updateField('medicament', $event)"
+        ></app-modifier-details>
+        <button class="button">
+          <img src="/assets/images/supp.png" alt="Delete" />
+        </button>
+      </div>
+    </span>
+
+    <!-- Row for 'Dose' -->
+    <span class="row">
+      <label class="label" for="dose">Dose:</label>
+      <textarea class="text" id="dose" readonly>{{ soin.dose }}</textarea>
+      <div *ngIf="role == 'admin' || role == 'infermierResponsable'" class="icons">
+        <button (click)="soin.dose && openPopup('dose', soin.dose)" class="button">
+          <img src="/assets/images/modifier.png" alt="Edit" />
+        </button>
+        <app-modifier-details
+          [isVisible]="activeField === 'dose'"
+          [label]="'Dose'"
+          [detail]="soin.dose"
+          (closePopup)="closePopup()"
+          (saveChanges)="updateField('dose', $event)"
+        ></app-modifier-details>
+        <button class="button">
+          <img src="/assets/images/supp.png" alt="Delete" />
+        </button>
+      </div>
+    </span>
+  </div>
+
+  <!-- Row for 'Etat de Patient' / Description -->
+  <div class="row h-96 flex items-start">
+    <label *ngIf="soin.type_soins!='OBSERVATION D\'ETAT'" class="label" for="etat_patient">Description:</label>
+    <label *ngIf="soin.type_soins=='OBSERVATION D\'ETAT'" class="label" for="etat_patient">État de Patient:</label>
+    <textarea class="text flex-1 h-full h-80" id="etat_patient" readonly>{{ soin.description }}</textarea>
+    <div *ngIf="role == 'admin' || role == 'infermierResponsable'" class="icons">
+      <button (click)="openPopup('description', soin.description)" class="button">
+        <img src="/assets/images/modifier.png" alt="Edit" />
+      </button>
+      <app-modifier-details
+        [isVisible]="activeField === 'description'"
+        [label]="soin.type_soins=='OBSERVATION D\'ETAT' ? 'État de Patient' : 'Description'"
+        [detail]="soin.description"
+        (closePopup)="closePopup()"
+        (saveChanges)="updateField('description', $event)"
+      ></app-modifier-details>
+      <button class="button">
+        <img src="/assets/images/supp.png" alt="Delete" />
+      </button>
+    </div>
+  </div>
+</div>

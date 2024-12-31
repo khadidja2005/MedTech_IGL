@@ -44,8 +44,10 @@ export interface ResultatRadio {
 })
 export class BilanDisplayRadiologueComponent {
 
+
   @Input() bilan!: BilanRadio ;
   @Input() result!: ResultatRadio;
+
 
 
   showViewModal = false;
@@ -62,12 +64,12 @@ export class BilanDisplayRadiologueComponent {
 
   ImporterPDF(event: any): void {
     const file = event.target.files[0];
-    
+
     if (!file) {
       alert('Aucun fichier sélectionné');
       return;
     }
-    
+
     if (file.type !== 'application/pdf') {
       alert('Veuillez sélectionner un fichier PDF valide');
       return;
@@ -76,7 +78,7 @@ export class BilanDisplayRadiologueComponent {
     try {
       // Store the PDF locally
       this.selectedPDF = file;
-      
+
       // Update local state
       this.result.piece_jointe = file.name;
       this.bilan.est_complet = true;
@@ -84,7 +86,7 @@ export class BilanDisplayRadiologueComponent {
 
       // Optional: Show success message
       alert('PDF importé avec succès');
-      
+
     } catch (error) {
       console.error('Error handling PDF:', error);
       this.resetPDFState();
@@ -145,7 +147,7 @@ export class BilanDisplayRadiologueComponent {
 
   openViewCompteRendu(): void {
     this.viewMode = 'compteRendu';
-    this.viewOnlyCompteRendu = this.result.compte_rendu;
+    this.viewOnlyCompteRendu = this.result.compte_rendu || '';
     this.showViewModal = true;
   }
 
@@ -156,7 +158,7 @@ export class BilanDisplayRadiologueComponent {
   }
 
   modifyCompteRendu(): void {
-    this.editedCompteRendu = this.result.compte_rendu;
+    this.editedCompteRendu = this.result.compte_rendu || '';
     this.showEditModal = true;
   }
 
@@ -164,6 +166,7 @@ export class BilanDisplayRadiologueComponent {
     this.showEditModal = false;
     this.editedCompteRendu = '';
   }
+
 
   ngOnInit() {
     if (!this.bilan || !this.result) {
@@ -193,4 +196,6 @@ export class BilanDisplayRadiologueComponent {
       };
     }
   }
+}
+
 }

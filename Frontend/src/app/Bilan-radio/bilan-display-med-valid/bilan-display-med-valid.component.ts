@@ -42,6 +42,7 @@ export interface ResultatRadio {
 })
 export class BilanDisplayMedValidComponent {
 
+
    @Input() bilan!: BilanRadio ;
    @Input() result!: ResultatRadio;
 
@@ -60,7 +61,7 @@ export class BilanDisplayMedValidComponent {
  showViewModal = false;
  showEditModal = false;
  viewMode: 'description' | 'compteRendu' = 'description';
- 
+
  // Modal content
  viewOnlyDescription = '';
  viewOnlyCompteRendu :string| null = null;
@@ -75,7 +76,7 @@ export class BilanDisplayMedValidComponent {
 
  openViewCompteRendu(): void {
    this.viewMode = 'compteRendu';
-   this.viewOnlyCompteRendu = this.result.compte_rendu;
+   this.viewOnlyCompteRendu = this.result.compte_rendu ?? '';
    this.showViewModal = true;
  }
 
@@ -87,7 +88,7 @@ export class BilanDisplayMedValidComponent {
 
  // Edit Modal Functions
  modifyCompteRendu(): void {
-   this.editedCompteRendu = this.result.compte_rendu;
+   this.editedCompteRendu = this.result.compte_rendu ?? '';
    this.showEditModal = true;
  }
 
@@ -100,7 +101,7 @@ export class BilanDisplayMedValidComponent {
    try {
      // Update local state
      this.result.compte_rendu = this.editedCompteRendu;
-     
+
      // Update backend
      await this.http.patch(`YOUR_API_ENDPOINT/resultats/${this.result.id}`, {
        compte_rendu: this.editedCompteRendu
@@ -119,7 +120,7 @@ export class BilanDisplayMedValidComponent {
      try {
        // Update local state
        this.result.compte_rendu = '';
-       
+
        // Update backend
        await this.http.patch(`YOUR_API_ENDPOINT/resultats/${this.result.id}`, {
          compte_rendu: ''
@@ -142,16 +143,19 @@ export class BilanDisplayMedValidComponent {
         this.selectedPDF = file;
         const formData = new FormData();
         formData.append('pdf', file);
+
         formData.append('bilanId', this.bilan.id.toString()); // Convert ID to string for FormData
 
         await this.http.post('YOUR_API_ENDPOINT/upload-pdf', formData).toPromise();
 
         this.result.piece_jointe = file.name;
         
+
         await this.http.patch(`YOUR_API_ENDPOINT/bilans/${this.bilan.id}`, {
           est_complet: true,
           piece_jointe: file.name
         }).toPromise();
+
 
         this.bilan.est_complet = true;
         this.importedPDF = true;
@@ -168,7 +172,7 @@ export class BilanDisplayMedValidComponent {
       alert('Veuillez sélectionner un fichier PDF valide');
     }
   }
-  
+
   async viewPDF(): Promise<void> {
     if (this.importedPDF || this.result.piece_jointe) {  // Changed condition
       try {
@@ -176,7 +180,7 @@ export class BilanDisplayMedValidComponent {
           `YOUR_API_ENDPOINT/pdf/${this.bilan.id}`,
           { responseType: 'blob' }
         ).toPromise();
-        
+
         if (response) {
           const blob = new Blob([response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
@@ -201,7 +205,7 @@ export class BilanDisplayMedValidComponent {
     if (!this.BilanNonComplet()) {  // Check if bilan is complete
       try {
         this.bilan.est_resultat = true;
-        
+
         await this.http.patch(`YOUR_API_ENDPOINT/bilans/${this.bilan.id}`, {
           est_resultat: true
         }).toPromise();

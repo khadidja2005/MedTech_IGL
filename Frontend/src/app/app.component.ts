@@ -1,3 +1,4 @@
+
 // app.routes.ts
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './LandingPage/landing-page/landing-page.component';
@@ -48,3 +49,16 @@ export const routes: Routes = [
   // Wildcard route for 404
   { path: '**', redirectTo: '/landing' }
 ];
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  // imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],
+  imports: [RouterOutlet  ],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  title = 'Medtech';
+}
+

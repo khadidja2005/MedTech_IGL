@@ -1,0 +1,22 @@
+<div *ngIf="isVisible" class="modal-overlay">
+  <div class="modal-content">
+    <div class="panel-header">
+      <span class="panel-title">Ajouter Un Parametre </span>
+    </div>
+
+    <form [formGroup]="ajoutForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="nom">Entrez le nom de parametre a mesurer</label>
+        <input id="nom" type="text" formControlName="nom" class="form-control">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="ajoutForm.invalid" (click)="closePanel.emit()">
+          Sauvegarder
+        </button>
+        <button type="submit" class="btn2" (click)="closesPanel()">
+          Annuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

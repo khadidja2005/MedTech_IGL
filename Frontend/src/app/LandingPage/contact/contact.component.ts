@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import axios from 'axios';
 @Component({
   selector: 'app-contact',
   imports: [FormsModule, CommonModule],
   templateUrl: './contact.component.html',
-  styleUrl: './contact.component.css'
+  styleUrl: './contact.component.css',
 })
 export class ContactComponent {
   email: string = '';
@@ -40,20 +40,23 @@ export class ContactComponent {
 
     // Check for only special characters
     if (onlySpecialCharsPattern.test(this.message)) {
-      this.errorMessage = 'Votre message semble incorrect. Veuillez entrer un message valide.';
+      this.errorMessage =
+        'Votre message semble incorrect. Veuillez entrer un message valide.';
       return;
     }
 
     // Check for special characters combined with numbers
     if (specialCharsAndNumbersPattern.test(this.message)) {
-      this.errorMessage = 'Votre message semble incorrect. Veuillez entrer un message valide.';
+      this.errorMessage =
+        'Votre message semble incorrect. Veuillez entrer un message valide.';
       return;
     }
 
     // Check for more than 6 special characters
     const specialCharMatches = this.message.match(excessiveSpecialCharsPattern);
     if (specialCharMatches && specialCharMatches.length > 6) {
-      this.errorMessage = 'Votre message semble incorrect. Veuillez entrer un message valide.';
+      this.errorMessage =
+        'Votre message semble incorrect. Veuillez entrer un message valide.';
       return;
     }
 
@@ -61,9 +64,17 @@ export class ContactComponent {
     this.errorMessage = null; // Clear error message
     console.log('email:', this.email);
     console.log('message:', this.message);
+    axios
+      .post('http://localhost:8000/contact-us/', {
+        email: this.email,
+        message: this.message,
+      })
+      .then((response) => {
+        console.log(response);
+        this.errorMessage = 'Votre message a été envoyé avec succès.';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
-
-
-
-

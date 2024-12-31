@@ -52,8 +52,6 @@ export class BilanDisplayComponent {
   };
 
 
- 
-
 showTypeModal = false;
 showResumeModal = false;
 showViewModal = false;  // New variable for view-only modal
