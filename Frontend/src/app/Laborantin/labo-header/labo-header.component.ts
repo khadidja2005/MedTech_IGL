@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BilanBio } from '../../../types/bilanbio';
 import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-filter.component';
+import { BilanLabo } from '../laborantin/laborantin.component';
 
 @Component({
   selector: 'app-labo-header',
@@ -9,7 +10,7 @@ import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-f
   styleUrl: './labo-header.component.css'
 })
 export class LaboHeaderComponent {
-   @Input() bilans!: BilanBio[];
+   @Input() bilans!: BilanLabo[];
     filledFieldsCount: number = 0;
     @Output() applyFilter = new EventEmitter<any>(); // Add this output
     @Output() resetFilter = new EventEmitter<void>();

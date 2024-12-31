@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Medicament } from '../../../types/medicament';
 import { CommonModule } from '@angular/common';
+import { MedicamentPageOrd } from '../ordonnance/ordonnance.component';
 
 @Component({
   selector: 'app-ajouter-medicament',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class AjouterMedicamentComponent {
     @Input() isVisible: boolean = false;
     @Output() closePanel = new EventEmitter<void>();
-    @Output() saveConsultation = new EventEmitter<Medicament>();  // Emit the added consultation
+    @Output() saveMedicament = new EventEmitter<MedicamentPageOrd>();  // Emit the added consultation
 
     ajoutForm: FormGroup;
 
@@ -29,16 +30,14 @@ export class AjouterMedicamentComponent {
         const formValue = this.ajoutForm.value;
 
         // Create the new consultation object
-        const newMedicament: Medicament = {
-          id: '',
+        const newMedicament: MedicamentPageOrd = {
           nom : formValue.nom,
           dosage: formValue.dose,
           duree: formValue.duree,
-          ordonnance: '',  // Set this according to your data structure
         };
 
         // Emit the new consultation to the parent
-        this.saveConsultation.emit(newMedicament);
+        this.saveMedicament.emit(newMedicament);
         this.closePanel.emit();  // Close the panel after adding the consultation
         this.ajoutForm.reset();  // Reset the form
       }

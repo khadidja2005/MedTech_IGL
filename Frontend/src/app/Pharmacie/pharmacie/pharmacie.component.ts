@@ -3,8 +3,19 @@ import { Component } from '@angular/core';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { PharmaHeaderComponent } from '../pharma-header/pharma-header.component';
-import { Ordonnance } from '../../../types/ordonance';
 import { OrdonnanceCardComponent } from "../ordonnance-card/ordonnance-card.component";
+
+export interface OrdonnancePharma {
+  date_debut: string;
+  date_fin: string;
+  etablissement : number;
+
+}
+export interface Etab {
+  nom : string;
+  id : number;
+}
+
 
 @Component({
   selector: 'app-pharmacie',
@@ -13,205 +24,129 @@ import { OrdonnanceCardComponent } from "../ordonnance-card/ordonnance-card.comp
   styleUrl: './pharmacie.component.css'
 })
 export class PharmacieComponent {
+
   role = 'pharmacien';
   activeItem='Ordonnance'
 
-  ordonnances : Ordonnance[] = [
+  getNameEtablissemnt(id : number) : string {
+    return this.etablissements.find(e => e.id === id)?.nom || 'Inconnu';
+  }
+
+  etablissements : Etab[] = [
     {
-      id: '1',
-      date_debut: '01/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 1',
+      id : 1
     },
     {
-      id: '1',
-      date_debut: '02/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 2',
+      id : 2
     },
     {
-      id: '1',
-      date_debut: '03/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 3',
+      id : 3
     },
     {
-      id: '1',
-      date_debut: '04/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 4',
+      id : 4
     },
     {
-      id: '1',
-      date_debut: '05/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 5',
+      id : 5
     },
     {
-      id: '1',
-      date_debut: '06/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 6',
+      id : 6
     },
     {
-      id: '1',
-      date_debut: '07/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      nom : 'Etablissement 7',
+      id : 7
+    }
+  ];
+
+  ordonnances : OrdonnancePharma[] = [
+    {
+      date_debut : '01/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 1,
     },
     {
-      id: '1',
-      date_debut: '08/12/2024',
-      date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      date_debut : '02/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 2,
     },
     {
-      id: '1',
+      date_debut : '03/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 1,
+    },
+    {
+      date_debut : '04/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 2,
+    },
+    {
+      date_debut : '05/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 3,
+    },
+    {
+      date_debut : '06/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 3,
+    },
+    {
+      date_debut : '07/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 3,
+    },
+    {
+      date_debut : '08/12/2024',
+      date_fin : '25/12/2024',
+      etablissement : 4,
+    },
+    {
       date_debut: '09/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 5,
     },
     {
-      id: '1',
       date_debut: '10/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 1,
     },
     {
-      id: '1',
       date_debut: '11/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 6,
     },
     {
-      id: '1',
       date_debut: '12/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 7,
     },
     {
-      id: '1',
       date_debut: '13/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 7
     },
     {
-      id: '1',
       date_debut: '14/12/2024',
       date_fin: '24/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 6
     },
     {
-      id: '1',
       date_debut: '15/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 5
     },
     {
-      id: '1',
       date_debut: '16/12/2024',
       date_fin: '25/12/2024',
-      estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
-      termine : false,
-      etablissement : 'EHS'
+      etablissement : 4
     },
   ];
 
-  filteredOrdonnances: Ordonnance[] = [...this.ordonnances]; // Holds the filtered results
+  filteredOrdonnances: OrdonnancePharma[] = [...this.ordonnances]; // Holds the filtered results
 
   pageSize = 12; // Items per page
   currentPage = 1;
@@ -236,9 +171,7 @@ export class PharmacieComponent {
       }
 
       if (filterValues.etablissement?.trim()) {
-        matchesEtablissement = ordonnance.etablissement
-          .toLowerCase()
-          .includes(filterValues.etablissement.toLowerCase().trim());
+        matchesEtablissement = this.getNameEtablissemnt(ordonnance.etablissement).toLowerCase()==filterValues.etablissement.toLowerCase();
       }
 
       return matchesDateDebut || matchesDateFin || matchesEtablissement;
@@ -264,7 +197,7 @@ export class PharmacieComponent {
   onResetFilter() {
     this.filteredOrdonnances = [...this.ordonnances];
     this.currentPage = 1;  // Reset to first page
-    
+
   }
 
 }

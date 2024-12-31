@@ -1,6 +1,8 @@
+import { Infermier } from './../../Soin/soin/soin.component';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Soins } from '../../../types/soins';
+import { SoinPageHospitalisation } from '../hospitalisation/hospitalisation.component';
 
 @Component({
   selector: 'app-soins-table',
@@ -10,11 +12,19 @@ import { Soins } from '../../../types/soins';
   styleUrl: './soins-table.component.css'
 })
 export class SoinsTableComponent {
-  @Input() soins!: Soins[];
+  @Input() soins!: SoinPageHospitalisation[];
+  @Input() infermiers!: Infermier[];
+
+  getInfermierName(infermierId: number): string {
+    // Convert infermierId to number since it might be coming as a string
+    const id = Number(infermierId);
+    const infermier = this.infermiers.find(i => i.id === id);
+    return infermier ? infermier.nom : 'Unknown Infermier';
+}
 
   ngOnInit(): void {}
 
-  onConsult(consultation: Soins): void {
+  onConsult(consultation: SoinPageHospitalisation): void {
     console.log('Consulting:', consultation);
     // Add your consultation logic here
   }

@@ -11,7 +11,7 @@
       <div class="form-group">
         <label for="infermier">Infermier:</label>
         <select id="infermier" formControlName="infermier" class="form-control">
-          <option *ngFor="let infermier of infermiers" [value]="infermier">{{ infermier }}</option>
+          <option *ngFor="let infermier of infermiers" [value]="infermier.id">{{ infermier.nom }}</option>
         </select>
       </div>
 

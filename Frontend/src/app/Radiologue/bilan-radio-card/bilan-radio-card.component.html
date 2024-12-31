@@ -1,5 +1,5 @@
 <div class="card-container">
-  <div class="title">Bilan n° {{bilan.id}}</div>
+  <div class="title">Bilan n° {{i+1}}</div>
   <div class="date">{{bilan.date_debut}}</div>
-  <div class="etablissement">{{bilan.etablissement}}</div>
+  <div class="etablissement">{{getEtablissementName(bilan.etablissement)}}</div>
 </div>

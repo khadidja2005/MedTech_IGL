@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Ordonnance } from '../../../types/ordonance';
+import { OrdonnancePharma } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-filter.component';
 
 @Component({
@@ -9,19 +9,19 @@ import { AjouterFilterComponent } from '../../Pharmacie/ajouter-filter/ajouter-f
   styleUrl: './archive-header.component.css'
 })
 export class ArchiveHeaderComponent {
-  @Input() ordonnances!: Ordonnance[];
+  @Input() ordonnances!: OrdonnancePharma[];
     filledFieldsCount: number = 0;
     @Output() applyFilter = new EventEmitter<any>(); // Add this output
     @Output() resetFilter = new EventEmitter<void>();
 
 
-  isAddPanelVisible = false;
-  isPopupVisible = false;
+    isAddPanelVisible = false;
+    isPopupVisible = false;
 
-  onReset() {
-    this.filledFieldsCount = 0;
-    this.resetFilter.emit();
-  }
+    onReset() {
+      this.filledFieldsCount = 0;
+      this.resetFilter.emit();
+    }
 
     onFilterApply(filterValues: any) {
       this.applyFilter.emit(filterValues);

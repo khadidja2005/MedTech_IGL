@@ -2,6 +2,7 @@ import { ResultatBio } from './../../../types/resultatbio.d';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Resultat } from '../bilan-bio/bilan-bio.component';
 
 @Component({
   selector: 'app-ajouter-param',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class AjouterParamComponent {
   @Input() isVisible: boolean = false;
       @Output() closePanel = new EventEmitter<void>();
-      @Output() saveParam = new EventEmitter<ResultatBio>();  // Emit the added consultation
+      @Output() saveParam = new EventEmitter<Resultat>()  // Emit the added consultation
 
       ajoutForm: FormGroup;
 
@@ -27,15 +28,11 @@ export class AjouterParamComponent {
           const formValue = this.ajoutForm.value;
 
           // Create the new consultation object
-          const newParam: ResultatBio = {
-            id: '',
-            valeur_mesure: '',
-            date_mesure: '',
-            heure_mesure: '',
+          const newParam: Resultat = {
             parametre: formValue.nom,
-            norme: '',
-            bilan_bio: '1',
-            laborantin: ''
+            norme: null,
+            valeur_mesure: null,
+            laborantin: null
           };
 
           // Emit the new consultation to the parent

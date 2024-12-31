@@ -1,0 +1,56 @@
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000];
+}
+
+.modal-content {
+  @apply bg-white max-w-full w-1/2 max-h-full h-3/4 shadow-lg rounded-lg p-6 flex flex-col;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.panel-header {
+  @apply flex items-center justify-center p-3;
+}
+
+.panel-title {
+  @apply text-main_color text-3xl font-bold;
+}
+
+.scan_frame {
+  @apply relative;
+  aspect-ratio: 1; /* Maintain square shape */
+  max-height: calc(100% - 3rem); /* Ensure it fits in the available space (adjust for padding/margins) */
+  max-width: 100%; /* Prevent horizontal overflow */
+  width: auto;
+  height: auto;
+}
+
+.corner-marker {
+  @apply absolute w-12 h-12 border-main_color;
+}
+
+.corner-marker.top-0.left-0 {
+  @apply border-t-4 border-l-4;
+}
+
+.corner-marker.top-0.right-0 {
+  @apply border-t-4 border-r-4;
+}
+
+.corner-marker.bottom-0.left-0 {
+  @apply border-b-4 border-l-4;
+}
+
+.corner-marker.bottom-0.right-0 {
+  @apply border-b-4 border-r-4;
+}

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ConsultaionsTableComponent } from '../consultaions-table/consultaions-table.component';
 import { SoinsTableComponent } from '../soins-table/soins-table.component';
 import { ModifierComponent } from '../modifier/modifier.component';
-import { Hospitalisation } from '../../../types/hospitalisation';
-import { Consultation } from '../../../types/consultation';
-import { Soins } from '../../../types/soins';
 import { AjouterConsultationComponent } from '../ajouter-consultation/ajouter-consultation.component';
-import { AjouterSoinComponent } from '../ajouter-soin/ajouter-soin.component';
+import { AjouterSoinComponent, SoinPageAjouter } from '../ajouter-soin/ajouter-soin.component';
+import { ConsultationPageHospitalisation, HospitalisationPage, medecin, SoinPageHospitalisation } from '../hospitalisation/hospitalisation.component';
+import { Infermier } from '../../Soin/soin/soin.component';
 
 @Component({
   selector: 'app-hospitalisation-details',
@@ -20,11 +19,11 @@ export class HospitalisationDetailsComponent {
   selectedTab: string = 'consultations';
   isAddPanelVisible = false;  // Flag to control the visibility of the "Add Consultation" panel
   isPopupVisible = false;
-  @Input() hospitalisation!: Hospitalisation;
-  @Input() consultations!: Consultation[];  // This is the consultations array
-  @Input() soins!: Soins[];
-  @Input() medecins: string[] = [];
-  @Input() infermiers: string[] = [];
+  @Input() hospitalisation!: HospitalisationPage
+  @Input() consultations!: ConsultationPageHospitalisation[]; // This is the consultations array
+  @Input() soins!: SoinPageHospitalisation[];  // This is the soins array
+  @Input() medecins!:medecin[];
+  @Input() infermiers!: Infermier[];
 
   // Method to open the "Add Consultation" panel
   openAddPanel() {
@@ -44,28 +43,36 @@ export class HospitalisationDetailsComponent {
     this.isPopupVisible = false;
   }
 
+  getStatus(){
+    if(this.hospitalisation.date_fin == null){
+      return "En cours";
+    }
+    return "fini";
+  }
+
   // Method to add a consultation (called when the new consultation is emitted from the form)
-  addConsultation(newConsultation: Consultation) {
-    newConsultation.id = ((this.consultations.length)+1).toString();  // Example ID generation
-    newConsultation.Hospitalisation = this.hospitalisation.id;  // Set the hospitalisation ID
+  addConsultation(newConsultation: ConsultationPageHospitalisation) {
     this.consultations.push(newConsultation);  // Add the new consultation to the list
     this.isAddPanelVisible = false;  // Close the panel after adding
   }
-  addSoin(newSoin: Soins) {
-    newSoin.id = ((this.soins.length)+1).toString();  // Example ID generation
-    newSoin.hospitalisation = this.hospitalisation.id;  // Set the hospitalisation ID
-    this.soins.push(newSoin);  // Add the new soin to the list
+  addSoin(newSoin: SoinPageAjouter) {
+    const soin: SoinPageHospitalisation = {
+      type_soins: newSoin.type,
+      infermier: newSoin.infermier,
+      date: newSoin.date,
+      heure: newSoin.heure,
+    }
+    this.soins.push(soin);  // Add the new soin to the list
     this.isAddPanelVisible = false;  // Close the panel after adding
   }
 
   // Method to update hospitalisation (no changes needed here for consultation addition)
-  updateHospitalisation(updatedData: Partial<Hospitalisation>) {
+  updateHospitalisation(updatedData: Partial<HospitalisationPage>) {
     this.hospitalisation = {
       ...this.hospitalisation,
-      medecin_responsable: updatedData.medecin_responsable || this.hospitalisation.medecin_responsable,
-      date_debut: updatedData.date_debut ? updatedData.date_debut : this.hospitalisation.date_debut,
+      medecin: updatedData.medecin || this.hospitalisation.medecin,
+      date_debut:updatedData.date_debut? updatedData.date_debut: this.hospitalisation.date_debut,
       date_fin: updatedData.date_fin ? updatedData.date_fin : this.hospitalisation.date_fin,
-      status: updatedData.status || this.hospitalisation.status
     };
     this.isAddPanelVisible = false;  // Close the panel after saving the data
   }

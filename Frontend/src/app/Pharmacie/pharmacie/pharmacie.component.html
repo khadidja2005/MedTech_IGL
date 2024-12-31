@@ -15,8 +15,8 @@
     </app-pharma-header>
       <div class="cards">
         <app-ordonnance-card
-          *ngFor="let ordonnance of paginatedOrdonnances"
-          [ordonnance]="ordonnance">
+          *ngFor="let ordonnance of paginatedOrdonnances let i=index"
+          [ordonnance]="ordonnance" [i]="i" [etablissements]="etablissements">
         </app-ordonnance-card>
       </div>
 

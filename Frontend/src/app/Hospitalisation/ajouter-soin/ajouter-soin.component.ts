@@ -1,9 +1,20 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Soins } from '../../../types/soins';
 import { TypeSoins } from '../../../types/soins';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Infermier } from '../../Soin/soin/soin.component';
+import { SoinPageHospitalisation } from '../hospitalisation/hospitalisation.component';
+
+export interface SoinPageAjouter {
+  infermier : number;
+  date : string;
+  heure : string;
+  type : TypeSoins;
+  description : string;
+  medicament : string;
+  dose : string;
+}
 
 @Component({
   selector: 'app-ajouter-soin',
@@ -13,14 +24,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class AjouterSoinComponent {
   @Input() isVisible: boolean = false;
-  @Input() infermiers: string[] = [];
+  @Input() infermiers: Infermier[] = [];
   @Output() closePanel = new EventEmitter<void>();
-  @Output() saveSoin = new EventEmitter<Soins>();  // Emit the added consultation
+  @Output() saveSoin = new EventEmitter<SoinPageAjouter>();  // Emit the added consultation
 
   soinForm: FormGroup;
 
   showDescription: boolean = false;
-  showEtat: boolean = false;
   showMedicamentDose: boolean = false;
 
   constructor(private fb: FormBuilder) {
@@ -30,32 +40,23 @@ export class AjouterSoinComponent {
       heure: ['', Validators.required],
       type: ['', Validators.required],
       descrip: [''],
-      etat: [''],
       medic: [''],
       doses: ['']
     });
 
     this.soinForm.get('type')?.valueChanges.subscribe(value => {
-      this.showDescription = value === 'SOIN INFERMIER' || value === 'AUTRE';
-      this.showEtat = value === 'OBSERVATION DETAT';
+      this.showDescription = value === 'INFIRMIER' || value === 'AUTRE' || value === 'OBSERVATION D\'ETAT';
       this.showMedicamentDose = value === 'ADMINISTRATION DE MEDICAMENT';
 
       const descrip = this.soinForm.get('descrip');
-      const etat = this.soinForm.get('etat');
       const medic = this.soinForm.get('medic');
       const doses = this.soinForm.get('doses');
 
-      if (value === 'SOIN INFERMIER' || value === 'AUTRE') {
+      if (value === 'INFERMIER' || value === 'AUTRE' || value === 'OBSERVATION D\'ETAT') {
         descrip?.setValidators([Validators.required]);
       } else {
         descrip?.clearValidators();
         descrip?.setValue('');
-      }
-      if (value === 'OBSERVATION DETAT') {
-        etat?.setValidators([Validators.required]);
-      } else {
-        etat?.clearValidators();
-        etat?.setValue('');
       }
       if (value === 'ADMINISTRATION DE MEDICAMENT') {
         medic?.setValidators([Validators.required]);
@@ -68,7 +69,6 @@ export class AjouterSoinComponent {
       }
       medic?.updateValueAndValidity();
       doses?.updateValueAndValidity();
-      etat?.updateValueAndValidity();
       descrip?.updateValueAndValidity();
     });
   }
@@ -88,22 +88,18 @@ export class AjouterSoinComponent {
       const formValue = this.soinForm.value;
 
       // Create the new consultation object
-      const newSoin: Soins = {
-        id: '',
+      const nvSoin: SoinPageAjouter = {
         date: this.convertDateToDisplayFormat(formValue.date), // ISO date string
         heure: formValue.heure, // ISO time string
-        type_soins: formValue.type as TypeSoins,
+        type: formValue.type as TypeSoins,
         description: formValue.descrip || '',
-        etat_patient: formValue.etat,
-        medicament: formValue.medic || '',
-        dose: formValue.doses || '',
-        hospitalisation: '', // Foreign key to Hospitalisation
+        medicament: formValue.medic || null,
+        dose: formValue.doses || null,
         infermier: formValue.infermier, // Foreign key to PersonnelMedical, nullable
       };
-      console.log(newSoin.type_soins);
 
       // Emit the new consultation to the parent
-      this.saveSoin.emit(newSoin);
+      this.saveSoin.emit(nvSoin);
       this.closePanel.emit();  // Close the panel after adding the consultation
       this.soinForm.reset();  // Reset the form
     }

@@ -2,7 +2,7 @@
   <!-- Hospitalisation Title -->
   <div class="flex items-center justify-between">
     <div>
-      <h2 class="hospitalization-title">Hospitalisation n° {{ hospitalisation.id }}</h2>
+      <h2 class="hospitalization-title">Hospitalisation n° {{ hospitalisation.ordre }}</h2>
 
       <!-- Action Buttons -->
       <div *ngIf="role === 'admin' || role === 'medecinResponsable'" class="actions">
@@ -27,14 +27,14 @@
     <div class="details">
       <div>
         <span class="label">Médecin Responsable :</span>
-        <span class="value">{{ hospitalisation.medecin_responsable }}</span>
+        <span class="value">{{hospitalisation.medecin}}</span>
       </div>
       <div>
         <span class="label">Date début :</span>
         <span class="value">{{ hospitalisation.date_debut }}</span>
-        <span *ngIf="hospitalisation.date_fin!='' " class="label">Date fin : </span>
-        <span *ngIf="hospitalisation.date_fin!='' " class="value">{{ hospitalisation.date_fin }}</span>
-        <span *ngIf="hospitalisation.date_fin=='' " class="status">{{ hospitalisation.status }}</span>
+        <span *ngIf="hospitalisation.date_fin!=null"class="label">Date fin : </span>
+        <span *ngIf="hospitalisation.date_fin!=null"class="value">{{ hospitalisation.date_fin }}</span>
+        <span *ngIf="hospitalisation.date_fin==null"class="status">{{getStatus()}}</span>
       </div>
     </div>
   </div>
@@ -87,11 +87,11 @@
   <div class="table-container">
     <ng-container *ngIf="selectedTab === 'consultations'">
       <!-- Include your Consultations Table Component -->
-      <app-consultaions-table [consultations]="consultations"></app-consultaions-table>
+      <app-consultaions-table [consultations]="consultations" [medecins]="medecins"></app-consultaions-table>
     </ng-container>
     <ng-container *ngIf="selectedTab === 'soins'">
       <!-- Include your Soins Table Component -->
-      <app-soins-table [soins]="soins"></app-soins-table>
+      <app-soins-table [soins]="soins" [infermiers]="infermiers"></app-soins-table>
     </ng-container>
   </div>
 </div>

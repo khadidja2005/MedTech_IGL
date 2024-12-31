@@ -15,8 +15,8 @@
     </app-archive-header>
       <div class="cards">
         <app-bilan-radio-card
-          *ngFor="let bilan of paginatedBilans"
-          [bilan]="bilan">
+          *ngFor="let bilan of paginatedBilans let i=index"
+          [bilan]="bilan" [i]="i" [etablissements]="etablissements">
         </app-bilan-radio-card>
       </div>
 

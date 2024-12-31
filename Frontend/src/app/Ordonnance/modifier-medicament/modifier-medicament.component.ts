@@ -1,3 +1,4 @@
+import { MedicamentPageOrd } from './../ordonnance/ordonnance.component';
 import { Medicament } from './../../../types/medicament.d';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
@@ -12,9 +13,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ModifierMedicamentComponent {
   @Input() isVisible: boolean = false;
-    @Input() medicament !: Medicament;
+    @Input() medicament !: MedicamentPageOrd;
     @Output() closePanel = new EventEmitter<void>();
-    @Output() saveChanges = new EventEmitter<Partial<Medicament>>();
+    @Output() saveChanges = new EventEmitter<Partial<MedicamentPageOrd>>();
     modifyForm: FormGroup;
 
 

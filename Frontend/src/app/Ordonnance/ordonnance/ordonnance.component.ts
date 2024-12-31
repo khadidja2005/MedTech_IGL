@@ -1,10 +1,32 @@
+import { Ordonnance } from './../../../types/ordonance.d';
 import { Component } from '@angular/core';
-import { Ordonnance } from '../../../types/ordonance';
-import { Medicament } from '../../../types/medicament';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { OrdonnaceDetailsComponent } from '../ordonnace-details/ordonnace-details.component';
 import { TableMedicamentComponent } from '../table-medicament/table-medicament.component';
+
+export interface OrdonnancePageOrd
+{
+  ordre : number;
+  date : string;
+  estValide: boolean;
+  patient_id: number;
+  medecin_id: number;
+  termine: boolean;
+  etablissement: number;
+}
+
+export interface MedicamentPageOrd
+{
+  nom: string;
+  dosage: string;
+  duree: string;
+}
+
+export interface Patient {
+  nom : string;
+  id : number;
+}
 
 @Component({
   selector: 'app-ordonnance',
@@ -23,57 +45,55 @@ export class OrdonnanceComponent {
       this.activeItem = 'DPI';
     }
   }
-  ordonnance: Ordonnance = {
-      id: '1',
-      date_debut: '25/12/2024',
-      date_fin: '25/12/2024',
+  patients : Patient[] = [
+    { nom: 'Jean Dupont', id: 1},
+    { nom: 'Paul Martin', id: 2},
+    { nom: 'Marie Durand', id: 3},
+  ];
+  medecins : Patient[] = [
+    { nom: 'Dr. Jean Dupont', id: 1},
+    { nom: 'Dr. Paul Martin', id: 2},
+    { nom: 'Dr. Marie Durand', id: 3},
+  ];
+  
+  ordonnance: OrdonnancePageOrd = {
+      ordre : 1,
+      date: '25/12/2024',
       estValide: false,
-      consultation: '1',
-      pharmacien_id: 'Khelifati Amine',
-      patient_id: 'Khelifati Amine',
-      medecin_id: 'Khelifati Amine',
+      patient_id: 1,
+      medecin_id: 1,
       termine : false,
-      etablissement: 'CHU de Tlemcen',
+      etablissement: 1,
     };
-  medicaments: Medicament[] = [
+  medicaments: MedicamentPageOrd[] = [
     {
-      id: '1',
       nom: 'doliprane',
       dosage: '500mg',
       duree: '3 jours',
-      ordonnance: '1'
     },
 
     {
-      id: '2',
       nom: 'xydole',
       dosage: '500mg',
       duree: '2 jours',
-      ordonnance: '1'
     },
 
     {
-      id: '3',
       nom: 'ibuprofène',
       dosage: '200mg',
       duree: '5 jours',
-      ordonnance: '1'
     },
 
     {
-      id: '4',
       nom: 'paracétamol',
       dosage: '100mg',
       duree: '4 jours',
-      ordonnance: '1'
     },
 
     {
-      id: '5',
       nom: 'amoxicilline',
       dosage: '250mg',
       duree: '7 jours',
-      ordonnance: '1'
     }
 
   ];
