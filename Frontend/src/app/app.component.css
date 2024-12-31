@@ -1,3 +1,4 @@
+@import 'notyf/notyf.min.css';
 .app-layout {
   @apply flex flex-col h-screen; /* Full screen layout with vertical flex */
 }

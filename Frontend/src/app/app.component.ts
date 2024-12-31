@@ -22,7 +22,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   // imports: [RouterOutlet, LandingPageComponent, HeaderPDIComponent, SidebarComponent, DpiInfoComponent, DpiComponent, ConsultationInfoComponent, EstablishmentsComponent, PersonnalsMedicauxComponent, EmployeInfComponent, BddComponent, PageListEtablissemetsComponent, DoctorEstablishmentsComponent, DPIManagementComponent, BilanListComponent, BilanDisplayComponent, BilanDisplayRadiologueComponent, BilanDisplayMedValidComponent],
-  imports: [RouterOutlet],
+  imports: [RouterOutlet  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

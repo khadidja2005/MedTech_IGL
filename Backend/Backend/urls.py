@@ -34,7 +34,7 @@ from Consultation.urls import urlpatterns as consultation_urls
 from Ordonnance.urls import urlpatterns as ordonnance_urls
 from Parametres.urls import urlpatterns as parametres_urls
 from Landing.urls import urlpatterns as landing_urls
-
+from Auth.urls import urlpatterns as auth_login
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(bdd_urls)),
@@ -54,4 +54,5 @@ urlpatterns = [
     path("ordonnance/", include(ordonnance_urls)),
     path("parametres/", include(parametres_urls)),
     path("contact-us/", include(landing_urls)),
+    path("auth/" , include(auth_login))
 ]
