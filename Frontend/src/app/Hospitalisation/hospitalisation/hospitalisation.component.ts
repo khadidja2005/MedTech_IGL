@@ -4,6 +4,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HospitalisationDetailsComponent } from '../hospitalisation-details/hospitalisation-details.component';
 import { TypeSoins } from '../../../types/soins';
 import { Infermier } from '../../Soin/soin/soin.component';
+import axios from 'axios';
 
 export interface SoinPageHospitalisation {
   type_soins: TypeSoins;
@@ -37,6 +38,34 @@ export interface medecin {
   styleUrl: './hospitalisation.component.css',
 })
 export class HospitalisationComponent {
+  hospitalisation_id = 2871; //use navigation to get this value
+  hospitalisation: HospitalisationPage = {
+    ordre: 1, //use navigation
+    date_debut: '12/12/2024',
+    medecin: 'Khelifati Amine',
+    date_fin: null,
+  };
+  ngOnInit() {
+    this.onPageLoad();
+  }
+  async onPageLoad(): Promise<void> {
+    console.log(
+      'Fetching hospitalisation details for ID:',
+      this.hospitalisation_id
+    );
+    await axios
+      .get('http://localhost:8000/hospitalisation/', {
+        params: { hospitalisation_id: this.hospitalisation_id },
+      })
+      .then((response) => {
+        this.hospitalisation.date_debut = response.data.date_debut;
+        this.hospitalisation.date_fin = response.data.date_fin;
+        this.hospitalisation.medecin = response.data.medecin;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   medecins: medecin[] = [
     {
       nom: 'Khelifati Amine',
@@ -130,10 +159,4 @@ export class HospitalisationComponent {
       medecin: 4,
     },
   ];
-  hospitalisation: HospitalisationPage = {
-    ordre: 1,
-    date_debut: '12/12/2024',
-    medecin: 'Khelifati Amine',
-    date_fin: null,
-  };
 }

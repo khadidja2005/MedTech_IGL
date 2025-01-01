@@ -16,8 +16,7 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(["GET"])
 def get_info_hospitalisation(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -34,13 +33,9 @@ def get_info_hospitalisation(request):
     # Ensure all fields are JSON-serializable
     response_data = {
         "date_debut": hospitalisation.date_debut.strftime("%Y-%m-%d"),
-        "medecin_responsable": hospitalisation.medecin_responsable.nom_complet,
+        "medecin": hospitalisation.medecin_responsable.nom_complet,
+        "date_fin": hospitalisation.date_fin.strftime("%Y-%m-%d"),
     }
-
-    if hospitalisation.date_fin:
-        response_data["date_fin"] = hospitalisation.date_fin.strftime("%Y-%m-%d")
-    else:
-        response_data["etat"] = "en cours"
 
     # Return the response as JSON
     return JsonResponse(response_data)
@@ -122,8 +117,7 @@ def get_soins(request):
 
 def get_all_medecins(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         print(hospitalisation_id)
         if not hospitalisation_id:
             return JsonResponse(
