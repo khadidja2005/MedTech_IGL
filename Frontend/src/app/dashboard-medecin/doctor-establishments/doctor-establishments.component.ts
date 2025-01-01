@@ -4,13 +4,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PersonnelMedical } from '../../../types/personnelMedical';
 import { Etablissement } from '../../../types/etablissement';
-import { EtablissementPersonnelMedical } from '../../../types/etablissementPersonnelmedical';
+import { SidebarComponent } from "../../components/sidebar/sidebar.component";
+import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.component";
 
+
+
+interface EtablissementPersonnelMedical {
+  id: number;
+  etablissement: number; 
+  personnel_medical: number; 
+}
 
 @Component({
   selector: 'app-doctor-establishments',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SidebarComponent, HeaderPDIComponent],
   templateUrl: './doctor-establishments.component.html',
   styleUrls: ['./doctor-establishments.component.css']
 })
@@ -21,7 +29,7 @@ export class DoctorEstablishmentsComponent implements OnInit {
   showModal: boolean = false;
   
   currentDoctor: PersonnelMedical = {
-    id: '1',
+    id: 1,
     lienPhoto: 'assets/images/doctor.png',
     nom_complet: 'laila hadid',
     email: 'doctor@example.com',
@@ -76,37 +84,37 @@ export class DoctorEstablishmentsComponent implements OnInit {
   private loadDoctorEstablishments(): void {
     this.establishments = [
       {
-        id: '1',
+        id: 1,
         nom_etablissement: 'Hopital Central',
         adresse: '123 Rue Principale',
         telephone: 123456789,
         email: 'hopital@example.com',
-        type: 'Hôpital'
+        type: 'HOPITAL'
       },
       {
-        id: '2',
+        id: 3,
         nom_etablissement: 'Hôpital Central',
         adresse: '123 Rue Principale',
         telephone: 123456789,
         email: 'hopital@example.com',
-        type: 'Hôpital'
+        type: 'HOPITAL'
       },
       {
-        id: '1',
+        id: 5,
         nom_etablissement: 'Hôpital Central',
         adresse: '123 Rue Principale',
         telephone: 123456789,
         email: 'hopital@example.com',
-        type: 'Hôpital'
+        type: 'HOPITAL'
       }
       
     ];
 
     this.doctorEstablishments = [
       {
-        id: '1',
-        etablissement: '1',
-        personnel_medical: '1'
+        id: 2,
+        etablissement: 1,
+        personnel_medical: 1
       }
      
     ];

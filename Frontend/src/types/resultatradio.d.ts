@@ -6,4 +6,5 @@ export interface ResultatRadio {
     compte_rendu: string;
     radiologue_compte_rendu: number; // Foreign key to PersonnelMedical
     radiologue: number; // Foreign key to PersonnelMedical
+
 }

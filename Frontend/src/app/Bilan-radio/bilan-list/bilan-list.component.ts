@@ -1,8 +1,36 @@
 import { Component } from '@angular/core';
-import { BilanRadio } from '../../../types/bilanRadio';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
+
+
+export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
+
+export interface BilanRadio {
+  id: number;
+  date_debut: string; // ISO date string
+  date_fin: string; // ISO date string
+  type_radio: TypeRadio;
+  est_complet: boolean;
+  est_resultat: boolean;
+  description: string;
+  Consultation: string; // Foreign key to Consultation, nullable
+  resultat_id: number | null;
+  etablissement: number;
+  medecin:string;
+  patient:string;
+
+}
+export interface ResultatRadio {
+  id: number;
+  description: string;
+  piece_jointe: string;
+  date: string; // ISO date string
+  compte_rendu: string;
+  radiologue_compte_rendu: number | null; // Foreign key to PersonnelMedical
+  radiologue: number | null; // Foreign key to PersonnelMedical
+}
+
 
 @Component({
   selector: 'app-bilan-list',
@@ -17,7 +45,7 @@ export class BilanListComponent {
 
   bilanRadio: BilanRadio[] = [
      {
-       id: '1',
+       id: 0,
        date_debut: '2024-01-15',
        date_fin: '2024-01-16',
        type_radio: 'IRM',
@@ -26,12 +54,12 @@ export class BilanListComponent {
        description: 'IRM cérébrale standard',
        medecin: 'Dr. Amine Bensalem',
        Consultation: 'CONS001',
-       resultat_id: 'RES001',
-       etablissement: 'etablissement',
+       resultat_id: 0,
+       etablissement: 1,
        patient: ''
      },
      {
-       id: '2',
+       id: 0,
        date_debut: '2024-02-01',
        date_fin: '2024-02-01',
        type_radio: 'SCANNER',
@@ -40,12 +68,12 @@ export class BilanListComponent {
        description: 'Scanner thoracique',
        medecin: 'Dr. Leila Hamdi',
        Consultation: 'CONS002',
-       resultat_id: 'RES002',
-       etablissement: 'etablissement2',
+       resultat_id: 0,
+       etablissement: 2,
        patient: ''
      },
      {
-       id: '3',
+       id: 0,
        date_debut: '2024-01-15',
        date_fin: '2024-01-16',
        type_radio: 'IRM',
@@ -54,12 +82,12 @@ export class BilanListComponent {
        description: 'IRM cérébrale standard',
        medecin: 'Dr. Amine Bensalem',
        Consultation: 'CONS001',
-       resultat_id: 'RES001',
-       etablissement: 'etablissement3',
+       resultat_id: 0,
+       etablissement: 3,
        patient: ''
      },
     {
-      id: '4',
+      id: 0,
       date_debut: '2024-02-01',
       date_fin: '2024-02-01',
       type_radio: 'SCANNER',
@@ -68,12 +96,12 @@ export class BilanListComponent {
       description: 'Scanner thoracique',
       medecin: 'Dr. Leila Hamdi',
       Consultation: 'CONS002',
-      resultat_id: 'RES002',
-      etablissement: 'etablissement4',
+      resultat_id: 0,
+      etablissement: 4,
       patient: ''
     },
     {
-      id: '5',
+      id: 0,
       date_debut: '2024-01-15',
       date_fin: '2024-01-16',
       type_radio: 'IRM',
@@ -82,12 +110,12 @@ export class BilanListComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement5',
+      resultat_id: 0,
+      etablissement: 5,
       patient: ''
     },
     {
-      id: '6',
+      id: 0,
       date_debut: '2024-02-01',
       date_fin: '2024-02-01',
       type_radio: 'SCANNER',
@@ -96,12 +124,12 @@ export class BilanListComponent {
       description: 'Scanner thoracique',
       medecin: 'Dr. Leila Hamdi',
       Consultation: 'CONS002',
-      resultat_id: 'RES002',
-      etablissement: 'etablissement',
+      resultat_id: 0,
+      etablissement: 6,
       patient: ''
     },
     {
-      id: '7',
+      id: 0,
       date_debut: '2024-01-15',
       date_fin: '2024-01-16',
       type_radio: 'IRM',
@@ -110,12 +138,12 @@ export class BilanListComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement',
+      resultat_id: 0,
+      etablissement:7,
       patient: ''
     },
     {
-      id: '8',
+      id: 0,
       date_debut: '2024-01-15',
       date_fin: '2024-01-16',
       type_radio: 'IRM',
@@ -124,12 +152,12 @@ export class BilanListComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement2',
+      resultat_id: 0,
+      etablissement: 8,
       patient: ''
     },
     {
-      id: '9',
+      id: 0,
       date_debut: '2024-01-15',
       date_fin: '2024-01-16',
       type_radio: 'IRM',
@@ -138,12 +166,12 @@ export class BilanListComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement6',
+      resultat_id: 0,
+      etablissement: 9,
       patient: ''
     },
     {
-      id: '10',
+      id: 0,
       date_debut: '2024-01-15',
       date_fin: '2024-01-16',
       type_radio: 'IRM',
@@ -152,78 +180,8 @@ export class BilanListComponent {
       description: 'IRM cérébrale standard',
       medecin: 'Dr. Amine Bensalem',
       Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement5',
-      patient: ''
-    },
-    {
-      id: '11',
-      date_debut: '2024-01-15',
-      date_fin: '2024-01-16',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale standard',
-      medecin: 'Dr. Amine Bensalem',
-      Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement4',
-      patient: ''
-    },
-    {
-      id: '12',
-      date_debut: '2024-01-15',
-      date_fin: '2024-01-16',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale standard',
-      medecin: 'Dr. Amine Bensalem',
-      Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement2',
-      patient: ''
-    },
-    {
-      id: '13',
-      date_debut: '2024-01-15',
-      date_fin: '2024-01-16',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale standard',
-      medecin: 'Dr. Amine Bensalem',
-      Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement3',
-      patient: ''
-    },
-    {
-      id: '14',
-      date_debut: '2024-01-15',
-      date_fin: '2024-01-16',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale standard',
-      medecin: 'Dr. Amine Bensalem',
-      Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: 'etablissement',
-      patient: ''
-    },
-    {
-      id: '15',
-      date_debut: '2024-02-01',
-      date_fin: '2024-02-01',
-      type_radio: 'SCANNER',
-      est_complet: false,
-      est_resultat: false,
-      description: 'Scanner thoracique',
-      medecin: 'Dr. Leila Hamdi',
-      Consultation: 'CONS002',
-      resultat_id: 'RES002',
-      etablissement: 'etablissement2',
+      resultat_id: 0,
+      etablissement:1,
       patient: ''
     }
    ];
@@ -248,12 +206,12 @@ export class BilanListComponent {
       }
        etablissements: Etablissement[] = [
           {
-            id: '1',
+            id: 0,
             nom_etablissement: 'Etablissement 1',
             adresse: '8 W. South St.Buford, GA 30518',
             telephone: 123456789,
             email: 'email@gmail.com',
-            type: 'Hôpital',
+            type: 'HOPITAL',
       
           }
           
@@ -270,7 +228,7 @@ export class BilanListComponent {
         
       
         filterCriteria = {
-          etablissement: '',
+          etablissement: 0,
           dateStart: '',
           dateEnd: ''
         };
@@ -286,7 +244,7 @@ export class BilanListComponent {
           console.log('Initial bilans:', this.filteredBilans); // Debug log
         }
       
-        get uniqueEtablissements(): string[] {
+        get uniqueEtablissements(): number[] {
           const establishments = [...new Set(this.bilanRadio.map(bilan => bilan.etablissement))];
           console.log('Available establishments:', establishments); // Debug log
           return establishments;
@@ -334,7 +292,7 @@ export class BilanListComponent {
           this.showFilterModal = false;
         }
       
-        selectEtablissement(etab: string) {
+        selectEtablissement(etab: number) {
           this.filterCriteria.etablissement = etab;
           this.showEtablissementDropdown = false;
         }
@@ -342,7 +300,7 @@ export class BilanListComponent {
         clearFilters() {
           console.log('Clearing filters'); // Debug log
           this.filterCriteria = {
-            etablissement: '',
+            etablissement: 0,
             dateStart: '',
             dateEnd: ''
           };
