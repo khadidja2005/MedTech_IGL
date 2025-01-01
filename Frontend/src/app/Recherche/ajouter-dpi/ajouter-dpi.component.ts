@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { DpiCards } from '../recherche/recherche.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
-
+import axios from 'axios';
 export interface Dpi {
   id: number;
   nom: string;
@@ -37,7 +37,7 @@ export class AjouterDPIComponent {
       etablissement: ['', Validators.required],
     });
   }
-
+  id = 296; //local storage
   onSubmit() {
     if (this.ajoutForm.valid) {
       const formValue = this.ajoutForm.value;
@@ -49,6 +49,20 @@ export class AjouterDPIComponent {
         nss: formValue.nss,
         etablissement: formValue.etablissement,
       };
+
+      axios
+        .post('http://localhost:8000/recherche/creerDPI', {
+          nss: newDpi.nss,
+          nom_complet: newDpi.nom,
+          etablissement_id: newDpi.etablissement,
+          createur_id: this.id,
+        })
+        .then((response) => {
+          newDpi.id = response.data.dpi_id;
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
 
       const newDpiCard: DpiCards = {
         id: newDpi.id,

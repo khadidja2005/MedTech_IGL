@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RechHeaderComponent } from '../rech-header/rech-header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
@@ -41,9 +41,7 @@ export class RechercheComponent {
       const response = await axios.get('http://localhost:8000/recherche/DPIS', {
         params: { personnel_id: this.id },
       });
-      console.log('Response:', response.data);
       this.dpis = response.data.all_dpis;
-      console.log('DPIs:', this.dpis);
     } catch (error) {
       console.error('Error:', error);
     }

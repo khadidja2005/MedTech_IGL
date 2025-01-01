@@ -3,23 +3,28 @@
 <div
   class="flex items-center border border-gray-300 rounded-lg bg-white justify-between mb-6"
 >
-  <input
-    type="text"
-    placeholder="Rechercher un dossier médical"
-    class="rounded-lg px-4 py-2 flex-grow text-sm focus:outline-none focus:ring focus:ring-blue-300"
-  />
-  <button
-    class="ml-2 p-2 bg-white hover:bg-blue_lighter flex"
-    (click)="openScannerPanel()"
-  >
-    <img src="/assets/images/Qr.png" class="h-6 w-6" />
-  </button>
-  <app-scanner [isVisible]="isScannerPanelVisible"></app-scanner>
-  <button
-    class="ml-2 p-2 bg-blue text-white rounded-r-lg hover:bg-blue_light flex"
-  >
-    <img src="/assets/images/rech.png" class="h-6 w-6" />
-  </button>
+  <form [formGroup]="rechForm" (ngSubmit)="onSubmit()">
+    <input
+      type="text"
+      placeholder="Rechercher un dossier médical"
+      class="rounded-lg px-4 py-2 flex-grow text-sm focus:outline-none focus:ring focus:ring-blue-300"
+      formControlName="nss"
+    />
+
+    <button
+      class="ml-2 p-2 bg-white hover:bg-blue_lighter flex"
+      (click)="openScannerPanel()"
+    >
+      <img src="/assets/images/Qr.png" class="h-6 w-6" />
+    </button>
+    <app-scanner [isVisible]="isScannerPanelVisible"></app-scanner>
+    <button
+      class="ml-2 p-2 bg-blue text-white rounded-r-lg hover:bg-blue_light flex"
+      type="submit"
+    >
+      <img src="/assets/images/rech.png" class="h-6 w-6" />
+    </button>
+  </form>
 </div>
 <!-- Footer Section -->
 <div class="footer">

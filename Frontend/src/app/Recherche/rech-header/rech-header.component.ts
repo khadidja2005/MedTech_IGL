@@ -4,6 +4,8 @@ import { AjouterDPIComponent } from '../ajouter-dpi/ajouter-dpi.component';
 import { DpiCards } from '../recherche/recherche.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { ScannerComponent } from '../scanner/scanner.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import axios from 'axios';
 
 @Component({
   selector: 'app-rech-header',
@@ -19,6 +21,14 @@ export class RechHeaderComponent {
 
   isAddPanelVisible = false;
   isPopupVisible = false;
+
+  rechForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.rechForm = this.fb.group({
+      nss: ['', Validators.required],
+    });
+  }
 
   openAddPanel() {
     this.isAddPanelVisible = true;
@@ -43,5 +53,22 @@ export class RechHeaderComponent {
   }
   openScannerPanel() {
     this.isScannerPanelVisible = true;
+  }
+
+  onSubmit() {
+    if (this.rechForm.valid) {
+      const formValue = this.rechForm.value;
+      console.log(formValue);
+      axios
+        .get('http://localhost:8000/recherche/Patient/DPIS', {
+          params: { nss: formValue.nss },
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
   }
 }

@@ -120,8 +120,7 @@ def get_DPI(request):
 
 def get_DPIS_patient(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        nss = data.get("nss")
+        nss = request.GET.get("nss")
         if not nss:
             return JsonResponse({"error": "NSS is required."}, status=400)
 
@@ -130,7 +129,7 @@ def get_DPIS_patient(request):
             patient = Patient.objects.get(nss=nss)
         except Patient.DoesNotExist:
             return JsonResponse(
-                {"error": "Patient with the provided NSS not found."}, status=404
+                {"error": "Patient with the provided NSS not found."}, status=200
             )
 
         # Retrieve all DPIs associated with the patient and include related Etablissement
