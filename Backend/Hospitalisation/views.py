@@ -33,7 +33,11 @@ def get_info_hospitalisation(request):
     response_data = {
         "date_debut": hospitalisation.date_debut.strftime("%Y-%m-%d"),
         "medecin": hospitalisation.medecin_responsable.nom_complet,
-        "date_fin": hospitalisation.date_fin.strftime("%Y-%m-%d"),
+        "date_fin": (
+            hospitalisation.date_fin.strftime("%Y-%m-%d")
+            if hospitalisation.date_fin
+            else None
+        ),
     }
 
     # Return the response as JSON
@@ -76,7 +80,6 @@ def get_consultations(request):
 def get_soins(request):
     if request.method == "GET":
         hospitalisation_id = request.GET.get("hospitalisation_id")
-        print(hospitalisation_id)
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -114,7 +117,6 @@ def get_soins(request):
 def get_all_medecins(request):
     if request.method == "GET":
         hospitalisation_id = request.GET.get("hospitalisation_id")
-        print(hospitalisation_id)
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -133,7 +135,6 @@ def get_all_medecins(request):
         medecins = etablissement_personnel_medical.objects.filter(
             etablissement=etablissement_id
         )
-        print(medecins)
 
         response = [
             {
@@ -178,7 +179,10 @@ def modifier(request):
             hospitalisation.date_debut = date_debut
         if date_fin:
             hospitalisation.date_fin = date_fin
-
+        else:
+            status = data.get("status")
+            if status == "fini":
+                hospitalisation.date_fin = None
         hospitalisation.save()
         return JsonResponse({"message": "Hospitalisation updated successfully."})
     else:

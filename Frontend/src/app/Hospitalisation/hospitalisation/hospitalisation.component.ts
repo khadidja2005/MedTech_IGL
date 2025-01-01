@@ -42,8 +42,8 @@ export class HospitalisationComponent {
   hospitalisation_id = 2878; //use navigation to get this value
   hospitalisation: HospitalisationPage = {
     ordre: 1, //use navigation
-    date_debut: '12/12/2024',
-    medecin: 'Khelifati Amine',
+    date_debut: ' ',
+    medecin: ' ',
     date_fin: null,
   };
   medecins: medecin[] = [];
@@ -75,7 +75,6 @@ export class HospitalisationComponent {
       })
       .then((response) => {
         this.medecins = response.data;
-        console.log('Medecins:', this.medecins);
       })
       .catch((error) => {
         console.log(error);
