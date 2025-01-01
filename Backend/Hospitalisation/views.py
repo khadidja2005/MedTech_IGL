@@ -222,7 +222,9 @@ def ajouter_consultation(request):
             Medecin=medecin,
         )
         consultation.save()
-        return JsonResponse({"message": "Consultation added successfully."})
+        return JsonResponse(
+            {"message": "Consultation added successfully.", "id": consultation.id}
+        )
     else:
         return JsonResponse({"error": "Invalid request method."}, status=405)
 
