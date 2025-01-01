@@ -31,7 +31,7 @@ def signup_admin(request):
         admin = serializer.save(password=password)
         
         # Generate token for immediate login
-        token = generate_token(str(admin.id), 'ADMIN')
+        token = generate_token(admin.id, 'ADMIN')
         
         return Response({
             'message': 'Admin created successfully',
@@ -48,7 +48,7 @@ def signup_personnel(request):
         password = make_password(serializer.validated_data['password'])
         personnel = serializer.save(password=password)
         
-        token = generate_token(str(personnel.id), personnel.role)
+        token = generate_token(personnel.id, personnel.role)
         
         return Response({
             'message': 'Personnel medical created successfully',
@@ -65,7 +65,7 @@ def signup_patient(request):
         password = make_password(serializer.validated_data['password'])
         patient = serializer.save(password=password)
         
-        token = generate_token(str(patient.id), 'PATIENT')
+        token = generate_token(patient.id, 'PATIENT')
         
         return Response({
             'message': 'Patient created successfully',
@@ -114,7 +114,7 @@ def login(request):
             pass
 
     if user and role:
-        token = generate_token(str(user.id), role)
+        token = generate_token(user.id, role)
         response_data = {
             'id': user.id,
             'email': user.email,

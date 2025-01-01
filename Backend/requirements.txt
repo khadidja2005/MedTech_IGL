@@ -7,3 +7,4 @@ faker >= 9.0.2
 qrcode>=7.3.1
 cloudinary >=1.26.0
 PyJWT >=2.9.0
+django-cors-headers >=3.7.0

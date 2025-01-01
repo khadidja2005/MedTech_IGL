@@ -5,7 +5,7 @@ urlpatterns = [
     # Etablissement CRUD
     path('etablissements/', views.get_all_etablissements, name='get_all_etablissements'),
     path('etablissements/<str:etablissement_id>/', views.get_etablissement, name='get_etablissement'),
-    path('etablissements/create/', views.create_etablissement, name='create_etablissement'),
+    path('etablissements/', views.create_etablissement, name='create_etablissement'),
     path('etablissements/<str:etablissement_id>/update/', views.update_etablissement, name='update_etablissement'),
     path('etablissements/<str:etablissement_id>/delete/', views.delete_etablissement, name='delete_etablissement'),
     
