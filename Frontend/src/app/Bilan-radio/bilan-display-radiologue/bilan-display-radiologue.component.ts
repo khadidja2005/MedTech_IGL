@@ -4,10 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes } from '@angular/router';
 import { PageBilanComponent } from '../page-bilan/page-bilan.component';
 
-
-
 export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
-
 
 export interface BilanRadio {
   id: number;
@@ -20,9 +17,8 @@ export interface BilanRadio {
   Consultation: string; // Foreign key to Consultation, nullable
   resultat_id: number | null;
   etablissement: number;
-  medecin:string;
-  patient:string;
-
+  medecin: string;
+  patient: string;
 }
 export interface ResultatRadio {
   id: number;
@@ -34,28 +30,22 @@ export interface ResultatRadio {
   radiologue: number | null; // Foreign key to PersonnelMedical
 }
 
-
-
 @Component({
   selector: 'app-bilan-display-radiologue',
   imports: [CommonModule, FormsModule],
   templateUrl: './bilan-display-radiologue.component.html',
-  styleUrl: './bilan-display-radiologue.component.css'
+  styleUrl: './bilan-display-radiologue.component.css',
 })
 export class BilanDisplayRadiologueComponent {
-
-
-  @Input() bilan!: BilanRadio ;
+  @Input() bilan!: BilanRadio;
   @Input() result!: ResultatRadio;
-
-
 
   showViewModal = false;
   showEditModal = false;
   viewMode: 'description' | 'compteRendu' = 'description';
   viewOnlyDescription = '';
-  viewOnlyCompteRendu:string|null = '';
-  editedCompteRendu  = '';
+  viewOnlyCompteRendu: string | null = '';
+  editedCompteRendu = '';
   selectedPDF: File | null = null;
   importedPDF = false;
 
@@ -86,7 +76,6 @@ export class BilanDisplayRadiologueComponent {
 
       // Optional: Show success message
       alert('PDF importé avec succès');
-
     } catch (error) {
       console.error('Error handling PDF:', error);
       this.resetPDFState();
@@ -167,12 +156,11 @@ export class BilanDisplayRadiologueComponent {
     this.editedCompteRendu = '';
   }
 
-
   ngOnInit() {
     if (!this.bilan || !this.result) {
       this.bilan = {
         id: 0,
-        description: "This is a comprehensive description...",
+        description: 'This is a comprehensive description...',
         date_debut: '2024-12-01',
         date_fin: '2024-12-10',
         type_radio: 'RADIO',
@@ -182,7 +170,7 @@ export class BilanDisplayRadiologueComponent {
         Consultation: 'description',
         resultat_id: 0,
         etablissement: 2,
-        patient: 'Amina khelifi'
+        patient: 'Amina khelifi',
       };
 
       this.result = {
@@ -196,6 +184,4 @@ export class BilanDisplayRadiologueComponent {
       };
     }
   }
-}
-
 }
