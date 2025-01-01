@@ -1,7 +1,9 @@
+import uuid
 from django.db import models
 
 
 class Etablissement(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class TypeChoices(models.TextChoices):
         HOPITAL = "HOPITAL", "Hopital"
         CLINIQUE = "CLINIQUE", "Clinique"
@@ -17,17 +19,19 @@ class Etablissement(models.Model):
 
 
 class Admin(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom_complet = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
     telephone = models.CharField(
         max_length=10,
         null=True,
     )
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=100 , unique=True)
     lienPhoto = models.URLField()
 
 
 class PersonnelMedical(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class RoleChoices(models.TextChoices):
         MEDECIN = "MEDECIN", "Medecin"
         RADIOLOGUE = "RADIOLOGUE", "Radiologue"
@@ -40,7 +44,7 @@ class PersonnelMedical(models.Model):
     email = models.EmailField(max_length=100)
     specialite = models.CharField(max_length=100)
     telephone = models.CharField(max_length=10)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=100 , unique=True)
     role = models.CharField(
         max_length=10,
         choices=RoleChoices.choices,
@@ -49,18 +53,20 @@ class PersonnelMedical(models.Model):
 
 
 class etablissement_personnel_medical(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     etablissement = models.ForeignKey(Etablissement, on_delete=models.CASCADE)
     personnel_medical = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
 
 
 class Patient(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nss = models.CharField(max_length=100)
     nom_complet = models.CharField(max_length=200)
     date_naissance = models.DateField(null=True)
     adresse = models.CharField(max_length=100, null=True)
     telephone = models.CharField(max_length=10, null=True)
     email = models.EmailField(max_length=100, null=True)
-    password = models.CharField(max_length=100, null=True)
+    password = models.CharField(max_length=100, unique=True , null=True)
     lienPhoto = models.URLField()
     lieu_naissance = models.CharField(max_length=100, null=True)
     genre = models.CharField(max_length=100, null=True)
@@ -68,6 +74,7 @@ class Patient(models.Model):
 
 
 class Mutuelle(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
     nom = models.CharField(max_length=100)
     numero_adherent = models.IntegerField()
@@ -77,6 +84,7 @@ class Mutuelle(models.Model):
 
 
 class Contact(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom_complet = models.CharField(max_length=200)
     relation = models.CharField(max_length=100)
     priorite = models.IntegerField(default=0)
@@ -87,6 +95,7 @@ class Contact(models.Model):
 
 
 class DPI(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_creation = models.DateField()
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     etablissement_id = models.ForeignKey(Etablissement, on_delete=models.CASCADE)
@@ -97,6 +106,7 @@ class DPI(models.Model):
 
 
 class Antecedent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(max_length=100, null=True)
     nom = models.CharField(max_length=50)
     description = models.TextField(null=True)
@@ -106,6 +116,7 @@ class Antecedent(models.Model):
 
 
 class Hospitalisation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_debut = models.DateField()
     date_fin = models.DateField(null=True)
     DPI = models.ForeignKey(DPI, on_delete=models.CASCADE)
@@ -113,6 +124,7 @@ class Hospitalisation(models.Model):
 
 
 class Consultation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     resume = models.TextField()
     date = models.DateField()
     Hospitalisation = models.ForeignKey(Hospitalisation, on_delete=models.CASCADE)
@@ -120,6 +132,7 @@ class Consultation(models.Model):
 
 
 class Ordonnance(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estValide = models.BooleanField(default=False)
     estTerminer = models.BooleanField(default=False)
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
@@ -129,6 +142,7 @@ class Ordonnance(models.Model):
 
 
 class Medicament(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom = models.CharField(max_length=100)
     dosage = models.CharField(max_length=100)
     duree = models.CharField(max_length=100)
@@ -136,6 +150,7 @@ class Medicament(models.Model):
 
 
 class Soins(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class typeSoinsChoices(models.TextChoices):
         INFIRMIER = "INFIRMIER", "Infirmier"
         OBSERVATIONDETAT = (
@@ -166,6 +181,7 @@ class Soins(models.Model):
 
 
 class BilanBio(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_debut = models.DateField()
     date_fin = models.DateField(null=True)
     parametres = models.TextField(null=True)
@@ -175,6 +191,7 @@ class BilanBio(models.Model):
 
 
 class ResultatBio(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     valeur_mesure = models.CharField(max_length=100)
     date_mesure = models.DateField()
     heure_mesure = models.TimeField()
@@ -185,6 +202,7 @@ class ResultatBio(models.Model):
 
 
 class ResultatRadio(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     piece_jointe = models.TextField()
     date = models.DateField()
     compte_rendu = models.TextField(null=True)
@@ -200,6 +218,7 @@ class ResultatRadio(models.Model):
 
 
 class BilanRadio(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class typeRadioChoices(models.TextChoices):
         RADIO = "RADIO", "Radio"
         SCANNER = "SCANNER", "Scanner"
