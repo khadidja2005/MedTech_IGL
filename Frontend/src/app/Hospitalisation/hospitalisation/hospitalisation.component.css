@@ -3,7 +3,7 @@
 }
 
 .header {
-  @apply w-full flex bg-white shadow-md p-4 h-screen ; /* Full-width header */
+  @apply w-full flex bg-white shadow-md p-8 h-screen ; /* Full-width header */
 }
 
 .main-section {
