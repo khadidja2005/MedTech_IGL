@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Etablissement } from '../../../types/etablissement';
-import { EtablissementPersonnelMedical } from '../../../types/etablissementPersonnelmedical';
 import { PersonnelMedical } from '../../../types/personnelMedical';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DPI } from '../../../types/dpi';
 import { Patient } from '../../../types/patient';
 import { Mutuelle } from '../../../types/mutuelle';
+import { EtablissementPersonnelMedical } from '../../../types/etablissementPersonnelmedical';
+
 
 @Component({
   selector: 'app-personnals-medicaux',
@@ -16,24 +17,24 @@ import { Mutuelle } from '../../../types/mutuelle';
 })
 export class PersonnalsMedicauxComponent {
 Etablissement: Etablissement={
-  id: '001',
+  id: 1,
   nom_etablissement: '',
   adresse: '',
   telephone: 0,
   email: '',
-  type: ''
+  type: 'HOPITAL'
 };
 
 user1 = {
   Admin: true,
   name: "Mohamed Reda",
-  id: 'USER-051',
+  id: 1,
   profession: 'infermier'
 };
 
 personnels: PersonnelMedical[] = [
   {
-    id: 'p1',
+    id: 1,
     lienPhoto: 'assets/images/medecin1.jpg',
     nom_complet: 'Jean Dupont',
     email: 'jean.dupont@exemple.com',
@@ -43,7 +44,7 @@ personnels: PersonnelMedical[] = [
     role: 'MEDECIN',
   },
   {
-    id: 'p2',
+    id: 2,
     lienPhoto: 'assets/images/medecin2.jpg',
     nom_complet: 'Alice Martin',
     email: 'alice.martin@exemple.com',
@@ -56,37 +57,37 @@ personnels: PersonnelMedical[] = [
 
 DPIList: DPI[] = [
   {
-    id: '1',
+    id: 1,
     date_creation: '2024-01-01T08:30:00.000Z',
     patient: 'P001',
-    etablissement_id: '001',
-    createur_id: 'A001',
+    etablissement_id: 1,
+    createur_id: 1,
   },
   {
-    id: '2',
+    id: 2,
     date_creation: '2024-01-10T09:45:00.000Z',
     patient: 'P002',
-    etablissement_id: '001',
-    createur_id: 'A002',
+    etablissement_id: 2,
+    createur_id: 2,
   },
   {
-    id: '3',
+    id: 3,
     date_creation: '2024-02-15T14:20:00.000Z',
     patient: 'P003',
-    etablissement_id: '001',
+    etablissement_id: 1,
     createur_id: null, // No admin linked
   },
   {
-    id: '4',
+    id: 4,
     date_creation: '2024-03-05T11:00:00.000Z',
     patient: 'P004',
-    etablissement_id: '3',
-    createur_id: 'A003',
+    etablissement_id: 3,
+    createur_id: 3,
   },]
 
 etablissementPersonnel: EtablissementPersonnelMedical[] = [
-  { id: '1', etablissement: '001', personnel_medical: 'p1' },
-  { id: '2', etablissement: '001', personnel_medical: 'p2' },
+  { id: 1, etablissement: 1, personnel_medical: 1 },
+  { id: 2, etablissement: 1, personnel_medical: 2 },
 ];
 
 
@@ -104,12 +105,12 @@ selectMenu(menuNumber: number): void {
 }
 
 newEstablishment: Etablissement = {
-  id: '',
+  id: 0,
   nom_etablissement: '',
   adresse: '',
   telephone: 0,
   email: '',
-  type: '',
+  type: 'HOPITAL',
 };
 
 openModal(): void {
@@ -123,12 +124,12 @@ closeModal(): void {
 
 resetNewEstablishment(): void {
   this.newEstablishment = {
-    id: '',
+    id: 0,
     nom_etablissement: '',
     adresse: '',
     telephone: 0,
     email: '',
-    type: '',
+    type: 'HOPITAL',
   };
 }
 
@@ -200,7 +201,7 @@ showPersonnelModal = false;
 showDPIModal = false;
 
 patient:Patient = {
-  id: 'P12345',
+  id: 1,
   nss: '12345678901234',
   nom_complet: 'Sarah Benali',
   date_naissance: '1995-06-15',
@@ -215,11 +216,11 @@ patient:Patient = {
 };
 
 newDPI: DPI = {
-  id: '',
+  id: 0,
   date_creation: new Date().toISOString(),
   patient: '',
-  etablissement_id: '',
-  createur_id: ''
+  etablissement_id: 0,
+  createur_id: 0
 };
 
 
@@ -238,7 +239,7 @@ validateNewDPI(): boolean {
 showSuccessToast = false;
 showErrorToast = false;
 showDeleteConfirmation = false;
-itemToDelete: string | null = null;
+itemToDelete: number | null = null;
 
 private showSuccess(): void {
   this.showSuccessToast = true;
@@ -330,7 +331,7 @@ mutuelle1: Mutuelle = {
   email: '',
   telephone: 0,
   type_couverture: '',
-  id: '',
+  id: 0,
   patient_id: '',
   numero_adherent: 0
 };
@@ -340,7 +341,7 @@ mutuelle2: Mutuelle = {
   email: '',
   telephone: 0,
   type_couverture: '',
-  id: '',
+  id: 0,
   patient_id: '',
   numero_adherent: 0
 };
@@ -359,7 +360,7 @@ returnFirst() {
 
 resetDPIForm() {
   this.patient = {
-    id: '',
+    id: 0,
     nss: '',
     nom_complet: '',
     date_naissance: '',
@@ -374,11 +375,11 @@ resetDPIForm() {
   };
   
   this.newDPI = {
-    id: '',
+    id: 0,
     date_creation: new Date().toISOString(),
     patient: '',
-    etablissement_id: '',
-    createur_id: ''
+    etablissement_id: 0,
+    createur_id: 0
   };
   
   this.DPIValidationErrors = {};
@@ -447,7 +448,7 @@ nextStep() {
 editMode = false; // New property to track whether we're editing an employe
 
 defaultPersonnel: PersonnelMedical = {
-  id: '',
+  id: 0,
   lienPhoto: '',
   nom_complet: '',
   email: '',
@@ -550,7 +551,7 @@ createNewPersonnel(action: string, employe?: PersonnelMedical): void {
 }
 
 
-sselectedExistingPersonnel: string = ''; // For select dropdown
+sselectedExistingPersonnel: number = 0; // For select dropdown
 existingPersonnelError: string = '';
 
 addExistingPersonnel(): void {
@@ -591,16 +592,15 @@ getDPIsForCurrentEtablissement(): DPI[] {
 }
 
 // Méthode pour ajouter un personnel à l'établissement
-addPersonnelToEtablissement(personnelId: string) {
+addPersonnelToEtablissement(personnelId: number) {
   const newLink: EtablissementPersonnelMedical = {
-    id: `${Date.now()}`, // Générer un ID unique
-    etablissement: this.Etablissement.id,
-    personnel_medical: personnelId
+    id: 0, // Générer un ID unique
+    personnel_medical: 0,
+    etablissement: 0
   };
   this.etablissementPersonnel.push(newLink);
 }
 
-// Modifier la méthode submitNewPersonnel pour ajouter le lien
 submitNewPersonnel(): void {
   if (this.validateNewPersonnel()) {
     if (this.editMode) {
@@ -611,12 +611,18 @@ submitNewPersonnel(): void {
         this.personnels[index] = { ...this.newPersonnel };
       }
     } else {
-      const newPersonnelId = `p${Date.now()}`; // Générer un ID unique
-      this.newPersonnel.id = newPersonnelId;
+      // Get the next available ID
+      const maxId = Math.max(0, ...this.personnels.map(p => p.id));
+      const newId = maxId + 1;
+      
+      // Create new personnel with the new ID
+      this.newPersonnel.id = newId;
       this.personnels.push({ ...this.newPersonnel });
-      // Ajouter le lien avec l'établissement
-      this.addPersonnelToEtablissement(newPersonnelId);
+      
+      // Add the link with establishment - now passing the new ID
+      this.addPersonnelToEtablissement(newId);
     }
+    
     this.showSuccess();
     this.togglePersonnelModal('');
     this.showPersonnelModal = false;
@@ -625,9 +631,8 @@ submitNewPersonnel(): void {
   }
 }
 
-
 // Modifier la méthode deleteEmploye
-deleteEmploye(id: string): void {
+deleteEmploye(id: number): void {
   // Supprimer le lien avec l'établissement
   const linkIndex = this.etablissementPersonnel.findIndex(
     link => link.etablissement === this.Etablissement.id && 
@@ -658,4 +663,6 @@ submitNewDPI(): void {
     this.showError();
   }
 }
+
+
 }  

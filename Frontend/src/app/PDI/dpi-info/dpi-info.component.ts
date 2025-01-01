@@ -7,13 +7,54 @@ import { Etablissement } from '../../../types/etablissement';
 import { Patient } from '../../../types/patient';
 import { Antecedent } from '../../../types/antecedent';
 import { Hospitalisation } from '../../../types/hospitalisation';
-import { BilanRadio } from '../../../types/bilanRadio';
-import { Mutuelle } from '../../../types/mutuelle';
-import { BilanBio } from '../../../types/bilanbio';
 
 
+export interface Mutuelle {
+  id: number;
+  patient_id: number; // Foreign key to Patient
+  nom: string;
+  numero_adherent: number;
+  type_couverture: string;
+  telephone: number;
+  email: string;
+}
 
-type CombinedBilan = (BilanRadio | BilanBio) & { type: 'radio' | 'bio' };
+
+export interface BaseBilan {
+  id: number;
+  date_debut: string;
+  date_fin: string; 
+  est_complet: boolean;
+  est_resultat: boolean;
+  medecin: string;
+  Consultation: number | null;
+  etablissement: number;
+  patient: string;
+}
+
+export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
+
+export interface BilanRadio extends BaseBilan {
+  type_radio: TypeRadio;
+  description: string;
+  resultat_id: number | null;
+}
+
+export interface BilanBio extends BaseBilan {
+  parametres: string;
+}
+
+export type CombinedBilan = 
+  | (BilanRadio & { type: 'radio' })
+  | (BilanBio & { type: 'bio' });
+
+export interface BilanRadio extends BaseBilan {
+  type_radio: TypeRadio;
+  description: string;
+  resultat_id: number | null;
+}
+
+
 
 @Component({
   selector: 'app-dpi-info',
@@ -39,24 +80,24 @@ export class DpiInfoComponent implements OnInit {
 
 
   dpi: DPI = {
-    id: 'DPI-123',
-    createur_id: 'USER-001',
+    id: 1,
+    createur_id: 1,
     date_creation: '2024-12-21',
     patient: 'Sam Mahmoudi',
-    etablissement_id: 'Hôpital Central'
+    etablissement_id: 1
   };
 
 
   user1 = {
     Admin: true,
     name: 'Amina Benali',
-    id: 'USER-051',
+    id: 1,
     profession: 'infermier' 
   };
 
 
   patient1: Patient = {
-    id: 'P12345',
+    id: 1,
     nss: '12345678901234',
     nom_complet: 'Sarah Benali',
     date_naissance: '1995-06-15',
@@ -235,31 +276,31 @@ export class DpiInfoComponent implements OnInit {
 
   antecedents: Antecedent [] = [
     {
-      id: '1',
+      id: 1,
       type: 'Type 1',
       nom: 'Antécédent 1',
       description: 'Description 1',
       date_debut: '2023-01-01',
       date_fin: '2023-12-31',
-      DPI_id: 'DPI-123',
+      DPI_id: 1,
     },
     {
-      id: '2',
+      id: 2,
       type: 'Type 2',
       nom: 'Antécédent 2',
       description: 'Description 2',
       date_debut: '2022-05-15',
       date_fin: '2022-10-20',
-      DPI_id: 'DPI-123',
+      DPI_id: 2,
     },
     {
-      id: '3',
+      id: 3,
       type: 'Type 2',
       nom: 'Antécédent 3',
       description: 'Description 3',
       date_debut: '2020-02-25',
       date_fin: '2021-05-29',
-      DPI_id: 'DPI123',
+      DPI_id: 3,
     },
   ];
 
@@ -337,7 +378,7 @@ addAntecedent() {
   const hasErrors = Object.values(this.validationErrors).some(error => error !== '');
 
   if (!hasErrors) {
-    const newId = (this.antecedents.length + 1).toString();
+    const newId = this.antecedents.length + 1;
     const antecedent: Antecedent = {
       id: newId,
       type: this.newAntecedent.type!,
@@ -441,7 +482,7 @@ updateAntecedent() {
 }
 
 // Add function to delete antecedent
-deleteAntecedent(id: string) {
+deleteAntecedent(id: number) {
   if (confirm('Êtes-vous sûr de vouloir supprimer cet antécédent ?')) {
     const index = this.antecedents.findIndex(a => a.id === id);
     if (index !== -1) {
@@ -452,59 +493,59 @@ deleteAntecedent(id: string) {
 
   Hospitalisations: Hospitalisation[] = [
     {
-      id: '1',
+      id: 1,
       date_debut: '2024-12-01',
       date_fin: '',
-      DPI: 'DPI001',
-      medecin_responsable: 'MED001',
+      DPI: 1,
+      medecin_responsable: 1,
     },
     {
-      id: '2',
+      id: 2,
       date_debut: '2024-11-15',
       date_fin: '2024-11-20',
-      DPI: 'DPI002',
-      medecin_responsable: 'MED002',
+      DPI: 2,
+      medecin_responsable: 2,
     },
     {
-      id: '3',
+      id: 3,
       date_debut: '2024-10-01',
       date_fin: '2024-10-15',
-      DPI: 'DPI003',
-      medecin_responsable: 'MED003',
+      DPI: 3,
+      medecin_responsable: 3,
     },
   ];
 
   bilans: BilanRadio[] = [
     {
-      id: 'BR001',
+      id: 1,
       date_debut: '2024-12-01',
       date_fin: '2024-12-05',
       type_radio: 'IRM',
       est_complet: true,
       est_resultat: true,
       description: 'IRM cérébrale pour évaluation neurologique',
-      medecin: 'MED001',
-      Consultation: 'CONS001',
-      resultat_id: 'RES001',
-      etablissement: '',
+      medecin: 'doc1',
+      Consultation: 0,
+      resultat_id: 1,
+      etablissement: 0,
       patient: ''
     },
     {
-      id: 'BR002',
+      id: 2,
       date_debut: '2024-11-20',
       date_fin: '2024-11-22',
       type_radio: 'SCANNER',
       est_complet: false,
       est_resultat: false,
       description: 'Scanner thoracique pour diagnostic précoce',
-      medecin: 'MED002',
-      Consultation: null, // Pas associé à une consultation
-      resultat_id: 'RES002',
-      etablissement: '',
+      medecin: 'doc2',
+      Consultation: 1,
+      resultat_id: 2,
+      etablissement: 0,
       patient: ''
     },
     {
-      id: 'BR003',
+      id: 3,
       date_debut: '2024-10-15',
       date_fin: '2024-10-18',
       type_radio: 'RADIO',
@@ -512,28 +553,28 @@ deleteAntecedent(id: string) {
       est_resultat: true,
       description: 'Radiographie abdominale pour contrôle postopératoire',
       medecin: 'MED003',
-      Consultation: 'CONS003',
-      resultat_id: 'RES003',
-      etablissement: '',
+      Consultation: 2,
+      resultat_id: 1,
+      etablissement: 0,
       patient: ''
     },
   ];
 
   bilansBio: BilanBio[] = [
     {
-      id: 'BB001',
+      id: 1,
       date_debut: '2024-12-03',
       date_fin: '2024-12-04',
       parametres: 'Glycémie, Cholestérol, Créatinine',
       est_complet: true,
       est_resultat: true,
       medecin: 'MED001',
-      Consultation: 'CONS002',
-      etablissement: '',
+      Consultation: 2,
+      etablissement: 1,
       patient: ''
     },
     {
-      id: 'BB002',
+      id: 2,
       date_debut: '2024-11-25',
       date_fin: '2024-11-26',
       parametres: 'Hémogramme complet',
@@ -541,19 +582,19 @@ deleteAntecedent(id: string) {
       est_resultat: false,
       medecin: 'MED003',
       Consultation: null,
-      etablissement: '',
+      etablissement: 1,
       patient: ''
     },
     {
-      id: 'BB003',
+      id: 3,
       date_debut: '2024-10-10',
       date_fin: '2024-10-11',
       parametres: 'Tests hépatiques, Ionogramme',
       est_complet: true,
       est_resultat: true,
       medecin: 'MED002',
-      Consultation: 'CONS004',
-      etablissement: '',
+      Consultation: 1,
+      etablissement: 2,
       patient: ''
     }
   ];
@@ -677,8 +718,8 @@ deleteAntecedent(id: string) {
 
   mutuelles: Mutuelle[] = [
     {
-      id: 'M001',
-      patient_id: 'P001',
+      id: 1,
+      patient_id: 1,
       nom: 'Mutuelle Santé Plus',
       numero_adherent: 12345678,
       type_couverture: 'Complète',
@@ -686,8 +727,8 @@ deleteAntecedent(id: string) {
       email: 'contact@mutuellesanteplus.dz',
     },
     {
-      id: 'M002',
-      patient_id: 'P002',
+      id: 2,
+      patient_id: 2,
       nom: 'Assurance Maladie Universelle',
       numero_adherent: 87654321,
       type_couverture: 'Partielle',
@@ -695,8 +736,8 @@ deleteAntecedent(id: string) {
       email: 'info@amu.dz',
     },
     {
-      id: 'M003',
-      patient_id: 'P003',
+      id: 3,
+      patient_id: 3,
       nom: 'Mutuelle Bien-Être',
       numero_adherent: 56781234,
       type_couverture: 'Spécialisée',
@@ -709,11 +750,11 @@ deleteAntecedent(id: string) {
   hospitalizationModalMode: 'add' | 'view' = 'add';
   selectedHospitalization: Hospitalisation | null = null;
   newHospitalization: Partial<Hospitalisation> = {
-    id: '',
+    id: 0,
     date_debut: '',
     date_fin: '',
-    DPI: '',
-    medecin_responsable: ''
+    DPI: 0,
+    medecin_responsable: 0
   };
   
   hospitalizationValidationErrors: { [key: string]: string } = {
@@ -739,22 +780,22 @@ deleteAntecedent(id: string) {
         // For adding new hospitalization
         this.selectedHospitalization = null;
         this.newHospitalization = {
-          id: '',
+          id: 0,
           date_debut: '',
           date_fin: '',
           DPI: this.dpi.id,
-          medecin_responsable: ''
+          medecin_responsable: 0
         };
       }
     } else {
       // Closing modal - reset everything
       this.selectedHospitalization = null;
       this.newHospitalization = {
-        id: '',
+        id: 0,
         date_debut: '',
         date_fin: '',
-        DPI: '',
-        medecin_responsable: ''
+        DPI: 0,
+        medecin_responsable: 0
       };
     }
 
@@ -769,7 +810,7 @@ deleteAntecedent(id: string) {
     };
     let isValid = true;
 
-    if (!this.newHospitalization.medecin_responsable?.trim()) {
+    if (!this.newHospitalization.medecin_responsable) {
       this.hospitalizationValidationErrors['medecin_responsable'] = 'Le médecin responsable est requis';
       isValid = false;
     }
@@ -785,7 +826,7 @@ deleteAntecedent(id: string) {
   // Add new hospitalization
   addHospitalization() {
     if (this.validateHospitalization()) {
-      const newId = (this.Hospitalisations.length + 1).toString();
+      const newId = (this.Hospitalisations.length + 1);
       const hospitalization: Hospitalisation = {
         id: newId,
         date_debut: this.newHospitalization.date_debut!,
@@ -816,8 +857,8 @@ newMutuelle: Mutuelle = {
   numero_adherent: 0,
   email: '',
   telephone: 0,
-  id: '',
-  patient_id: ''
+  id: 0,
+  patient_id: 0
 };
 
 // Toggle modal function
@@ -830,8 +871,8 @@ toggleMutuelleModal() {
           numero_adherent: 0,
           email: '',
           telephone: 0,
-          id: '',
-          patient_id: ''
+          id: 0,
+          patient_id: 0
       };
       this.mutuelleValidationErrors = {
           nom: '',
@@ -893,7 +934,7 @@ validateMutuelle(): boolean {
 // Fixed addMutuelle function
 addMutuelle() {
   if (this.validateMutuelle()) {
-      const newId = `M${(this.mutuelles.length + 1).toString().padStart(3, '0')}`;
+      const newId = 0;
       
       // Create new mutuelle without spread operator to avoid property conflicts
       const mutuelle: Mutuelle = {
@@ -983,7 +1024,7 @@ handleClick(event: MouseEvent) {
     // Create a new DPI object to trigger change detection
     this.dpi = {
       ...this.dpi,
-      etablissement_id: this.selectedEtablissement.nom_etablissement
+      etablissement_id: this.selectedEtablissement.id
     };
     
     // Close the modal
@@ -1009,44 +1050,44 @@ handleClick(event: MouseEvent) {
 
   etablissements: Etablissement[] = [
     {
-      id: '1',
+      id: 1,
       nom_etablissement: 'Hôpital Central',
       adresse: '123 Rue de la Santé, Paris',
       telephone: 123456789,
       email: 'contact@hopitalcentral.fr',
-      type: 'Hôpital'
+      type: 'HOPITAL'
     },
     {
-      id: '2',
+      id: 2,
       nom_etablissement: 'Clinique Sainte-Marie',
       adresse: '45 Avenue des Roses, Lyon',
       telephone: 987654321,
       email: 'info@cliniquesainte-marie.fr',
-      type: 'Clinique'
+      type: 'HOPITAL'
     },
     {
-      id: '3',
+      id: 3,
       nom_etablissement: 'Centre Médical du Nord',
       adresse: '78 Boulevard des Lumières, Lille',
       telephone: 564738291,
       email: 'contact@centremedicalnord.fr',
-      type: 'Centre Médical'
+      type: 'HOPITAL'
     },
     {
-      id: '4',
+      id: 4,
       nom_etablissement: 'Polyclinique de la Côte',
       adresse: '11 Rue des Vagues, Nice',
       telephone: 472836194,
       email: 'contact@polycliniquecote.fr',
-      type: 'Polyclinique'
+      type: 'HOPITAL'
     },
     {
-      id: '5',
+      id: 5,
       nom_etablissement: 'Hôpital Universitaire',
       adresse: '99 Campus Santé, Marseille',
       telephone: 741258963,
       email: 'info@hopitaluniversitaire.fr',
-      type: 'Hôpital'
+      type: 'HOPITAL'
     }]
 
   }

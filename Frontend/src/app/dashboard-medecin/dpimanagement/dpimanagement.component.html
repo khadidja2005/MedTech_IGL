@@ -1,3 +1,11 @@
+  <!-- Fix the header so it stays at the top -->
+  <app-header-pdi ></app-header-pdi>
+
+  <!-- Main content -->
+  <div class="layout flex pt-[60px]"> <!-- Add padding-top for spacing below the fixed header -->
+    <app-sidebar></app-sidebar>
+    <div class="bg-[#F3F8FF] flex-1 ml-52 mt-3"> <!-- Adjusted for sidebar width -->
+ 
 <div class="grid grid-cols-12 gap-2 p-4 font-poppins relative">
     <div class="consultation flex-col col-span-3 p-4">
       <!-- Etablissement Header -->
@@ -246,3 +254,5 @@
         </svg>
         <span>Une erreur est survenue</span>
     </div>
+  </div>
+</div>

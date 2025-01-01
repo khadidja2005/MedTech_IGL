@@ -1,4 +1,12 @@
-<div class="p-8">
+  <!-- Fix the header so it stays at the top -->
+  <app-header-pdi ></app-header-pdi>
+
+  <!-- Main content -->
+  <div class="layout flex pt-[60px]"> <!-- Add padding-top for spacing below the fixed header -->
+    <app-sidebar></app-sidebar>
+    <div class="bg-[#F3F8FF] flex-1 ml-52 mt-3"> <!-- Adjusted for sidebar width -->
+
+    <div class="p-8">
     <!-- Search and Info Section -->
     <div class="justify-between mb-8">
         <div class="relative mb-8">
@@ -74,4 +82,6 @@
             {{page}}
         </button>
     </div>
+</div>
+</div>
 </div>

@@ -1,7 +1,26 @@
 import { Component } from '@angular/core';
-import { PersonnelMedical } from '../../../types/personnelMedical';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+
+export type PersonnelMedicalRole =
+  | 'MEDECIN'
+  | 'RADIOLOGUE'
+  | 'LABORANTIN'
+  | 'INFIRMIER'
+  | 'PHARMACIEN';
+
+export interface PersonnelMedical {
+  id:number;
+  lienPhoto: string;
+  nom_complet: string;
+  email: string;
+  specialite: string;
+  telephone: number;
+  password: string;
+  role: PersonnelMedicalRole;
+}
+
 
 @Component({
   selector: 'app-employe-inf',
@@ -20,7 +39,7 @@ export class EmployeInfComponent {
   
   personnels: PersonnelMedical[] = [
     {
-      id: 'p1',
+      id:0,
       lienPhoto: 'assets/images/medecin1.jpg',
       nom_complet: 'Jean Dupont',
       email: 'jean.dupont@exemple.com',
@@ -30,7 +49,7 @@ export class EmployeInfComponent {
       role: 'MEDECIN',
     },
     {
-      id: 'p2',
+      id:2,
       lienPhoto: 'assets/images/medecin2.jpg',
       nom_complet: 'Alice Martin',
       email: 'alice.martin@exemple.com',
@@ -61,7 +80,7 @@ export class EmployeInfComponent {
   editMode = false; // New property to track whether we're editing an employe
   
   defaultPersonnel: PersonnelMedical = {
-    id: '',
+    id:0,
     lienPhoto: '',
     nom_complet: '',
     email: '',
@@ -74,7 +93,7 @@ export class EmployeInfComponent {
   newPersonnel: PersonnelMedical = { ...this.defaultPersonnel };
   
   PersonnelValidationErrors: {
-    id?: string;
+
     lienPhoto?: string;
     nom_complet?: string;
     email?: string;
@@ -145,18 +164,6 @@ export class EmployeInfComponent {
   
   submitNewPersonnel(): void {
     if (this.validateNewPersonnel()) {
-      if (this.editMode) {
-        const index = this.personnels.findIndex(
-          (person) => person.id === this.newPersonnel.id
-        );
-        if (index > -1) {
-          this.personnels[index] = { ...this.newPersonnel };
-        }
-        this.showSuccess();
-      } else {
-        this.personnels.push({ ...this.newPersonnel });
-        this.showSuccess();
-      }
       this.togglePersonnelModal('');
       this.showPersonnelModal = false;
     } else {
@@ -197,14 +204,7 @@ export class EmployeInfComponent {
     this.togglePersonnelModal(action, employe);
   }
   
-  deleteEmploye(id: string): void {
-    const index = this.personnels.findIndex((person) => person.id === id);
-    if (index > -1) {
-      this.personnels.splice(index, 1);
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 3000);
-    }
+  deleteEmploye(id: number): void {
+   
   }
 }  

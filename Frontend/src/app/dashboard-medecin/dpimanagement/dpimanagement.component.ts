@@ -1,38 +1,35 @@
 import { Component } from '@angular/core';
-import { DPI } from '../../../types/dpi';
 import { Patient } from '../../../types/patient';
 import { Mutuelle } from '../../../types/mutuelle';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
+import { DPI } from '../../../types/dpi';
+import { SidebarComponent } from "../../components/sidebar/sidebar.component";
+import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.component";
+
 
 @Component({
   selector: 'app-dpi-management',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SidebarComponent, HeaderPDIComponent],
   templateUrl: './dpimanagement.component.html',
   styleUrl: './dpimanagement.component.css'
 })
 export class DPIManagementComponent {
-  // Current user (medical personnel)
-  user = {
-    id: 'USER-051',
-    name: "Mohamed Reda",
-    profession: 'medecin'
-  };
-
+  
   Etablissement: Etablissement={
-    id: '001',
+    id: 1,
     nom_etablissement: '',
     adresse: '',
     telephone: 0,
     email: '',
-    type: ''
+    type: 'HOPITAL'
   };
 
   user1 = {
     Admin: true,
     name: "Mohamed Reda",
-    id: 'USER-051',
+    id: 1,
     profession: 'medecin'
   };
   
@@ -42,7 +39,7 @@ export class DPIManagementComponent {
   }
 
   showDeleteConfirmation=false;
-  itemToDelete: string | null = null;
+  itemToDelete: Number | null = null;
   
   deleteEtablissement(): void {
     this.showDeleteConfirmation = true;
@@ -52,31 +49,31 @@ export class DPIManagementComponent {
   // DPI list
   DPIList: DPI[] = [
     {
-      id: '1',
+      id: 1,
       date_creation: '2024-01-01T08:30:00.000Z',
       patient: 'P001',
-      etablissement_id: '001',
-      createur_id: 'USER-051',
+      etablissement_id: 1,
+      createur_id: 1,
     },
     {
-      id: '2',
+      id: 2,
       date_creation: '2024-01-10T09:45:00.000Z',
       patient: 'P002',
-      etablissement_id: '001',
-      createur_id: 'USER-051',
+      etablissement_id: 1,
+      createur_id: 2,
     },
     {
-      id: '3',
+      id: 3,
       date_creation: '2024-02-15T14:20:00.000Z',
       patient: 'P003',
-      etablissement_id: '001',
-      createur_id: 'A002',
+      etablissement_id: 1,
+      createur_id: 3,
     }
   ];
 
   // Patient model for new DPI
   patient: Patient = {
-    id: '',
+    id: 0,
     nss: '',
     nom_complet: '',
     date_naissance: '',
@@ -92,11 +89,11 @@ export class DPIManagementComponent {
 
   // New DPI model
   newDPI: DPI = {
-    id: '',
+    id: 0,
     date_creation: new Date().toISOString(),
     patient: '',
-    etablissement_id: '001', // Set to current establishment
-    createur_id: this.user.id
+    etablissement_id: 1, // Set to current establishment
+    createur_id: this.user1.id
   };
 
   // UI control flags
@@ -121,7 +118,7 @@ export class DPIManagementComponent {
     email: '',
     telephone: 0,
     type_couverture: '',
-    id: '',
+    id: 0,
     patient_id: '',
     numero_adherent: 0
   };
@@ -131,20 +128,20 @@ export class DPIManagementComponent {
     email: '',
     telephone: 0,
     type_couverture: '',
-    id: '',
+    id: 0,
     patient_id: '',
     numero_adherent: 0
   };
 
   // Get DPIs created by current user
   getUserDPIs(): DPI[] {
-    return this.DPIList.filter(dpi => dpi.createur_id === this.user.id);
+    return this.DPIList.filter(dpi => dpi.createur_id === this.user1.id);
   }
 
   // Reset form
   resetDPIForm() {
     this.patient = {
-      id: '',
+      id: 0,
       nss: '',
       nom_complet: '',
       date_naissance: '',
@@ -159,11 +156,11 @@ export class DPIManagementComponent {
     };
     
     this.newDPI = {
-      id: '',
+      id: 0,
       date_creation: new Date().toISOString(),
       patient: '',
-      etablissement_id: '001',
-      createur_id: this.user.id
+      etablissement_id: 1,
+      createur_id: this.user1.id
     };
     
     this.DPIValidationErrors = {};
@@ -263,8 +260,8 @@ export class DPIManagementComponent {
     if (this.validateDPIForm()) {
       const newDPI = {
         ...this.newDPI,
-        id: `DPI-${Date.now()}`,
-        createur_id: this.user.id,
+        id: 0,
+        createur_id: this.user1.id,
         date_creation: new Date().toISOString()
       };
       this.DPIList.push(newDPI);

@@ -17,24 +17,24 @@ export class EstablishmentsComponent implements OnInit {
   
   establishments: Etablissement[] = [
     {
-      id: '1',
+      id: 1,
       nom_etablissement: 'Etablissement 1',
       adresse: '8 W. South St.Buford, GA 30518',
       telephone: 123456789,
       email: 'email@gmail.com',
-      type: 'Hôpital',
+      type: 'HOPITAL',
 
     }
     
   ];
 
   newEstablishment: Etablissement = {
-    id: '',
+    id: 0,
     nom_etablissement: '',
     adresse: '',
     telephone: 0,
     email: '',
-    type: '',
+    type: 'HOPITAL',
   };
 
   get filteredEstablishments(): Etablissement[] {
@@ -76,19 +76,19 @@ export class EstablishmentsComponent implements OnInit {
 
   resetNewEstablishment(): void {
     this.newEstablishment = {
-      id: '',
+      id: 0,
       nom_etablissement: '',
       adresse: '',
       telephone: 0,
       email: '',
-      type: '',
+      type: 'HOPITAL',
   
     };
   }
 
   addEstablishment(): void {
     if (this.validateNewEstablishment()) {
-      this.newEstablishment.id = (this.establishments.length + 1).toString();
+      this.newEstablishment.id = this.establishments.length + 1;
       this.establishments.push({...this.newEstablishment});
       this.closeModal();
     }
