@@ -41,7 +41,7 @@ export class AjouterConsultationComponent {
     return `${day}/${month}/${year}`;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.consultationForm.valid) {
       const formValue = this.consultationForm.value;
       let medecin = ' ';
@@ -58,7 +58,7 @@ export class AjouterConsultationComponent {
         date: this.convertDateToDisplayFormat(formValue.date),
       };
       let bool = false;
-      axios
+      await axios
         .post('http://localhost:8000/hospitalisation/ajouter/consultation', {
           hospitalisation_id: this.hospitalisation_id,
           medecin_id: formValue.medecin,

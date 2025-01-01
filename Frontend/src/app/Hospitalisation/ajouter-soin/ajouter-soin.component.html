@@ -43,7 +43,7 @@
           }"
         >
           <option value="INFIRMIER" class="text-infermier">
-            Soin infermier
+            Soin infirmier
           </option>
           <option value="OBSERVATION D'ETAT" class="text-etat">
             Observation d'état
@@ -62,11 +62,6 @@
           "
           for="descrip"
           >Description</label
-        >
-        <label
-          *ngIf="soinForm.value.type == 'OBSERVATION D\'ETAT'"
-          for="descrip"
-          >Etat Patient :</label
         >
         <textarea
           id="descrip"

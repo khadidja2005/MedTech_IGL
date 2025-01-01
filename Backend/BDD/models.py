@@ -147,7 +147,7 @@ class Soins(models.Model):
             "Administration de medicament",
         )
 
-        AUTRES = "AUTRES", "Autres"
+        AUTRES = "AUTRE", "Autre"
 
     date = models.DateField()
     heure = models.TimeField()

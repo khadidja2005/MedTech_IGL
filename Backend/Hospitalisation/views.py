@@ -252,7 +252,7 @@ def ajouter_soin(request):
         if not heure:
             return JsonResponse({"error": "'heure' is required."}, status=400)
         if not type_soins:
-            return JsonResponse({"error": "'type_soins' is required."}, status=400)
+            return JsonResponse({"error": "'type_soin' is required."}, status=400)
         try:
             hospitalisation = Hospitalisation.objects.get(id=hospitalisation_id)
         except Hospitalisation.DoesNotExist:

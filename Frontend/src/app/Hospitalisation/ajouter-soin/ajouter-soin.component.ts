@@ -3,12 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TypeSoins } from '../../../types/soins';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Infermier } from '../../Soin/soin/soin.component';
-import { SoinPageHospitalisation } from '../hospitalisation/hospitalisation.component';
+import axios from 'axios';
 
 export interface SoinPageAjouter {
   id: number;
-  infermier: number;
+  infermier: string;
   date: string;
   heure: string;
   type: TypeSoins;
@@ -26,7 +25,7 @@ export interface SoinPageAjouter {
 export class AjouterSoinComponent {
   @Input() isVisible: boolean = false;
   @Output() closePanel = new EventEmitter<void>();
-  @Output() saveSoin = new EventEmitter<SoinPageAjouter>(); // Emit the added consultation
+  @Output() saveSoin = new EventEmitter<SoinPageAjouter>();
 
   soinForm: FormGroup;
 
@@ -35,7 +34,6 @@ export class AjouterSoinComponent {
 
   constructor(private fb: FormBuilder) {
     this.soinForm = this.fb.group({
-      infermier: ['', Validators.required],
       date: ['', Validators.required],
       heure: ['', Validators.required],
       type: ['', Validators.required],
@@ -43,7 +41,6 @@ export class AjouterSoinComponent {
       medic: [''],
       doses: [''],
     });
-
     this.soinForm.get('type')?.valueChanges.subscribe((value) => {
       this.showDescription =
         value === 'INFIRMIER' ||
@@ -56,7 +53,7 @@ export class AjouterSoinComponent {
       const doses = this.soinForm.get('doses');
 
       if (
-        value === 'INFERMIER' ||
+        value === 'INFIRMIER' ||
         value === 'AUTRE' ||
         value === "OBSERVATION D'ETAT"
       ) {
@@ -89,8 +86,10 @@ export class AjouterSoinComponent {
   get type() {
     return this.soinForm.get('type');
   }
-
-  onSubmit() {
+  infermier_id = 1289; //TODO: get the id of the current user
+  infermier_nom = 'NOM'; //TODO: get the name of the current user
+  hospitalisation_id = 2878; //TODO: get the id of the current hospitalisation
+  async onSubmit() {
     if (this.soinForm.valid) {
       const formValue = this.soinForm.value;
 
@@ -103,13 +102,36 @@ export class AjouterSoinComponent {
         description: formValue.descrip || '',
         medicament: formValue.medic || null,
         dose: formValue.doses || null,
-        infermier: formValue.infermier, // Foreign key to PersonnelMedical, nullable
+        infermier: this.infermier_nom, // Foreign key to PersonnelMedical, nullable
       };
+      let bool = false;
 
-      // Emit the new consultation to the parent
-      this.saveSoin.emit(nvSoin);
-      this.closePanel.emit(); // Close the panel after adding the consultation
-      this.soinForm.reset(); // Reset the form
+      await axios
+        .post('http://localhost:8000/hospitalisation/ajouter/soin', {
+          hospitalisation_id: this.hospitalisation_id,
+          infermier_id: this.infermier_id,
+          date: nvSoin.date,
+          heure: nvSoin.heure,
+          type_soin: nvSoin.type,
+          description: nvSoin.description,
+          medicament: nvSoin.medicament,
+          dose: nvSoin.dose,
+        })
+        .then((response) => {
+          console.log(response);
+          nvSoin.id = response.data.id;
+          bool = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      if (bool) {
+        // Emit the new consultation to the parent
+        this.saveSoin.emit(nvSoin);
+        this.closePanel.emit(); // Close the panel after adding the consultation
+        this.soinForm.reset(); // Reset the form
+      }
     }
   }
 

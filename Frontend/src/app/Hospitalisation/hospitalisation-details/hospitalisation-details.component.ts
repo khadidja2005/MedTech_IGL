@@ -72,7 +72,7 @@ export class HospitalisationDetailsComponent {
     const soin: SoinPageHospitalisation = {
       id: newSoin.id,
       type_soins: newSoin.type,
-      infermier: this.nom,
+      infermier: newSoin.infermier,
       date: newSoin.date,
       heure: newSoin.heure,
     };
