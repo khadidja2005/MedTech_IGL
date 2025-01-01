@@ -24,11 +24,8 @@
     "angularx-qrcode": "^19.0.0",
     "axios": "^1.7.9",
     "express": "^4.18.2",
-<<<<<<< HEAD
     "frontend": "file:",
-=======
     "notyf": "^3.10.0",
->>>>>>> origin/main
     "rxjs": "~7.8.0",
     "tailwindcss-filters": "^3.0.0",
     "tslib": "^2.3.0",

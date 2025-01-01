@@ -1,44 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface Ordonnance {
-  id: number;
-  estValide: boolean;
-  estTerminer: boolean;
-  consultation: number;
-  pharmacien_id: number | null;
-  etablissement: number;
-  date: string;
-}
-
-export interface BaseBilan {
-  id: number;
-  date_debut: string;
-  date_fin: string; 
-  est_complet: boolean;
-  est_resultat: boolean;
-  medecin: string;
-  Consultation: number | null;
-  etablissement: number;
-  patient: string;
-}
-
-export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
-
-export interface BilanRadio extends BaseBilan {
-  type_radio: TypeRadio;
-  description: string;
-  resultat_id: number | null;
-}
-
-export interface BilanBio extends BaseBilan {
-  parametres: string;
-}
-
-export type CombinedBilan = 
-  | (BilanRadio & { type: 'radio' })
-  | (BilanBio & { type: 'bio' });
+import axios from 'axios';
 
 @Component({
   selector: 'app-consultation-info',
@@ -48,156 +11,157 @@ export type CombinedBilan =
   styleUrls: ['./consultation-info.component.css']
 })
 export class ConsultationInfoComponent implements OnInit {
-  consultation = {
-    id: 1,
-    resume: "Patient presented with mild symptoms of fever and headache.",
-    date: "2024-12-24T10:30:00Z",
-    Ordonnance: 12345,
-    Medecin: "Mohamed Reda"
-  };
+  consultation: any = {};
+  Ordonnances: any[] = [];
+  combinedBilans: any[] = [];
+  medecins: string[] = [];
+  pharmaciens: string[] = [];
 
-  medecins = ["Amine Bensalem", "Leila Hamdi", "Yacine Belkacem", "Souad Khelifi", "Mohamed Reda"];
-  pharmaciens = ["Amine Bensalem", "Leila Hamdi", "Yacine Belkacem", "Souad Khelifi", "Mohamed Reda"];
-  sontValides = ["Validé", "Non validé"];
-
-  user1 = {
-    Admin: true,
-    name: "Mohamed Reda",
-    id: 51,
-    profession: 'infermier'
-  };
-
-  // UI state properties
+  // States
   showModifyModal = false;
+  showResumeModal = false;
+  showOrdonnanceModal = false;
+  showBilanModal = false;
+  selectedMenu = 1;
   showMedecinDropdown = false;
+
+  // Fields for modals
   selectedMedecin: string | null = null;
   selectedDate: string | undefined;
-  showModal = false;
-  selectedMenu = 1;
   editedResume = '';
-  showResumeModal = false;
+  newOrdonnance: any = {};
+  newBilan: any = {};
 
-  // Ordonnance state
-  showOrdonnanceModal = false;
-  addOrdonnanceModalMode: 'add' | 'view' = 'add';
-  selectedOrdonnance: Ordonnance | null = null;
-  OrdonnanceValidationErrors: Record<string, string> = {};
-
-  // Bilan state
-  showBilanModal = false;
-  addBilanModalMode: 'add' | 'view' = 'add';
-  selectedBilan: CombinedBilan | null = null;
+  // Validation errors
   BilanValidationErrors: Record<string, string> = {};
+  OrdonnanceValidationErrors: Record<string, string> = {};
+  addOrdonnanceModalMode: 'add' | 'view' = 'add';
+  addBilanModalMode: 'add' | 'view' = 'add';
 
-  // Data collections
-  Ordonnances: Ordonnance[] = [
-    {
-      id: 1,
-      date: '2024-12-24T10:30:00Z',
-      estValide: true,
-      consultation: 1,
-      pharmacien_id: 1,
-      estTerminer: false,
-      etablissement: 0
-    },
-    {
-      id: 2,
-      date: '2024-12-24T11:30:00Z',
-      estValide: false,
-      consultation: 1,
-      pharmacien_id: 2,
-      estTerminer: false,
-      etablissement: 0
-    }
-  ];
-
-  combinedBilans: CombinedBilan[] = [];
-
-  private readonly staticRadioBilans: BilanRadio[] = [
-    {
-      id: 1,
-      date_debut: '2024-01-15',
-      date_fin: '2024-01-16',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale standard',
-      medecin: 'Dr. Amine Bensalem',
-      Consultation: 1,
-      resultat_id: 1,
-      etablissement: 1,
-      patient: 'Patient 1'
-    },
-    {
-      id: 2,
-      date_debut: '2024-02-01',
-      date_fin: '2024-02-01',
-      type_radio: 'SCANNER',
-      est_complet: false,
-      est_resultat: false,
-      description: 'Scanner thoracique',
-      medecin: 'Dr. Leila Hamdi',
-      Consultation: 2,
-      resultat_id: 2,
-      etablissement: 1,
-      patient: 'Patient 2'
-    }
-  ];
-
-  private readonly staticBioBilans: BilanBio[] = [
-    {
-      id: 3,
-      date_debut: '2024-01-20',
-      date_fin: '2024-01-21',
-      est_complet: true,
-      est_resultat: true,
-      parametres: 'Glycémie, HbA1c, Créatinine',
-      medecin: 'Dr. Souad Khelifi',
-      Consultation: 4,
-      etablissement: 1,
-      patient: 'Patient 3'
-    },
-    {
-      id: 4,
-      date_debut: '2024-02-15',
-      date_fin: '2024-02-16',
-      est_complet: false,
-      est_resultat: true,
-      parametres: 'NFS, Plaquettes, VS',
-      medecin: 'Dr. Mohamed Reda',
-      Consultation: 5,
-      etablissement: 1,
-      patient: 'Patient 4'
-    }
-  ];
-
-  newOrdonnance: Partial<Ordonnance> = this.getInitialOrdonnance();
-  newBilan: Partial<CombinedBilan> = this.getInitialBilan();
-
-  // Initialization methods
-  private getInitialOrdonnance(): Partial<Ordonnance> {
-    return {
-      id: 0,
-      date: '',
-      estValide: false,
-      consultation: 0,
-      pharmacien_id: 0
-    };
+  ngOnInit(): void {
+    const consultationId = 1; // Replace with dynamic ID if necessary
+    this.loadConsultation(consultationId);
   }
 
-  private getInitialBilan(): Partial<CombinedBilan> {
-    return {
-      id: 0,
-      date_debut: '',
-      date_fin: '',
-      est_complet: false,
-      est_resultat: false,
-      medecin: '',
-      Consultation: 0
-    };
+  async loadConsultation(id: number): Promise<void> {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/consultation/${id}`);
+      this.consultation = response.data;
+      this.Ordonnances = response.data.ordonnances || [];
+      this.combinedBilans = [...response.data.bilans_bio, ...response.data.bilans_radio];
+    } catch (error) {
+      console.error('Error loading consultation:', error);
+    }
   }
 
-  // Consultation methods
+  async saveModifications(): Promise<void> {
+    try {
+      const data = {
+        consultation_id: this.consultation.id,
+        date: this.selectedDate,
+        medecin_id: this.selectedMedecin,
+      };
+      await axios.post(`http://127.0.0.1:8000/api/consultation/modifier/`, data);
+      alert('Consultation modifiée avec succès');
+      this.showModifyModal = false;
+      this.loadConsultation(this.consultation.id);
+    } catch (error) {
+      console.error('Error modifying consultation:', error);
+    }
+  }
+
+  async saveResume(): Promise<void> {
+    try {
+      const data = { consultation_id: this.consultation.id, resume: this.editedResume };
+      await axios.post(`http://127.0.0.1:8000/api/consultation/modifier/resume/`, data);
+      alert('Résumé modifié avec succès');
+      this.showResumeModal = false;
+      this.consultation.resume = this.editedResume;
+    } catch (error) {
+      console.error('Erreur lors de la modification du résumé:', error);
+    }
+  }
+
+  async addOrdonnance(): Promise<void> {
+    try {
+      const data = {
+        consultation_id: this.consultation.id,
+        ...this.newOrdonnance,
+      };
+      const response = await axios.post(`http://127.0.0.1:8000/api/consultation/ajouter/ordonnance/`, data);
+      this.Ordonnances.push(response.data);
+      alert('Ordonnance ajoutée avec succès');
+      this.showOrdonnanceModal = false;
+    } catch (error) {
+      console.error('Erreur lors de l’ajout d’une ordonnance:', error);
+    }
+  }
+
+  async addBilan(): Promise<void> {
+    try {
+      const data = {
+        consultation_id: this.consultation.id,
+        ...this.newBilan,
+      };
+      const response = await axios.post(`http://127.0.0.1:8000/api/consultation/ajouter/bilan/`, data);
+      this.combinedBilans.push(response.data);
+      alert('Bilan ajouté avec succès');
+      this.showBilanModal = false;
+    } catch (error) {
+      console.error('Erreur lors de l’ajout d’un bilan:', error);
+    }
+  }
+
+  // Utility methods
+  getBilanTypeStyle(type: 'radio' | 'bio'): { color: string; backgroundColor: string } {
+    return type === 'bio' 
+      ? { color: '#FF34A0', backgroundColor: '#FF34A033' }
+      : { color: '#0CF045', backgroundColor: '#0CF04533' };
+  }
+
+  getBilanDisplayType(bilan: any): string {
+    return bilan.type === 'bio' ? 'Biologique' : 'Radiologique';
+  }
+
+  selectMenu(menuNumber: number): void {
+    this.selectedMenu = menuNumber;
+  }
+
+  toggleOrdonnanceModal(mode: 'add' | 'view' = 'add', ordonnance?: any): void {
+    this.addOrdonnanceModalMode = mode;
+    this.OrdonnanceValidationErrors = {};
+
+    if (mode === 'view' && ordonnance) {
+      this.newOrdonnance = { ...ordonnance };
+    } else {
+      this.newOrdonnance = {};
+    }
+
+    this.showOrdonnanceModal = !this.showOrdonnanceModal;
+  }
+
+  toggleBilanModal(mode: 'add' | 'view' = 'add', bilan?: any): void {
+    this.addBilanModalMode = mode;
+    this.BilanValidationErrors = {};
+
+    if (mode === 'view' && bilan) {
+      this.newBilan = { ...bilan };
+    } else {
+      this.newBilan = {};
+    }
+
+    this.showBilanModal = !this.showBilanModal;
+  }
+
+  canEditConsultation(): boolean {
+    return true; // Replace with actual logic
+  }
+
+  modifyConsultation(): void {
+    this.selectedDate = this.consultation.date.slice(0, 16);
+    this.showModifyModal = true;
+  }
+
   deleteConsultation(): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette Consultation ?')) {
       // TODO: Implement actual deletion logic
@@ -205,9 +169,9 @@ export class ConsultationInfoComponent implements OnInit {
     }
   }
 
-  modifyConsultation(): void {
-    this.selectedDate = this.consultation.date.slice(0, 16);
-    this.showModifyModal = true;
+  closeModifyModal(): void {
+    this.showModifyModal = false;
+    this.selectedMedecin = null;
   }
 
   toggleMedecinDropdown(event?: MouseEvent): void {
@@ -222,47 +186,9 @@ export class ConsultationInfoComponent implements OnInit {
     this.showMedecinDropdown = false;
   }
 
-  saveModifications(): void {
-    if (!this.validateModifications()) {
-      return;
-    }
-
-    this.consultation.Medecin = this.selectedMedecin!;
-    this.consultation.date = new Date(this.selectedDate!).toISOString();
-    
-    alert('Consultation modifiée avec succès');
-    this.closeModifyModal();
-  }
-
-  private validateModifications(): boolean {
-    if (!this.selectedMedecin) {
-      alert('Veuillez sélectionner un médecin');
-      return false;
-    }
-
-    if (!this.selectedDate) {
-      alert('Veuillez sélectionner une date');
-      return false;
-    }
-
-    return true;
-  }
-
-  // Resume methods
   modifyResume(): void {
     this.editedResume = this.consultation.resume;
     this.showResumeModal = true;
-  }
-
-  saveResume(): void {
-    if (!this.editedResume.trim()) {
-      alert('Le résumé ne peut pas être vide');
-      return;
-    }
-
-    this.consultation.resume = this.editedResume;
-    alert('Résumé modifié avec succès');
-    this.closeResumeModal();
   }
 
   deleteResume(): void {
@@ -272,188 +198,8 @@ export class ConsultationInfoComponent implements OnInit {
     }
   }
 
-  // Ordonnance methods
-  toggleOrdonnanceModal(mode: 'add' | 'view' = 'add', ordonnance?: Ordonnance): void {
-    this.addOrdonnanceModalMode = mode;
-    this.OrdonnanceValidationErrors = {};
-
-    if (mode === 'view' && ordonnance) {
-      this.selectedOrdonnance = ordonnance;
-      this.newOrdonnance = { ...ordonnance };
-    } else {
-      this.selectedOrdonnance = null;
-      this.newOrdonnance = this.getInitialOrdonnance();
-      this.newOrdonnance.consultation = this.consultation?.id || 0;
-    }
-
-    this.showOrdonnanceModal = !this.showOrdonnanceModal;
-  }
-
-  validateOrdonnance(): boolean {
-    this.OrdonnanceValidationErrors = {};
-    let isValid = true;
-
-    if (!this.newOrdonnance.pharmacien_id) {
-      this.OrdonnanceValidationErrors['pharmacien_id'] = 'Le pharmacien est requis';
-      isValid = false;
-    }
-
-    if (!this.newOrdonnance.date) {
-      this.OrdonnanceValidationErrors['date'] = 'La date est requise';
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
-  addOrdonnance(): void {
-    if (!this.validateOrdonnance()) {
-      return;
-    }
-
-    const ordonnance: Ordonnance = {
-      ...this.getInitialOrdonnance(),
-      date: this.newOrdonnance.date!,
-      estValide: this.newOrdonnance.estValide || false,
-      consultation: this.consultation.id,
-      pharmacien_id: this.newOrdonnance.pharmacien_id!,
-      id: this.getNextOrdonnanceId(),
-      estTerminer: false,
-      etablissement: 0
-    };
-
-    this.Ordonnances.push(ordonnance);
-    alert('Ordonnance ajoutée avec succès');
-    this.toggleOrdonnanceModal();
-  }
-
-  // Bilan methods
-  private createNewBilan(type: 'bio' | 'radio', data: Partial<CombinedBilan>): CombinedBilan {
-    const baseBilan: BaseBilan = {
-      id: data.id || 0,
-      date_debut: data.date_debut || '',
-      date_fin: data.date_fin || '',
-      est_complet: data.est_complet || false,
-      est_resultat: data.est_resultat || false,
-      medecin: data.medecin || '',
-      Consultation: data.Consultation || null,
-      etablissement: 0,
-      patient: ''
-    };
-  
-    if (type === 'bio') {
-      return {
-        ...baseBilan,
-        type: 'bio' as const,
-        parametres: ''
-      };
-    }
-  
-    return {
-      ...baseBilan,
-      type: 'radio' as const,
-      type_radio: 'RADIO',
-      description: '',
-      resultat_id: null
-    };
-  }
-
-  toggleBilanModal(mode: 'add' | 'view' = 'add', bilan?: CombinedBilan): void {
-    this.addBilanModalMode = mode;
-    this.BilanValidationErrors = {};
-    
-    if (mode === 'view' && bilan) {
-      this.selectedBilan = bilan;
-      this.newBilan = { ...bilan };
-    } else {
-      this.selectedBilan = null;
-      this.newBilan = this.getInitialBilan();
-    }
-
-    this.showBilanModal = !this.showBilanModal;
-  }
-
-  validateBilan(): boolean {
-    this.BilanValidationErrors = {};
-    if (!this.newBilan.type) {
-      this.BilanValidationErrors['type'] = 'Le type est requis';
-      return false;
-    }
-    return true;
-  }
-  
-  addBilan(): void {
-    if (!this.validateBilan()) {
-      return;
-    }
-
-    const newId = this.getNextBilanId(this.newBilan.type as 'bio' | 'radio');
-    const bilan = this.createNewBilan(
-      this.newBilan.type as 'bio' | 'radio',
-      { ...this.newBilan, id: newId }
-    );
-    
-    this.combinedBilans.push(bilan);
-    alert('Bilan ajouté avec succès');
-    this.toggleBilanModal();
-  }
-
-  // Utility methods
-  getBilanTypeStyle(type: 'radio' | 'bio'): { color: string; backgroundColor: string } {
-    return type === 'bio' 
-      ? { color: '#FF34A0', backgroundColor: '#FF34A033' }
-      : { color: '#0CF045', backgroundColor: '#0CF04533' };
-  }
-
-  getBilanDisplayType(bilan: CombinedBilan): string {
-    return bilan.type === 'bio' ? 'Biologique' : 'Radiologique';
-  }
-
-  getOrdonnances(consultationId: number): Ordonnance[] {
-    return this.Ordonnances.filter(ord => ord.consultation === consultationId);
-  }
-
-  getBilan(consultationId: number): CombinedBilan[] {
-    return this.combinedBilans.filter(bilan => bilan.Consultation === consultationId);
-  }
-
-  canEditConsultation(): boolean {
-    return this.user1?.Admin || this.user1?.profession === 'médecin';
-  }
-
   canEditOrdonnance(): boolean {
-    return this.user1?.Admin || this.user1?.profession === 'pharmacien';
-  }
-
-  closeModifyModal(): void {
-    this.showModifyModal = false;
-    this.selectedMedecin = null;
-  }
-
-  closeResumeModal(): void {
-    this.showResumeModal = false;
-    this.editedResume = '';
-  }
-
-  selectMenu(menuNumber: number): void {
-    this.selectedMenu = menuNumber;
-  }
-
-  toggleModal(): void {
-    this.showModal = !this.showModal;
-  }
-
-  private getNextBilanId(type: 'bio' | 'radio'): number {
-    const existingIds = this.combinedBilans
-      .filter(bilan => bilan.type === type)
-      .map(bilan => bilan.id);
-    
-    return Math.max(0, ...existingIds) + 1;
-  }
-
-  private getNextOrdonnanceId(): number {
-    const existingIds = this.Ordonnances.map(ord => ord.id);
-    return Math.max(0, ...existingIds) + 1;
+    return true; // Replace with actual logic
   }
 
   @HostListener('document:click', ['$event'])
@@ -463,21 +209,5 @@ export class ConsultationInfoComponent implements OnInit {
     if (dropdown && !dropdown.contains(target)) {
       this.showMedecinDropdown = false;
     }
-  }
-
-  ngOnInit(): void {
-    const radioBilans: CombinedBilan[] = this.staticRadioBilans.map(bilan => ({
-      ...bilan,
-      type: 'radio' as const,
-      date_fin: bilan.date_fin || ''
-    }));
-  
-    const bioBilans: CombinedBilan[] = this.staticBioBilans.map(bilan => ({
-      ...bilan,
-      type: 'bio' as const,
-      date_fin: bilan.date_fin || ''
-    }));
-  
-    this.combinedBilans = [...radioBilans, ...bioBilans];
   }
 }

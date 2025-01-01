@@ -11,40 +11,28 @@ from BDD.models import (
 
 @csrf_exempt
 @require_http_methods(["GET"])  # Handle GET requests
+@csrf_exempt
+@require_http_methods(["GET"])
 def get_infos(request):
-    if request.method == "GET":
-        data = json.loads(request.body)
-        ordonnance_id = data.get("ordonnance_id")
-        if not ordonnance_id:
-            return JsonResponse({"error": "A 'ordonnance_id' is required."}, status=400)
-        try:
-            ordonnance = Ordonnance.objects.get(id=ordonnance_id)
-        except Ordonnance.DoesNotExist:
-            return JsonResponse(
-                {"error": "Ordonnance with the provided id not found."}, status=404
-            )
+    ordonnance_id = request.GET.get("ordonnance_id")
+    if not ordonnance_id:
+        return JsonResponse({"error": "A 'ordonnance_id' is required."}, status=400)
+    try:
+        ordonnance = Ordonnance.objects.get(id=ordonnance_id)
         meds = Medicament.objects.filter(ordonnance=ordonnance)
-        return JsonResponse(
-            {
-                "date": ordonnance.consultation.date,
-                "medecin": ordonnance.consultation.Medecin.nom_complet,
-                "patient": ordonnance.consultation.Hospitalisation.DPI.patient.nom_complet,
-                "estValide": ordonnance.estValide,
-                "estTerminer": ordonnance.estTerminer,
-                "medicaments": [
-                    {
-                        "medicament_id": med.id,
-                        "nom": med.nom,
-                        "dosage": med.dosage,
-                        "duree": med.duree,
-                    }
-                    for med in meds
-                ],
-            }
-        )
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
-
+        return JsonResponse({
+            "date": ordonnance.consultation.date,
+            "medecin": ordonnance.consultation.Medecin.nom_complet,
+            "patient": ordonnance.consultation.Hospitalisation.DPI.patient.nom_complet,
+            "estValide": ordonnance.estValide,
+            "estTerminer": ordonnance.estTerminer,
+            "medicaments": [
+                {"medicament_id": med.id, "nom": med.nom, "dosage": med.dosage, "duree": med.duree}
+                for med in meds
+            ],
+        })
+    except Ordonnance.DoesNotExist:
+        return JsonResponse({"error": "Ordonnance not found."}, status=404)
 
 @csrf_exempt
 def supprimer_ordonnance(request):
@@ -144,24 +132,18 @@ def supprimer_medicament(request):
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
 
-
+@csrf_exempt
 def peut_modifier_ordonnance(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        ordonnance_id = data.get("ordonnance_id")
+        ordonnance_id = request.GET.get("ordonnance_id")
         if not ordonnance_id:
             return JsonResponse({"error": "A 'ordonnance_id' is required."}, status=400)
         try:
             ordonnance = Ordonnance.objects.get(id=ordonnance_id)
+            return JsonResponse({"peut_modifier": not ordonnance.estValide})
         except Ordonnance.DoesNotExist:
-            return JsonResponse(
-                {"error": "Ordonnance with the provided id not found."}, status=404
-            )
-        if ordonnance.estValide:
-            return JsonResponse({"peut_modifier": False})
-        return JsonResponse({"peut_modifier": True})
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+            return JsonResponse({"error": "Ordonnance not found."}, status=404)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 @csrf_exempt
@@ -170,39 +152,22 @@ def valider_ordonnance(request):
         data = json.loads(request.body)
         ordonnance_id = data.get("ordonnance_id")
         pharmacien_id = data.get("pharmacien_id")
-        if not all([ordonnance_id, pharmacien_id]):
-            return JsonResponse(
-                {"error": "A 'ordonnance_id' and 'pharmacien_id' are required."},
-                status=400,
-            )
+        if not ordonnance_id or not pharmacien_id:
+            return JsonResponse({"error": "Missing required fields."}, status=400)
         try:
             ordonnance = Ordonnance.objects.get(id=ordonnance_id)
-        except Ordonnance.DoesNotExist:
-            return JsonResponse(
-                {"error": "Ordonnance with the provided id not found."}, status=404
-            )
-        try:
             pharmacien = PersonnelMedical.objects.get(id=pharmacien_id)
-        except PersonnelMedical.DoesNotExist:
-            return JsonResponse(
-                {"error": "Pharmacien with the provided id not found."}, status=404
-            )
-        if ordonnance.estTerminer:
-            if not ordonnance.estValide:
-                ordonnance.estValide = True
-                ordonnance.pharmacien_id = pharmacien
-                ordonnance.save()
-            else:
-                return JsonResponse(
-                    {"message": "Ordonnance est dejas valide."},
-                )
-        else:
-            return JsonResponse(
-                {"message": "Ordonnance est en cours de modification."},
-            )
-        return JsonResponse({"success": "Ordonnance validated successfully."})
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+            if ordonnance.estValide:
+                return JsonResponse({"message": "Ordonnance already validated."}, status=400)
+            if not ordonnance.estTerminer:
+                return JsonResponse({"message": "Ordonnance must be completed before validation."}, status=400)
+            ordonnance.estValide = True
+            ordonnance.pharmacien_id = pharmacien
+            ordonnance.save()
+            return JsonResponse({"success": "Ordonnance validated successfully."})
+        except (Ordonnance.DoesNotExist, PersonnelMedical.DoesNotExist) as e:
+            return JsonResponse({"error": str(e)}, status=404)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 @csrf_exempt
