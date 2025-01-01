@@ -3,18 +3,19 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HospitalisationDetailsComponent } from '../hospitalisation-details/hospitalisation-details.component';
 import { TypeSoins } from '../../../types/soins';
-import { Infermier } from '../../Soin/soin/soin.component';
 import axios from 'axios';
 
 export interface SoinPageHospitalisation {
+  id: number;
   type_soins: TypeSoins;
-  infermier: number;
+  infermier: string;
   date: string;
   heure: string;
 }
 export interface ConsultationPageHospitalisation {
+  id: number;
   date: string;
-  medecin: number;
+  medecin: string;
 }
 export interface HospitalisationPage {
   ordre: number;
@@ -38,13 +39,16 @@ export interface medecin {
   styleUrl: './hospitalisation.component.css',
 })
 export class HospitalisationComponent {
-  hospitalisation_id = 2871; //use navigation to get this value
+  hospitalisation_id = 2878; //use navigation to get this value
   hospitalisation: HospitalisationPage = {
     ordre: 1, //use navigation
     date_debut: '12/12/2024',
     medecin: 'Khelifati Amine',
     date_fin: null,
   };
+  medecins: medecin[] = [];
+  consultations: ConsultationPageHospitalisation[] = [];
+  soins: SoinPageHospitalisation[] = [];
   ngOnInit() {
     this.onPageLoad();
   }
@@ -65,98 +69,36 @@ export class HospitalisationComponent {
       .catch((error) => {
         console.log(error);
       });
+    await axios
+      .get('http://localhost:8000/hospitalisation/modifier/medecins', {
+        params: { hospitalisation_id: this.hospitalisation_id },
+      })
+      .then((response) => {
+        this.medecins = response.data;
+        console.log('Medecins:', this.medecins);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    await axios
+      .get('http://localhost:8000/hospitalisation/consultations', {
+        params: { hospitalisation_id: this.hospitalisation_id },
+      })
+      .then((response) => {
+        this.consultations = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    await axios
+      .get('http://localhost:8000/hospitalisation/Soins', {
+        params: { hospitalisation_id: this.hospitalisation_id },
+      })
+      .then((response) => {
+        this.soins = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-  medecins: medecin[] = [
-    {
-      nom: 'Khelifati Amine',
-      id: 1,
-    },
-    {
-      nom: 'Bouzidi Ahmed',
-      id: 2,
-    },
-    {
-      nom: 'Bouzidi Mohamed',
-      id: 3,
-    },
-    {
-      nom: 'Bouzidi Sarah',
-      id: 4,
-    },
-  ];
-
-  infermiers: Infermier[] = [
-    {
-      nom: 'Khelifati Amine',
-      id: 1,
-    },
-    {
-      nom: 'Bouzidi Ahmed',
-      id: 2,
-    },
-    {
-      nom: 'Bouzidi Mohamed',
-      id: 3,
-    },
-    {
-      nom: 'Bouzidi Sarah',
-      id: 4,
-    },
-  ];
-  soins: SoinPageHospitalisation[] = [
-    {
-      date: '12/12/2024',
-      heure: '15:30',
-      type_soins: 'INFIRMIER',
-      infermier: 1,
-    },
-    {
-      date: '13/12/2024',
-      heure: '7:30',
-      type_soins: 'AUTRE',
-      infermier: 2,
-    },
-
-    {
-      date: '15/12/2024',
-      heure: '13:30',
-      type_soins: 'ADMINISTRATION DE MEDICAMENT',
-      infermier: 1,
-    },
-
-    {
-      date: '21/12/2024',
-      heure: '21:30',
-      type_soins: "OBSERVATION D'ETAT",
-      infermier: 3,
-    },
-    {
-      date: '22/12/2024',
-      heure: '16:30',
-      type_soins: 'INFIRMIER',
-      infermier: 4,
-    },
-  ];
-  consultations: ConsultationPageHospitalisation[] = [
-    {
-      date: '12/12/2024',
-      medecin: 1,
-    },
-    {
-      date: '12/12/2024',
-      medecin: 1,
-    },
-    {
-      date: '13/12/2024',
-      medecin: 2,
-    },
-    {
-      date: '12/12/2024',
-      medecin: 3,
-    },
-    {
-      date: '13/12/2024',
-      medecin: 4,
-    },
-  ];
 }

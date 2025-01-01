@@ -9,54 +9,95 @@
 
     <form [formGroup]="soinForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="infermier">Infermier</label>
-        <select id="infermier" formControlName="infermier" class="form-control">
-          <option *ngFor="let infermier of infermiers" [value]="infermier.id">{{ infermier.nom }}</option>
-        </select>
-      </div>
-
-      <div class="form-group">
         <label for="date">Date</label>
-        <input id="date" type="date" formControlName="date" class="form-control" />
+        <input
+          id="date"
+          type="date"
+          formControlName="date"
+          class="form-control"
+        />
       </div>
 
       <div class="form-group">
         <label for="heure">Heure</label>
-        <input id="heure" type="time" formControlName="heure" class="form-control" />
+        <input
+          id="heure"
+          type="time"
+          formControlName="heure"
+          class="form-control"
+        />
       </div>
 
       <div class="form-group">
         <label for="type">Type:</label>
-        <select id="type" formControlName="type" class="form-control"
-        [ngClass]="{
-          'text-infermier': soinForm.value.type === 'INFIRMIER',
-          'text-etat': soinForm.value.type === 'OBSERVATION D\'ETAT',
-          'text-admin': soinForm.value.type === 'ADMINISTRATION DE MEDICAMENT',
-          'text-autre': soinForm.value.type === 'AUTRE'
-        }">
-          <option value="INFIRMIER" class="text-infermier">Soin infermier</option>
-          <option value="OBSERVATION D'ETAT" class="text-etat">Observation d'état</option>
-          <option value="ADMINISTRATION DE MEDICAMENT" class="text-admin">Administration de médicament</option>
+        <select
+          id="type"
+          formControlName="type"
+          class="form-control"
+          [ngClass]="{
+            'text-infermier': soinForm.value.type === 'INFIRMIER',
+            'text-etat': soinForm.value.type === 'OBSERVATION D\'ETAT',
+            'text-admin':
+              soinForm.value.type === 'ADMINISTRATION DE MEDICAMENT',
+            'text-autre': soinForm.value.type === 'AUTRE'
+          }"
+        >
+          <option value="INFIRMIER" class="text-infermier">
+            Soin infermier
+          </option>
+          <option value="OBSERVATION D'ETAT" class="text-etat">
+            Observation d'état
+          </option>
+          <option value="ADMINISTRATION DE MEDICAMENT" class="text-admin">
+            Administration de médicament
+          </option>
           <option value="AUTRE" class="text-autre">Autre</option>
         </select>
       </div>
 
       <div class="form-group" *ngIf="showDescription">
-        <label *ngIf="soinForm.value.type=='INFIRMIER' || soinForm.value.type=='AUTRE'" for="descrip">Description</label>
-        <label *ngIf="soinForm.value.type=='OBSERVATION D\'ETAT'" for="descrip">Etat Patient :</label>
-        <textarea id="descrip" formControlName="descrip" class="form-control"></textarea>
+        <label
+          *ngIf="
+            soinForm.value.type == 'INFIRMIER' || soinForm.value.type == 'AUTRE'
+          "
+          for="descrip"
+          >Description</label
+        >
+        <label
+          *ngIf="soinForm.value.type == 'OBSERVATION D\'ETAT'"
+          for="descrip"
+          >Etat Patient :</label
+        >
+        <textarea
+          id="descrip"
+          formControlName="descrip"
+          class="form-control"
+        ></textarea>
       </div>
-
 
       <div class="form-group" *ngIf="showMedicamentDose">
         <label for="medic">Medicament</label>
-        <input id="medic" type="text" formControlName="medic" class="form-control"/>
+        <input
+          id="medic"
+          type="text"
+          formControlName="medic"
+          class="form-control"
+        />
         <label for="doses">Dose</label>
-        <input id="doses" type="text" formControlName="doses" class="form-control"/>
+        <input
+          id="doses"
+          type="text"
+          formControlName="doses"
+          class="form-control"
+        />
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="soinForm.invalid">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="soinForm.invalid"
+        >
           Sauvegarder
         </button>
       </div>

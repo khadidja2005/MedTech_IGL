@@ -1,19 +1,28 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ConsultationPageHospitalisation, medecin } from '../hospitalisation/hospitalisation.component';
+import {
+  ConsultationPageHospitalisation,
+  medecin,
+} from '../hospitalisation/hospitalisation.component';
 
 @Component({
   selector: 'app-ajouter-consultation',
   templateUrl: './ajouter-consultation.component.html',
-  imports: [CommonModule,ReactiveFormsModule],
-  styleUrls: ['./ajouter-consultation.component.css']
+  imports: [CommonModule, ReactiveFormsModule],
+  styleUrls: ['./ajouter-consultation.component.css'],
 })
 export class AjouterConsultationComponent {
   @Input() isVisible: boolean = false;
   @Input() medecins: medecin[] = [];
   @Output() closePanel = new EventEmitter<void>();
-  @Output() saveConsultation = new EventEmitter<ConsultationPageHospitalisation>();  // Emit the added consultation
+  @Output() saveConsultation =
+    new EventEmitter<ConsultationPageHospitalisation>(); // Emit the added consultation
 
   consultationForm: FormGroup;
 
@@ -37,19 +46,18 @@ export class AjouterConsultationComponent {
 
       // Create the new consultation object
       const newConsultation: ConsultationPageHospitalisation = {
+        id: 0, // Temporary ID
         medecin: formValue.medecin,
         date: this.convertDateToDisplayFormat(formValue.date),
       };
 
       // Emit the new consultation to the parent
       this.saveConsultation.emit(newConsultation);
-      this.closePanel.emit();  // Close the panel after adding the consultation
-      this.consultationForm.reset();  // Reset the form
+      this.closePanel.emit(); // Close the panel after adding the consultation
+      this.consultationForm.reset(); // Reset the form
     }
   }
   closesPanel(): void {
-
     this.closePanel.emit();
-
   }
 }

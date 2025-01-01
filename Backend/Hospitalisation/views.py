@@ -21,7 +21,6 @@ def get_info_hospitalisation(request):
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
             )
-
         try:
             # Fetch the Hospitalisation object
             hospitalisation = Hospitalisation.objects.get(id=hospitalisation_id)
@@ -43,9 +42,7 @@ def get_info_hospitalisation(request):
 
 def get_consultations(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
-        print(hospitalisation_id)
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -78,8 +75,7 @@ def get_consultations(request):
 
 def get_soins(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         print(hospitalisation_id)
         if not hospitalisation_id:
             return JsonResponse(
@@ -95,7 +91,7 @@ def get_soins(request):
             )
 
         # Fetch all Consultation objects related to the Hospitalisation
-        soins = Soins.objects.filter(hospitalisation=hospitalisation_id)
+        soins = Soins.objects.filter(hospitalisation=hospitalisation)
 
         # Ensure all fields are JSON-serializable
         response_data = [
@@ -142,7 +138,7 @@ def get_all_medecins(request):
         response = [
             {
                 "id": medecin.personnel_medical.id,
-                "nom_complet": medecin.personnel_medical.nom_complet,
+                "nom": medecin.personnel_medical.nom_complet,
             }
             for medecin in medecins
         ]
