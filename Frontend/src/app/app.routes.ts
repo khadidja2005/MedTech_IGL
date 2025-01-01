@@ -4,7 +4,6 @@ import { ConsultationPageComponent } from './Consultation/consultation-page/cons
 import { LoginpageComponent } from './Login/loginpage/loginpage.component';
 import { OrdonnanceComponent } from './Ordonnance/ordonnance/ordonnance.component';
 import { HttpClientModule } from '@angular/common/http'; // Importer HttpClientModule
-
 // import { DpiComponent } from './PDI/dpi/dpi.component';
 // import { BddComponent } from './controle-bdd/bdd/bdd.component';
 // import { PageListEtablissemetsComponent } from './dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component';
