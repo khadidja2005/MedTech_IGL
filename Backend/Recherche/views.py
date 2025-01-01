@@ -28,18 +28,45 @@ def get_num_DPIS(request):
 
 def get_all_DPIS(request):
     if request.method == "GET":
-        # Get all DPIs in the database
-        all_dpis = DPI.objects.all()
-        respose_data = []
-        for dpi in all_dpis:
-            respose_data.append(
-                {
-                    "dpi_id": dpi.id,
-                    "patient_nom": dpi.patient.nom_complet,
-                    "etablissement_nom": dpi.etablissement_id.nom_etablissement,
-                }
+        personnel_id = request.GET.get("personnel_id")
+        if not personnel_id:
+            return JsonResponse({"error": "Personnel ID is required."}, status=400)
+        try:
+            personnel = PersonnelMedical.objects.get(id=personnel_id)
+            etabs = etablissement_personnel_medical.objects.filter(
+                personnel_medical_id=personnel
             )
-
+            respose_data = []
+            for etab in etabs:
+                dpis = DPI.objects.filter(etablissement_id=etab.etablissement)
+                for dpi in dpis:
+                    respose_data.append(
+                        {
+                            "id": dpi.id,
+                            "nom_complet": dpi.patient.nom_complet,
+                            "nss": dpi.patient.nss,
+                            "etablissement": dpi.etablissement_id.id,
+                        }
+                    )
+        except PersonnelMedical.DoesNotExist:
+            try:
+                personnel = Admin.objects.get(id=personnel_id)
+                # Get all DPIs in the database
+                all_dpis = DPI.objects.all()
+                respose_data = []
+                for dpi in all_dpis:
+                    respose_data.append(
+                        {
+                            "id": dpi.id,
+                            "nom_complet": dpi.patient.nom_complet,
+                            "nss": dpi.patient.nss,
+                            "etablissement": dpi.etablissement_id.id,
+                        }
+                    )
+            except Admin.DoesNotExist:
+                return JsonResponse(
+                    {"error": "Personnel with the provided ID not found."}, status=404
+                )
         # Return the DPIs as a JSON response
         return JsonResponse({"all_dpis": respose_data})
     else:
@@ -93,8 +120,7 @@ def get_DPI(request):
 
 def get_DPIS_patient(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        nss = data.get("nss")
+        nss = request.GET.get("nss")
         if not nss:
             return JsonResponse({"error": "NSS is required."}, status=400)
 
@@ -103,7 +129,7 @@ def get_DPIS_patient(request):
             patient = Patient.objects.get(nss=nss)
         except Patient.DoesNotExist:
             return JsonResponse(
-                {"error": "Patient with the provided NSS not found."}, status=404
+                {"error": "Patient with the provided NSS not found."}, status=200
             )
 
         # Retrieve all DPIs associated with the patient and include related Etablissement
@@ -215,8 +241,7 @@ def creer_DPI(request):
 
 def get_etablissements(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        personnel_id = data.get("personnel_id")
+        personnel_id = request.GET.get("personnel_id")
         if not personnel_id:
             return JsonResponse({"error": "Personnel ID is required."}, status=400)
         try:
@@ -228,8 +253,8 @@ def get_etablissements(request):
             for etab in etabs:
                 respose_data.append(
                     {
-                        "etablissement_id": etab.etablissement.id,
-                        "etablissement_nom": etab.etablissement.nom_etablissement,
+                        "id": etab.etablissement.id,
+                        "nom": etab.etablissement.nom_etablissement,
                     }
                 )
         except PersonnelMedical.DoesNotExist:
@@ -241,8 +266,8 @@ def get_etablissements(request):
                 for etablissement in all_etablissements:
                     respose_data.append(
                         {
-                            "etablissement_id": etablissement.id,
-                            "etablissement_nom": etablissement.nom_etablissement,
+                            "id": etablissement.id,
+                            "nom": etablissement.nom_etablissement,
                         }
                     )
             except Admin.DoesNotExist:

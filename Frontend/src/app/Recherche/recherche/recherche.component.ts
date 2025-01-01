@@ -1,42 +1,63 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RechHeaderComponent } from "../rech-header/rech-header.component";
+import { RechHeaderComponent } from '../rech-header/rech-header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
-import { PatientCardComponent } from "../patient-card/patient-card.component";
-
+import { PatientCardComponent } from '../patient-card/patient-card.component';
+import axios from 'axios';
 export interface DpiCards {
-  nss : string;
-  etablissement : number;
-};
+  id: number;
+  nom_complet: string;
+  nss: string;
+  etablissement: number;
+}
 
 @Component({
   selector: 'app-recherche',
-  imports: [RechHeaderComponent, SidebarComponent, HeaderPDIComponent, PatientCardComponent, CommonModule],
+  imports: [
+    RechHeaderComponent,
+    SidebarComponent,
+    HeaderPDIComponent,
+    PatientCardComponent,
+    CommonModule,
+  ],
   templateUrl: './recherche.component.html',
-  styleUrl: './recherche.component.css'
+  styleUrl: './recherche.component.css',
 })
 export class RechercheComponent {
-  role = 'medecin';
+  role = 'admin';
   activeItem = 'DPI';
-  dpis : DpiCards[] = [
-    {nss: '123456789', etablissement: 1},
-    {nss: '987654321', etablissement: 2},
-    {nss: '123123123', etablissement: 3},
-    {nss: '987987987', etablissement: 1},
-    {nss: '123456666', etablissement: 2},
-    {nss: '777777777', etablissement: 3},
-    {nss: '575757575', etablissement: 1},
-    {nss: '989898989', etablissement: 2},
-    {nss: '121212121', etablissement: 3},
-    {nss: '363636363', etablissement: 1},
-  ];
-  etablissements : Etab[] = [
-    {id: 1, nom: 'Etablissement 1'},
-    {id: 2, nom: 'Etablissement 2'},
-    {id: 3, nom: 'Etablissement 3'},
-  ];
+  id = 296; //local storage
+  dpis: DpiCards[] = [];
+  etablissements: Etab[] = [];
+  ngOnInit(): void {
+    this.onPageLoad();
+  }
+  // Fonction exécutée au chargement
+  async onPageLoad(): Promise<void> {
+    console.log('Fetching DPIs for personnel ID:', this.id);
+    try {
+      const response = await axios.get('http://localhost:8000/recherche/DPIS', {
+        params: { personnel_id: this.id },
+      });
+      this.dpis = response.data.all_dpis;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    try {
+      const response = await axios.get(
+        'http://localhost:8000/recherche/get-etablissements',
+        {
+          params: { personnel_id: this.id },
+        }
+      );
+      this.etablissements = response.data.all_etablissements;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   pageSize = 6; // Items per page
   currentPage = 1;
   get paginatedDpis() {
@@ -52,5 +73,4 @@ export class RechercheComponent {
   get totalPages() {
     return Math.ceil(this.dpis.length / this.pageSize);
   }
-
 }
