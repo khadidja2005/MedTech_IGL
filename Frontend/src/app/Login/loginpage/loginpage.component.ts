@@ -4,6 +4,7 @@ import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.compo
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
 import { Notyf } from 'notyf';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-loginpage',
@@ -16,12 +17,14 @@ export class LoginpageComponent {
   email: string = '';
   password: string = '';
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
     if (isPlatformBrowser(this.platformId)) {
       this.notyf = new Notyf();
     }
   }
-
+   navigatetorecovercode ():void {
+    this.router.navigate(["/authcode"])
+  }
   async onSubmit(event: Event) {
     //console.log('Password:', this.password);
     event.preventDefault();
