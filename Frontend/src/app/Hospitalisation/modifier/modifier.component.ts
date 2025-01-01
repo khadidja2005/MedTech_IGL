@@ -17,13 +17,14 @@ import axios from 'axios';
 })
 export class ModifierComponent implements OnInit {
   @Input() isVisible: boolean = false;
+  @Input() hospitalisation_id!: number;
   @Input() hospitalisation!: HospitalisationPage;
   @Output() closePopup = new EventEmitter<void>();
   @Output() saveChanges = new EventEmitter<Partial<HospitalisationPage>>();
   @Input() medecins: medecin[] = [];
 
   hospitalisationForm: FormGroup;
-  hospitalisation_id = 2878; //navigation
+  //hospitalisation_id = 2878; //navigation
   showEndDate: boolean = false;
 
   constructor(private fb: FormBuilder) {

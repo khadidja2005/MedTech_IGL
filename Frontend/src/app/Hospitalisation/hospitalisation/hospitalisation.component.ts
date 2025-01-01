@@ -39,7 +39,7 @@ export interface medecin {
   styleUrl: './hospitalisation.component.css',
 })
 export class HospitalisationComponent {
-  hospitalisation_id = 2878; //use navigation to get this value
+  hospitalisation_id = 2880; //use navigation to get this value
   hospitalisation: HospitalisationPage = {
     ordre: 1, //use navigation
     date_debut: ' ',

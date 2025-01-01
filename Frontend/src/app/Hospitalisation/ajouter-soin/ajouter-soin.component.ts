@@ -24,6 +24,7 @@ export interface SoinPageAjouter {
 })
 export class AjouterSoinComponent {
   @Input() isVisible: boolean = false;
+  @Input() hospitalisation_id!: number;
   @Output() closePanel = new EventEmitter<void>();
   @Output() saveSoin = new EventEmitter<SoinPageAjouter>();
 
@@ -88,7 +89,7 @@ export class AjouterSoinComponent {
   }
   infermier_id = 1289; //TODO: get the id of the current user
   infermier_nom = 'NOM'; //TODO: get the name of the current user
-  hospitalisation_id = 2878; //TODO: get the id of the current hospitalisation
+  //hospitalisation_id = 2878; //TODO: get the id of the current hospitalisation
   async onSubmit() {
     if (this.soinForm.valid) {
       const formValue = this.soinForm.value;

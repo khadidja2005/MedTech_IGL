@@ -21,12 +21,13 @@ import axios from 'axios';
 export class AjouterConsultationComponent {
   @Input() isVisible: boolean = false;
   @Input() medecins: medecin[] = [];
+  @Input() hospitalisation_id!: number;
   @Output() closePanel = new EventEmitter<void>();
   @Output() saveConsultation =
     new EventEmitter<ConsultationPageHospitalisation>(); // Emit the added consultation
 
   consultationForm: FormGroup;
-  hospitalisation_id = 2878; //use navigation to get this value
+  //hospitalisation_id = 2878; //use navigation to get this value
   constructor(private fb: FormBuilder) {
     this.consultationForm = this.fb.group({
       medecin: ['', Validators.required],

@@ -22,10 +22,14 @@
           [isVisible]="isPopupVisible"
           [hospitalisation]="hospitalisation"
           [medecins]="medecins"
+          [hospitalisation_id]="hospitalisation_id"
           (closePopup)="closePopup()"
           (saveChanges)="updateHospitalisation($event)"
         ></app-modifier>
-        <button class="delete-button flex items-center gap-1">
+        <button
+          class="delete-button flex items-center gap-1"
+          (click)="deleteHospitalisation()"
+        >
           <img src="/assets/images/delete.png" class="h-5 w-5" />
           Supprimer
         </button>
@@ -78,7 +82,8 @@
         (role === 'admin' ||
           role === 'medecinResponsable' ||
           role === 'medecin') &&
-        (selectedTab === 'consultations' || selectedTab === 'soins')
+        (selectedTab === 'consultations' || selectedTab === 'soins') &&
+        hospitalisation.date_fin == null
       "
       class="add-button"
       (click)="openAddPanel()"
@@ -92,6 +97,7 @@
     *ngIf="selectedTab === 'consultations'"
     [isVisible]="isAddPanelVisible"
     [medecins]="medecins"
+    [hospitalisation_id]="hospitalisation_id"
     (closePanel)="closeAddPanel()"
     (saveConsultation)="addConsultation($event)"
   >
@@ -100,6 +106,7 @@
   <app-ajouter-soin
     *ngIf="selectedTab === 'soins'"
     [isVisible]="isAddPanelVisible"
+    [hospitalisation_id]="hospitalisation_id"
     (closePanel)="closeAddPanel()"
     (saveSoin)="addSoin($event)"
   >
