@@ -1,49 +1,43 @@
 import { Component } from '@angular/core';
-import { DPI } from '../../../types/dpi';
 import { Patient } from '../../../types/patient';
 import { Mutuelle } from '../../../types/mutuelle';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
+import { DPI } from '../../../types/dpi';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 
 @Component({
   selector: 'app-dpi-management',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SidebarComponent, HeaderPDIComponent],
   templateUrl: './dpimanagement.component.html',
-  styleUrl: './dpimanagement.component.css'
+  styleUrl: './dpimanagement.component.css',
 })
 export class DPIManagementComponent {
-  // Current user (medical personnel)
-  user = {
-    id: 'USER-051',
-    name: "Mohamed Reda",
-    profession: 'medecin'
-  };
-
-  Etablissement: Etablissement={
-    id: '001',
+  Etablissement: Etablissement = {
+    id: 1,
     nom_etablissement: '',
     adresse: '',
     telephone: 0,
     email: '',
-    type: ''
+    type: 'HOPITAL',
   };
 
   user1 = {
     Admin: true,
-    name: "Mohamed Reda",
-    id: 'USER-051',
-    profession: 'medecin'
+    name: 'Mohamed Reda',
+    id: 1,
+    profession: 'medecin',
   };
-  
 
   canEditEtablissement(): boolean {
-    return this.user1?.profession ==='medecin';
+    return this.user1?.profession === 'medecin';
   }
 
-  showDeleteConfirmation=false;
-  itemToDelete: string | null = null;
-  
+  showDeleteConfirmation = false;
+  itemToDelete: Number | null = null;
+
   deleteEtablissement(): void {
     this.showDeleteConfirmation = true;
     this.itemToDelete = this.Etablissement.id;
@@ -52,31 +46,31 @@ export class DPIManagementComponent {
   // DPI list
   DPIList: DPI[] = [
     {
-      id: '1',
+      id: 1,
       date_creation: '2024-01-01T08:30:00.000Z',
       patient: 'P001',
-      etablissement_id: '001',
-      createur_id: 'USER-051',
+      etablissement_id: 1,
+      createur_id: 1,
     },
     {
-      id: '2',
+      id: 2,
       date_creation: '2024-01-10T09:45:00.000Z',
       patient: 'P002',
-      etablissement_id: '001',
-      createur_id: 'USER-051',
+      etablissement_id: 1,
+      createur_id: 2,
     },
     {
-      id: '3',
+      id: 3,
       date_creation: '2024-02-15T14:20:00.000Z',
       patient: 'P003',
-      etablissement_id: '001',
-      createur_id: 'A002',
-    }
+      etablissement_id: 1,
+      createur_id: 3,
+    },
   ];
 
   // Patient model for new DPI
   patient: Patient = {
-    id: '',
+    id: 0,
     nss: '',
     nom_complet: '',
     date_naissance: '',
@@ -87,16 +81,16 @@ export class DPIManagementComponent {
     lienPhoto: '',
     lieu_naissance: '',
     genre: '',
-    statueMatrimonial: ''
+    statueMatrimonial: '',
   };
 
   // New DPI model
   newDPI: DPI = {
-    id: '',
+    id: 0,
     date_creation: new Date().toISOString(),
     patient: '',
-    etablissement_id: '001', // Set to current establishment
-    createur_id: this.user.id
+    etablissement_id: 1, // Set to current establishment
+    createur_id: this.user1.id,
   };
 
   // UI control flags
@@ -121,9 +115,9 @@ export class DPIManagementComponent {
     email: '',
     telephone: 0,
     type_couverture: '',
-    id: '',
-    patient_id: '',
-    numero_adherent: 0
+    id: 0,
+    patient_id: 0,
+    numero_adherent: 0,
   };
 
   mutuelle2: Mutuelle = {
@@ -131,20 +125,20 @@ export class DPIManagementComponent {
     email: '',
     telephone: 0,
     type_couverture: '',
-    id: '',
-    patient_id: '',
-    numero_adherent: 0
+    id: 0,
+    patient_id: 0,
+    numero_adherent: 0,
   };
 
   // Get DPIs created by current user
   getUserDPIs(): DPI[] {
-    return this.DPIList.filter(dpi => dpi.createur_id === this.user.id);
+    return this.DPIList.filter((dpi) => dpi.createur_id === this.user1.id);
   }
 
   // Reset form
   resetDPIForm() {
     this.patient = {
-      id: '',
+      id: 0,
       nss: '',
       nom_complet: '',
       date_naissance: '',
@@ -155,17 +149,17 @@ export class DPIManagementComponent {
       lienPhoto: '',
       lieu_naissance: '',
       genre: '',
-      statueMatrimonial: ''
+      statueMatrimonial: '',
     };
-    
+
     this.newDPI = {
-      id: '',
+      id: 0,
       date_creation: new Date().toISOString(),
       patient: '',
-      etablissement_id: '001',
-      createur_id: this.user.id
+      etablissement_id: 1,
+      createur_id: this.user1.id,
     };
-    
+
     this.DPIValidationErrors = {};
   }
 
@@ -184,20 +178,22 @@ export class DPIManagementComponent {
     let isValid = true;
 
     if (!this.patient.nom_complet?.trim()) {
-      this.DPIValidationErrors.patient = "Le nom complet est requis";
+      this.DPIValidationErrors.patient = 'Le nom complet est requis';
       isValid = false;
     }
 
     if (!this.patient.date_naissance) {
-      this.DPIValidationErrors.date_naissance = "La date de naissance est requise";
+      this.DPIValidationErrors.date_naissance =
+        'La date de naissance est requise';
       isValid = false;
     }
 
     if (!this.patient.nss?.trim()) {
-      this.DPIValidationErrors.nss = "Le NSS est requis";
+      this.DPIValidationErrors.nss = 'Le NSS est requis';
       isValid = false;
     } else if (!/^\d{13,15}$/.test(this.patient.nss)) {
-      this.DPIValidationErrors.nss = "Le NSS doit contenir entre 13 et 15 chiffres";
+      this.DPIValidationErrors.nss =
+        'Le NSS doit contenir entre 13 et 15 chiffres';
       isValid = false;
     }
 
@@ -210,10 +206,10 @@ export class DPIManagementComponent {
     }
 
     if (!this.patient.telephone) {
-      this.DPIValidationErrors.telephone = "Le téléphone est requis";
+      this.DPIValidationErrors.telephone = 'Le téléphone est requis';
       isValid = false;
     } else if (!/^\d{9,12}$/.test(this.patient.telephone.toString())) {
-      this.DPIValidationErrors.telephone = "Format de téléphone invalide";
+      this.DPIValidationErrors.telephone = 'Format de téléphone invalide';
       isValid = false;
     }
 
@@ -263,9 +259,9 @@ export class DPIManagementComponent {
     if (this.validateDPIForm()) {
       const newDPI = {
         ...this.newDPI,
-        id: `DPI-${Date.now()}`,
-        createur_id: this.user.id,
-        date_creation: new Date().toISOString()
+        id: 0,
+        createur_id: this.user1.id,
+        date_creation: new Date().toISOString(),
       };
       this.DPIList.push(newDPI);
       this.toggleDPIModal('');
