@@ -8,7 +8,6 @@ from BDD.models import *
 # CRUD Etablissement
 @api_view(["POST"])
 def create_etablissement(request):
-    print(request.data)
     try:
         etablissement = Etablissement.objects.create(
             nom_etablissement=request.data.get("nom_etablissement"),
@@ -25,6 +24,7 @@ def create_etablissement(request):
                     "adresse": etablissement.adresse,
                     "telephone": etablissement.telephone,
                     "email": etablissement.email,
+                    "type": etablissement.type,
                 },
             },
             status=status.HTTP_201_CREATED,
@@ -49,6 +49,7 @@ def get_etablissement(request, etablissement_id):
                     "adresse": etablissement.adresse,
                     "telephone": etablissement.telephone,
                     "email": etablissement.email,
+                    "type": etablissement.type,
                 },
             }
         )
@@ -69,6 +70,7 @@ def get_all_etablissements(request):
                 "adresse": etab.adresse,
                 "telephone": etab.telephone,
                 "email": etab.email,
+                "type": etab.type,
             }
             for etab in etablissements
         ]
