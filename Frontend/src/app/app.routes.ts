@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './LandingPage/landing-page/landing-page.component';
 import { LoginpageComponent } from './Login/loginpage/loginpage.component';
+import { RechercheComponent } from './Recherche/recherche/recherche.component';
+import { HospitalisationComponent } from './Hospitalisation/hospitalisation/hospitalisation.component';
 // import { DpiComponent } from './PDI/dpi/dpi.component';
 // import { BddComponent } from './controle-bdd/bdd/bdd.component';
 // import { PageListEtablissemetsComponent } from './dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component';
@@ -13,6 +15,8 @@ import { LoginpageComponent } from './Login/loginpage/loginpage.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginpageComponent },
+  { path: 'recherche', component: RechercheComponent },
+  { path: 'hospitalisation', component: HospitalisationComponent },
   // DPI Routes
   //   { path: 'dpi', component: DpiComponent },
 
