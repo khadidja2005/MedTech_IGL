@@ -42,7 +42,7 @@ export class LoginpageComponent {
         this.notyf.success('Login Successful');
       }
       setTimeout(()=> {
-        this.router.navigate(["/dashboard"])
+        this.router.navigate(["/dashboard/etablissement"])
       } , 2000)
     } catch(e) {
       console.log("Error occurred");

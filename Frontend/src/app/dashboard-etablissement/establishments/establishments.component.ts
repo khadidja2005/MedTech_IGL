@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
 import axios from 'axios';
 import { Notyf } from 'notyf';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-establishments',
@@ -29,6 +31,11 @@ export class EstablishmentsComponent implements OnInit {
     type: 'HOPITAL',
   };
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.notyf = new Notyf();
+    }
+  }
   get filteredEstablishments(): Etablissement[] {
     return this.establishments.filter(est => 
       est.nom_etablissement.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -92,7 +99,7 @@ export class EstablishmentsComponent implements OnInit {
     if (this.validateNewEstablishment()) {
       try {
         console.log(this.newEstablishment);
-        const response = await axios.post('http://localhost:8000/dashboard/etablissements/', {
+        const response = await axios.post('http://localhost:8000/dashboard/etablissements/create/user/', {
           nom_etablissement: this.newEstablishment.nom_etablissement,
           adresse: this.newEstablishment.adresse,
           telephone: this.newEstablishment.telephone,
@@ -101,14 +108,15 @@ export class EstablishmentsComponent implements OnInit {
         console.log(response.data);
         if (this.notyf){
           this.notyf?.success('Etablissement ajouté avec succès');
+          setTimeout(()=> {
+          this.newEstablishment.id = this.establishments.length + 1;
+        this.establishments.push({...this.newEstablishment});
+        this.closeModal();
+          } , 2000)
 
         }
-        this.newEstablishment.id = this.establishments.length + 1;
-        this.establishments.push({...this.newEstablishment});
+  
         
-        this.closeModal();
-        this.newEstablishment.id = this.establishments.length + 1;
-        this.establishments.push({...this.newEstablishment});
         } catch (e) {
           console.log(e);
           if (this.notyf) {
