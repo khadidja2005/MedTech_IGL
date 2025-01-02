@@ -164,37 +164,61 @@ export class EmployeInfComponent {
     }, 3000);
   }
   
- async submitNewPersonnel(): Promise<void> {
+  async submitNewPersonnel(): Promise<void> {
     if (this.validateNewPersonnel()) {
-      console.log(this.newPersonnel);
       try {
-        console.log(this.newPersonnel);
-        const response = await axios.post('http://localhost:8000/dashboard/personnel-medical/', {
-          lienPhoto : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-          nom_complet: this.newPersonnel.nom_complet,
-          role: this.newPersonnel.role,
-          telephone: this.newPersonnel.telephone,
-          email: this.newPersonnel.email,
-          specialite: this.newPersonnel.specialite,
-          password:Math.random().toString(36).substring(2, 10) ,
-        });
-        console.log(response.data);
-        if (this.notyf){
-          this.notyf?.success('emploee a ete ajouté avec succès');
-          setTimeout(()=> {
-          this.newPersonnel.id = this.personnels.length + 1;
-        this.personnels.push({...this.newPersonnel});
-          this.togglePersonnelModal('');
-          this.showPersonnelModal = false;
-          } , 2000)
-
-        }
+        if (this.editMode) {
+          // Update existing personnel
+          const response = await axios.put(`http://localhost:8000/dashboard/personnel-medical/${this.newPersonnel.id}/`, {
+            lienPhoto: this.newPersonnel.lienPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+            nom_complet: this.newPersonnel.nom_complet,
+            role: this.newPersonnel.role,
+            telephone: this.newPersonnel.telephone,
+            email: this.newPersonnel.email,
+            specialite: this.newPersonnel.specialite,
+          });
   
-        
-        } catch (e) {
-          console.log(e);
           if (this.notyf) {
-            this.notyf.error('Erreur lors de l\'ajout de l\'employee');
+            this.notyf.success('Employee a été modifié avec succès');
+            
+            // Update the local array
+            const index = this.personnels.findIndex(p => p.id === this.newPersonnel.id);
+            if (index !== -1) {
+              this.personnels[index] = { ...this.newPersonnel };
+            }
+            
+            setTimeout(() => {
+              this.togglePersonnelModal('');
+              this.showPersonnelModal = false;
+            }, 2000);
+          }
+        } else {
+          // Create new personnel (existing logic)
+          const response = await axios.post('http://localhost:8000/dashboard/personnel-medical/', {
+            lienPhoto: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+            nom_complet: this.newPersonnel.nom_complet,
+            role: this.newPersonnel.role,
+            telephone: this.newPersonnel.telephone,
+            email: this.newPersonnel.email,
+            specialite: this.newPersonnel.specialite,
+            password: Math.random().toString(36).substring(2, 10),
+          });
+  
+          if (this.notyf) {
+            this.notyf.success('Employee a été ajouté avec succès');
+            setTimeout(() => {
+              this.newPersonnel.id = response.data.id; // Use the ID from the response
+              this.personnels.push({ ...this.newPersonnel });
+              this.togglePersonnelModal('');
+              this.showPersonnelModal = false;
+            }, 2000);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        if (this.notyf) {
+          const action = this.editMode ? 'modification' : 'ajout';
+          this.notyf.error(`Erreur lors de la ${action} de l'employee`);
         }
       }
     } else {
@@ -235,7 +259,22 @@ export class EmployeInfComponent {
     this.togglePersonnelModal(action, employe);
   }
   
-  deleteEmploye(id: number): void {
-   
+  async deleteEmploye(id: number): Promise<void> {
+   try {
+    await axios.delete(`http://localhost:8000/dashboard/personnel-medical/${id}`);
+    if (this.notyf) {
+      this.notyf.success('Employee supprimé avec succès');
+      this.personnels = this.personnels.filter((employe) => employe.id !== id);
+      this.showDeleteConfirmation = false;
+      this.showSuccess();
+    }
+
+   }catch (e){  
+    console.log(e);
+    if (this.notyf) {
+      this.notyf.error('Erreur lors de la suppression de l\'employee');
+    }
+
+   }
   }
 }  

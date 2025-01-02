@@ -125,18 +125,53 @@ def delete_etablissement(request, etablissement_id):
         )
 
 
-# Personnel Medical Operations
 @api_view(["GET"])
 def get_personnel_medical_by_etablissement(request, etablissement_id):
+    """
+    Get all medical personnel associated with a specific establishment.
+    """
     try:
+        # First verify the establishment exists
+        etablissement = get_object_or_404(Etablissement, id=etablissement_id)
+        
+        # Get personnel medical using the through model
         personnel_medical = PersonnelMedical.objects.filter(
-            etablissement_personnel_medical__etablissement_id=etablissement_id
-        ).values("id", "nom_complet", "email", "specialite", "telephone", "role")
-        return Response({"status": "success", "data": list(personnel_medical)})
-    except Exception as e:
-        return Response(
-            {"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            etablissement_personnel_medical__etablissement=etablissement
+        ).select_related(
+            'etablissement_personnel_medical'
+        ).values(
+            'id',
+            'nom_complet',
+            'email',
+            'specialite',
+            'telephone',
+            'role',
+            'lienPhoto'  # Added this since it's in your PersonnelMedical model
         )
+
+        if not personnel_medical.exists():
+            return Response({
+                "status": "success",
+                "message": "No medical personnel found for this establishment",
+                "data": []
+            })
+
+        return Response({
+            "status": "success",
+            "data": list(personnel_medical)
+        })
+
+    except Etablissement.DoesNotExist:
+        return Response({
+            "status": "error",
+            "message": "Establishment not found"
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        return Response({
+            "status": "error",
+            "message": f"An error occurred: {str(e)}"
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(["POST"])
@@ -146,7 +181,6 @@ def add_personnel_medical_to_etablissement(request, etablissement_id):
 
         # Créer le personnel médical
         personnel = PersonnelMedical.objects.create(
-            id=request.data.get("id"),
             nom_complet=request.data.get("nom_complet"),
             email=request.data.get("email"),
             specialite=request.data.get("specialite"),
@@ -240,27 +274,41 @@ def delete_personnel_medical_from_etablissement(
         )
 
 
-# DPI Operations
 @api_view(["GET"])
 def get_dpis_by_etablissement(request, etablissement_id):
     try:
-        dpis = (
-            DPI.objects.filter(
-                patient__antecedent__patient__mutuelle__patient__contact__patient__id__in=Patient.objects.filter(
-                    contact__patient__hospitalisation__consultation__medecin__etablissement_personnel_medical__etablissement_id=etablissement_id
-                ).values_list(
-                    "id", flat=True
-                )
-            )
-            .distinct()
-            .values("id", "date_creation", "patient__nom_complet", "patient__nss")
+        # Get DPIs directly using the etablissement_id field
+        dpis = DPI.objects.filter(
+            etablissement_id=etablissement_id
+        ).select_related(
+            'patient'  # Join with patient table efficiently
+        ).values(
+            'id',               # DPI id
+            'patient__id',      # Patient id
+            'patient__nss',     # NSS
+            'patient__nom_complet',  # Full name
+            'date_creation'     # Creation date
         )
 
-        return Response({"status": "success", "data": list(dpis)})
+        # Format the response data
+        formatted_dpis = [{
+            'dpi_id': dpi['id'],
+            'patient_id': dpi['patient__id'],
+            'nss': dpi['patient__nss'],
+            'nom_complet': dpi['patient__nom_complet'],
+            'date_creation': dpi['date_creation']
+        } for dpi in dpis]
+
+        return Response({
+            "status": "success",
+            "data": formatted_dpis
+        })
+
     except Exception as e:
-        return Response(
-            {"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({
+            "status": "error",
+            "message": str(e)
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
@@ -334,3 +382,32 @@ def personnel_medical_list_create(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def personnel_medical_detail(request, pk):
+    try:
+        personnel = PersonnelMedical.objects.get(pk=pk)
+    except PersonnelMedical.DoesNotExist:
+        return Response(
+            {"error": "PersonnelMedical not found."}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if request.method == "GET":
+        serializer = PersonnelMedicalSerializer(personnel)
+        return Response(serializer.data)
+
+    elif request.method == "PUT":
+        serializer = PersonnelMedicalSerializer(personnel, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == "DELETE":
+        personnel.delete()
+        return Response(
+            {"message": "PersonnelMedical deleted successfully."}, 
+            status=status.HTTP_204_NO_CONTENT
+        )
