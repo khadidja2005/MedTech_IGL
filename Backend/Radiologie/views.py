@@ -49,8 +49,7 @@ def archive_radio(request):
 
 def get_radios(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        Radiologue = data.get("Radiologue")
+        Radiologue = request.GET.get("Radiologue")
         if not Radiologue:
             return JsonResponse({"error": "Radiologue not provided"}, status=400)
         try:
