@@ -13,8 +13,7 @@ from BDD.models import (
 @require_http_methods(["GET"])
 def archive_pharmacie(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        pharmacien = data.get("pharmacien")
+        pharmacien = request.GET.get("pharmacien")
         try:
             pharmacien = PersonnelMedical.objects.get(id=pharmacien)
         except PersonnelMedical.DoesNotExist:

@@ -12,14 +12,7 @@ import { HospitalisationComponent } from './Hospitalisation/hospitalisation/hosp
 import { PageEmployesComponent } from './Employe/page-employes/page-employes.component';
 import { BddComponent } from './controle-bdd/bdd/bdd.component';
 import { PharmacieComponent } from './Pharmacie/pharmacie/pharmacie.component';
-// import { DpiComponent } from './PDI/dpi/dpi.component';
-// import { BddComponent } from './controle-bdd/bdd/bdd.component';
-// import { PageListEtablissemetsComponent } from './dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component';
-// import { DoctorEstablishmentsComponent } from './dashboard-medecin/doctor-establishments/doctor-establishments.component';
-// import { DPIManagementComponent } from './dashboard-medecin/dpimanagement/dpimanagement.component';
-// import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/page-affichage-etablissement/page-affichage-etablissement.component';
-// import { PageEmployesComponent } from './Employe/page-employes/page-employes.component';
-// import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
+import { ArchiveComponent } from './PharmacieArchive/archive/archive.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -38,4 +31,5 @@ export const routes: Routes = [
   { path: 'recherche', component: RechercheComponent },
   { path: 'hospitalisation', component: HospitalisationComponent },
   { path: 'pharmacie', component: PharmacieComponent },
+  { path: 'pharmacie/archive', component: ArchiveComponent },
 ];
