@@ -10,8 +10,7 @@ from BDD.models import BilanBio, ResultatBio, PersonnelMedical
 @require_http_methods(["GET"])
 def get_info_bilan_bio(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
+        bilan_id = request.GET.get("bilan_id")
         if not bilan_id:
             return JsonResponse({"error": "bilan_id is required"})
         try:
@@ -35,13 +34,15 @@ def get_info_bilan_bio(request):
             )
         return JsonResponse(
             {
+                "patient": bilan.Consultation.Hospitalisation.DPI.patient.nom_complet,
                 "date_debut": bilan.date_debut,
                 "date_fin": bilan.date_fin,
                 "parametres": bilan.parametres,
                 "est_complet": bilan.est_complet,
                 "est_resultat": bilan.est_resultat,
-                "medecin_id": bilan.medecin.id,
-                "medecin": bilan.medecin.nom_complet,
+                "medecin_id": bilan.Consultation.Medecin.id,
+                "medecin": bilan.Consultation.Medecin.nom_complet,
+                "etablissement": bilan.Consultation.Hospitalisation.DPI.etablissement_id.nom_etablissement,
                 "resultats": resultats_response,
             }
         )

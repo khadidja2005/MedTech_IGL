@@ -17,6 +17,7 @@ import { LaborantinComponent } from './Laborantin/laborantin/laborantin.componen
 import { ArchiveComponent as LaborantinArchiveComponent } from './LaborantinArchive/archive/archive.component';
 import { RadiologueComponent } from './Radiologue/radiologue/radiologue.component';
 import { ArchiveComponent as RadiologueArchiveComponent } from './RadiologueArchive/archive/archive.component';
+import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation', component: ConsultationPageComponent },
@@ -39,4 +40,5 @@ export const routes: Routes = [
   { path: 'laborantin/archive', component: LaborantinArchiveComponent },
   { path: 'radiologue', component: RadiologueComponent },
   { path: 'radiologue/archive', component: RadiologueArchiveComponent },
+  { path: 'bilan-bio', component: BilanBioComponent },
 ];

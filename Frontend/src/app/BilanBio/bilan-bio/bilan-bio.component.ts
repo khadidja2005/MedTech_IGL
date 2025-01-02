@@ -3,141 +3,107 @@ import { TableParamComponent } from '../table-param/table-param.component';
 import { BilanDetailsComponent } from '../bilan-details/bilan-details.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { Patient } from '../../Ordonnance/ordonnance/ordonnance.component';
-import { medecin } from '../../Hospitalisation/hospitalisation/hospitalisation.component';
-import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
-
+import axios from 'axios';
 export interface bilan {
+  id: number;
   ordre: number;
   date: string;
   est_complet: boolean;
   est_resultat: boolean;
   medecin: number;
-  etablissement: number;
-  patient: number;
+  etablissement: string;
+  patient: string;
+  parametres: string;
+  date_fin: string;
+  medecin_nom: string;
 }
-
 export interface Resultat {
+  id: number;
   valeur_mesure: string | null;
   parametre: string;
   norme: string | null;
   laborantin: number | null;
+  date_mesure: string | null;
+  heure_mesure: string | null;
+  laborantin_nom: string | null;
 }
-
-export interface labo {
-  id: number;
-  nom: string;
+interface data {
+  patient: string;
+  date_debut: string;
+  date_fin: string;
+  parametres: string;
+  est_complet: boolean;
+  est_resultat: boolean;
+  medecin_id: number;
+  etablissement: string;
+  medecin: string;
+  resultats: Resultat[];
 }
-
-
 @Component({
   selector: 'app-bilan-bio',
-  imports: [SidebarComponent,HeaderPDIComponent,BilanDetailsComponent,TableParamComponent],
+  imports: [
+    SidebarComponent,
+    HeaderPDIComponent,
+    BilanDetailsComponent,
+    TableParamComponent,
+  ],
   templateUrl: './bilan-bio.component.html',
-  styleUrl: './bilan-bio.component.css'
+  styleUrl: './bilan-bio.component.css',
 })
 export class BilanBioComponent {
   role: string = 'laborantin';
-
-
-  patients: Patient[] = [
-    {
-      id: 1,
-      nom: 'Dupont Jean',
-    },
-    {
-      id: 2,
-      nom: 'Dupont Jeanne',
-    },
-    {
-      id: 3,
-      nom: 'Dupont Jeanine',
-    }
-  ];
-
-  medecins : medecin[] = [
-    {
-      id: 1,
-      nom: 'Dr. Dupont'
-    },
-    {
-      id: 2,
-      nom: 'Dr. Durand'
-    },
-    {
-      id: 3,
-      nom: 'Dr. Dubois'
-    }
-  ];
-
-  labos : labo[] = [
-    {
-      id: 1,
-      nom: 'Labo 1'
-    },
-    {
-      id: 2,
-      nom: 'Labo 2'
-    },
-    {
-      id: 3,
-      nom: 'Labo 3'
-    }
-  ];
-
-  user:labo =this.labos[0];
-
+  laborantin = 1324; //localstorage
+  user = 'name'; //localstorage
+  bilan_id = 671; //navigation
   activeItem: string;
   constructor() {
     if (this.role == 'laborantin') {
       this.activeItem = 'Bilans';
-    }
-    else {
+    } else {
       this.activeItem = 'DPI';
     }
   }
-  bilan : bilan = {
-  ordre : 1,
-  date : '01/12/2024',
-  est_complet: false,
-  est_resultat: false,
-  medecin: 1,
-  etablissement: 1,
-  patient: 1
+  bilan: bilan = {
+    ordre: 1,
+    date: '01/12/2024',
+    est_complet: false,
+    est_resultat: false,
+    medecin: 1,
+    etablissement: 'etab',
+    patient: 'patient',
+    parametres: 'parametres',
+    date_fin: '01/12/2024',
+    medecin_nom: 'medecin_nom',
+    id: 1,
+  };
+  params: Resultat[] = [];
+  ngOnInit() {
+    this.pageLoad();
   }
-  params : Resultat[]= [
-    {
-    valeur_mesure: '5,9 x 10^3/ul',
-    parametre: 'param',
-    norme: '4-10',
-    laborantin: 1
-    },
-    {
-      valeur_mesure: '5,9 x 10^3/ul',
-      parametre: 'param',
-      norme: '4-10',
-      laborantin: 1
-      },
-      {
-        valeur_mesure: null,
-        parametre: 'param',
-        norme: null,
-        laborantin: null,
-        },
-  ];
-  etablissements : Etab[] = [
-    {
-      id: 1,
-      nom: 'CHU'
-    },
-    {
-      id: 2,
-      nom: 'Clinique'
-    },
-    {
-      id: 3,
-      nom: 'Hopital'
-    }
-  ];
-
+  async pageLoad() {
+    // Get the bilan details
+    await axios
+      .get<data>('http://localhost:8000/bilanbio/', {
+        params: { bilan_id: this.bilan_id },
+      })
+      .then((response) => {
+        this.params = response.data.resultats;
+        this.bilan = {
+          id: this.bilan_id,
+          ordre: 1,
+          date: response.data.date_debut,
+          est_complet: response.data.est_complet,
+          est_resultat: response.data.est_resultat,
+          medecin: response.data.medecin_id,
+          etablissement: response.data.etablissement,
+          patient: response.data.patient,
+          parametres: response.data.parametres,
+          date_fin: response.data.date_fin,
+          medecin_nom: response.data.medecin,
+        };
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
