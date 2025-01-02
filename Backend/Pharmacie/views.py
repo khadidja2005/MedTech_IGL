@@ -52,8 +52,7 @@ def archive_pharmacie(request):
 
 def get_ordonnances(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        pharmacien = data.get("pharmacien")
+        pharmacien = request.GET.get("pharmacien")
         try:
             pharmacien = PersonnelMedical.objects.get(id=pharmacien)
         except PersonnelMedical.DoesNotExist:
@@ -76,9 +75,10 @@ def get_ordonnances(request):
                     {
                         "id": ord.id,
                         "date": ord.consultation.date.strftime("%Y-%m-%d"),
+                        "etablissement_id": etab.id,
                         "etablissement": etab.nom_etablissement,
                     }
                 )
-        return JsonResponse({"ordonnances": ords, "numOrdonnances": count})
+        return JsonResponse({"ordonnances": ords})
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)

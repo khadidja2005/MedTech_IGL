@@ -3,7 +3,6 @@ import { LandingPageComponent } from './LandingPage/landing-page/landing-page.co
 import { ConsultationPageComponent } from './Consultation/consultation-page/consultation-page.component';
 import { LoginpageComponent } from './Login/loginpage/loginpage.component';
 import { OrdonnanceComponent } from './Ordonnance/ordonnance/ordonnance.component';
-import { HttpClientModule } from '@angular/common/http'; // Importer HttpClientModule
 import { RecoverpageComponent } from './Login/recoverpage/recoverpage.component';
 import { CodepageComponent } from './Login/codepage/codepage.component';
 import { ResetpasswordpageComponent } from './Login/resetpasswordpage/resetpasswordpage.component';
@@ -12,7 +11,7 @@ import { RechercheComponent } from './Recherche/recherche/recherche.component';
 import { HospitalisationComponent } from './Hospitalisation/hospitalisation/hospitalisation.component';
 import { PageEmployesComponent } from './Employe/page-employes/page-employes.component';
 import { BddComponent } from './controle-bdd/bdd/bdd.component';
-import path from 'path';
+import { PharmacieComponent } from './Pharmacie/pharmacie/pharmacie.component';
 // import { DpiComponent } from './PDI/dpi/dpi.component';
 // import { BddComponent } from './controle-bdd/bdd/bdd.component';
 // import { PageListEtablissemetsComponent } from './dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component';
@@ -38,4 +37,5 @@ export const routes: Routes = [
   { path: 'dashboard/Controlbdd', component: BddComponent },
   { path: 'recherche', component: RechercheComponent },
   { path: 'hospitalisation', component: HospitalisationComponent },
+  { path: 'pharmacie', component: PharmacieComponent },
 ];
