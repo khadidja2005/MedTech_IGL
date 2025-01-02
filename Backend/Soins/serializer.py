@@ -13,6 +13,6 @@ class SoinsSerializer(serializers.ModelSerializer):
         model = Soins
         fields = [
             'id', 'date', 'heure', 'type_soins',
-            'description', 'etat_patient', 'medicament', 'dose',
+            'description', 'medicament', 'dose',
             'hospitalisation', 'infermier', 'infirmier_info'
         ]

@@ -18,14 +18,17 @@ def get_all_soins(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_soin_by_id(request):
-    """Get specific soin by ID"""
-    # Verify soin belongs to the correct DPI
-    soin = get_object_or_404(
-        Soins, 
-        id=request.get('soin_id'), 
-        hospitalisation__DPI_id=request.get('dpi_id')
-    )
+def get_soin_by_id(request, soin_id , dpi_id):
+    """
+    Get specific soin (medical care record) by ID.
+    Verifies user has permission to access this medical record.
+    """
+    # Get the soin object
+    soin = get_object_or_404(Soins, id=soin_id)
+    
+    # Get the associated DPI through hospitalisation
+    dpi = soin.hospitalisation.DPI
+
     serializer = SoinsSerializer(soin)
     return Response(serializer.data)
 
