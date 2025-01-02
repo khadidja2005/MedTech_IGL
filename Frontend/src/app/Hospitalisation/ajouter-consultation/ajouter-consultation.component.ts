@@ -11,7 +11,10 @@ import {
   medecin,
 } from '../hospitalisation/hospitalisation.component';
 import axios from 'axios';
-
+interface data {
+  message: string;
+  id: number;
+}
 @Component({
   selector: 'app-ajouter-consultation',
   templateUrl: './ajouter-consultation.component.html',
@@ -60,11 +63,14 @@ export class AjouterConsultationComponent {
       };
       let bool = false;
       await axios
-        .post('http://localhost:8000/hospitalisation/ajouter/consultation', {
-          hospitalisation_id: this.hospitalisation_id,
-          medecin_id: formValue.medecin,
-          date: newConsultation.date,
-        })
+        .post<data>(
+          'http://localhost:8000/hospitalisation/ajouter/consultation',
+          {
+            hospitalisation_id: this.hospitalisation_id,
+            medecin_id: formValue.medecin,
+            date: newConsultation.date,
+          }
+        )
         .then((response) => {
           newConsultation.id = response.data.id; // Set the ID of the new consultations
           bool = true;

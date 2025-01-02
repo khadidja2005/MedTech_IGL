@@ -15,7 +15,10 @@ export interface SoinPageAjouter {
   medicament: string;
   dose: string;
 }
-
+interface data {
+  message: string;
+  id: number;
+}
 @Component({
   selector: 'app-ajouter-soin',
   templateUrl: './ajouter-soin.component.html',
@@ -108,7 +111,7 @@ export class AjouterSoinComponent {
       let bool = false;
 
       await axios
-        .post('http://localhost:8000/hospitalisation/ajouter/soin', {
+        .post<data>('http://localhost:8000/hospitalisation/ajouter/soin', {
           hospitalisation_id: this.hospitalisation_id,
           infermier_id: this.infermier_id,
           date: nvSoin.date,

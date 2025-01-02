@@ -139,7 +139,7 @@ def get_DPIS_patient(request):
             dpi_data.append(
                 {
                     "dpi_id": dpi.id,
-                    "etablissement_nom": dpi.etablissement_id.nom_etablissement,
+                    "etablissement": dpi.etablissement_id.id,
                 }
             )
         # Prepare the response data

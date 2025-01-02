@@ -38,9 +38,12 @@ export class RechercheComponent {
   async onPageLoad(): Promise<void> {
     console.log('Fetching DPIs for personnel ID:', this.id);
     try {
-      const response = await axios.get<{ all_dpis: DpiCards[] }>('http://localhost:8000/recherche/DPIS', {
-        params: { personnel_id: this.id },
-      });
+      const response = await axios.get<{ all_dpis: DpiCards[] }>(
+        'http://localhost:8000/recherche/DPIS',
+        {
+          params: { personnel_id: this.id },
+        }
+      );
       this.dpis = response.data.all_dpis;
     } catch (error) {
       console.error('Error:', error);
@@ -72,5 +75,9 @@ export class RechercheComponent {
 
   get totalPages() {
     return Math.ceil(this.dpis.length / this.pageSize);
+  }
+  onDpisChange(updatedDpis: DpiCards[]) {
+    // Update the parent's version of the array
+    this.dpis = updatedDpis;
   }
 }

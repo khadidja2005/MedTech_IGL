@@ -297,7 +297,7 @@ def ajouter_soin(request):
             dose=dose,
         )
         soin.save()
-        return JsonResponse({"message": "Soins added successfully."})
+        return JsonResponse({"message": "Soins added successfully.", "id": soin.id})
     else:
         return JsonResponse({"error": "Invalid request method."}, status=405)
 

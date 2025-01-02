@@ -58,7 +58,7 @@ export class HospitalisationComponent {
       this.hospitalisation_id
     );
     await axios
-      .get('http://localhost:8000/hospitalisation/', {
+      .get<HospitalisationPage>('http://localhost:8000/hospitalisation/', {
         params: { hospitalisation_id: this.hospitalisation_id },
       })
       .then((response) => {
@@ -70,9 +70,12 @@ export class HospitalisationComponent {
         console.log(error);
       });
     await axios
-      .get('http://localhost:8000/hospitalisation/modifier/medecins', {
-        params: { hospitalisation_id: this.hospitalisation_id },
-      })
+      .get<medecin[]>(
+        'http://localhost:8000/hospitalisation/modifier/medecins',
+        {
+          params: { hospitalisation_id: this.hospitalisation_id },
+        }
+      )
       .then((response) => {
         this.medecins = response.data;
       })
@@ -80,9 +83,12 @@ export class HospitalisationComponent {
         console.log(error);
       });
     await axios
-      .get('http://localhost:8000/hospitalisation/consultations', {
-        params: { hospitalisation_id: this.hospitalisation_id },
-      })
+      .get<ConsultationPageHospitalisation[]>(
+        'http://localhost:8000/hospitalisation/consultations',
+        {
+          params: { hospitalisation_id: this.hospitalisation_id },
+        }
+      )
       .then((response) => {
         this.consultations = response.data;
       })
@@ -90,9 +96,12 @@ export class HospitalisationComponent {
         console.log(error);
       });
     await axios
-      .get('http://localhost:8000/hospitalisation/Soins', {
-        params: { hospitalisation_id: this.hospitalisation_id },
-      })
+      .get<SoinPageHospitalisation[]>(
+        'http://localhost:8000/hospitalisation/Soins',
+        {
+          params: { hospitalisation_id: this.hospitalisation_id },
+        }
+      )
       .then((response) => {
         this.soins = response.data;
       })
