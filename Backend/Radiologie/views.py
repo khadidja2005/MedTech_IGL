@@ -13,8 +13,7 @@ from BDD.models import (
 @require_http_methods(["GET"])
 def archive_radio(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        Radiologue = data.get("Radiologue")
+        Radiologue = request.GET.get("Radiologue")
         if not Radiologue:
             return JsonResponse({"error": "Radiologue not provided"}, status=400)
         try:
