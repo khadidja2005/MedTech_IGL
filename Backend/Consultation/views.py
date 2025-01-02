@@ -12,58 +12,27 @@ from BDD.models import (
     etablissement_personnel_medical,
 )
 
-
 @csrf_exempt
-@require_http_methods(["GET"])  # Handle GET requests
-def get_infos(request):
-    if request.method == "GET":
-        data = json.loads(request.body)
-        consultation_id = data.get("consultation_id")
-        if not consultation_id:
-            return JsonResponse(
-                {"error": "A 'consultation_id' is required."}, status=400
-            )
-        try:
-            consultation = Consultation.objects.get(id=consultation_id)
-        except Consultation.DoesNotExist:
-            return JsonResponse(
-                {"error": "Consultation with the provided id not found."}, status=404
-            )
+@require_http_methods(["GET"])
+def get_infos(request, id=None):
+    consultation_id = id or request.GET.get("consultation_id")
+    if not consultation_id:
+        return JsonResponse({"error": "A 'consultation_id' is required."}, status=400)
+    try:
+        consultation = Consultation.objects.get(id=consultation_id)
         ordonnances = Ordonnance.objects.filter(consultation=consultation)
-        bilans_bio = BilanBio.objects.filter(Consultation=consultation)
-        bilans_radio = BilanRadio.objects.filter(Consultation=consultation)
-        return JsonResponse(
-            {
-                "medecin": consultation.Medecin.nom_complet,
-                "date": consultation.date,
-                "resume": consultation.resume,
-                "ordonnances": [
-                    {
-                        "ordonnance_id": ordonnance.id,
-                        "estValide": ordonnance.estValide,
-                        "pharmacien_id": ordonnance.pharmacien_id.nom_complet,
-                    }
-                    for ordonnance in ordonnances
-                ],
-                "bilans_bio": [
-                    {
-                        "bilan_bio_id": bilan_bio.id,
-                        "etat": "fini" if bilan_bio.est_resultat else "non finis",
-                    }
-                    for bilan_bio in bilans_bio
-                ],
-                "bilans_radio": [
-                    {
-                        "bilan_radio_id": bilan_radio.id,
-                        "etat": "fini" if bilan_radio.est_resultat else "non finis",
-                    }
-                    for bilan_radio in bilans_radio
-                ],
-            }
-        )
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
-
+        bilans_bio = BilanBio.objects.filter(consultation=consultation)
+        bilans_radio = BilanRadio.objects.filter(consultation=consultation)
+        data = {
+            "date": consultation.date,
+            "resume": consultation.resume,
+            "ordonnances": [{"id": o.id, "estValide": o.estValide} for o in ordonnances],
+            "bilans_bio": [{"id": b.id, "etat": "fini" if b.est_resultat else "non finis"} for b in bilans_bio],
+            "bilans_radio": [{"id": b.id, "etat": "fini" if b.est_resultat else "non finis"} for b in bilans_radio],
+        }
+        return JsonResponse(data)
+    except Consultation.DoesNotExist:
+        return JsonResponse({"error": "Consultation not found."}, status=404)
 
 def get_medecins(request):
     if request.method == "GET":
@@ -103,39 +72,26 @@ def get_medecins(request):
 
 
 @csrf_exempt
+@require_http_methods(["POST"])
 def modifier_consultation(request):
-    if request.method == "POST":
+    try:
         data = json.loads(request.body)
         consultation_id = data.get("consultation_id")
         date = data.get("date")
         medecin_id = data.get("medecin_id")
-        if not consultation_id:
-            return JsonResponse(
-                {"error": "A 'consultation_id' is required."}, status=400
-            )
-        if not date:
-            return JsonResponse({"error": "A 'date' is required."}, status=400)
-        if not medecin_id:
-            return JsonResponse({"error": "A 'medecin_id' is required."}, status=400)
-        try:
-            consultation = Consultation.objects.get(id=consultation_id)
-        except Consultation.DoesNotExist:
-            return JsonResponse(
-                {"error": "Consultation with the provided id not found."}, status=404
-            )
-        try:
-            medecin = PersonnelMedical.objects.get(id=medecin_id)
-        except PersonnelMedical.DoesNotExist:
-            return JsonResponse(
-                {"error": "Medecin with the provided id not found."}, status=404
-            )
-        consultation.Medecin = medecin
-        consultation.date = datetime.strptime(date, "%Y-%m-%d")
-        consultation.save()
-        return JsonResponse({"success": "Consultation updated successfully."})
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
 
+        if not consultation_id or not date or not medecin_id:
+            return JsonResponse({"error": "Missing required fields."}, status=400)
+
+        consultation = Consultation.objects.get(id=consultation_id)
+        medecin = PersonnelMedical.objects.get(id=medecin_id)
+        consultation.date = datetime.strptime(date, "%Y-%m-%d")
+        consultation.medecin = medecin
+        consultation.save()
+
+        return JsonResponse({"success": "Consultation updated successfully."})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 @csrf_exempt
 def modifier_resume(request):

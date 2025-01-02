@@ -3,12 +3,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from BDD.models import *
+from BDD.serializer import *
 
 
 # CRUD Etablissement
 @api_view(["POST"])
 def create_etablissement(request):
-    print(request.data)
     try:
         etablissement = Etablissement.objects.create(
             nom_etablissement=request.data.get("nom_etablissement"),
@@ -25,6 +25,7 @@ def create_etablissement(request):
                     "adresse": etablissement.adresse,
                     "telephone": etablissement.telephone,
                     "email": etablissement.email,
+                    "type": etablissement.type,
                 },
             },
             status=status.HTTP_201_CREATED,
@@ -49,6 +50,7 @@ def get_etablissement(request, etablissement_id):
                     "adresse": etablissement.adresse,
                     "telephone": etablissement.telephone,
                     "email": etablissement.email,
+                    "type": etablissement.type,
                 },
             }
         )
@@ -69,6 +71,7 @@ def get_all_etablissements(request):
                 "adresse": etab.adresse,
                 "telephone": etab.telephone,
                 "email": etab.email,
+                "type": etab.type,
             }
             for etab in etablissements
         ]
@@ -316,3 +319,18 @@ def delete_dpi(request, dpi_id):
         return Response(
             {"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
         )
+@api_view(["GET", "POST"])
+def personnel_medical_list_create(request):
+    if request.method == "GET":
+        # Get all PersonnelMedical records
+        personnel = PersonnelMedical.objects.all()
+        serializer = PersonnelMedicalSerializer(personnel, many=True)
+        return Response(serializer.data)
+
+    elif request.method == "POST":
+        # Add a new PersonnelMedical record
+        serializer = PersonnelMedicalSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

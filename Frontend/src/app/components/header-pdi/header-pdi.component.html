@@ -4,9 +4,9 @@
   </div>
   <div class="flex items-center space-x-4">
     <div>
-      <p class="doctor-name">{{ user1.name }}</p>
-      <p *ngIf="user1.Admin" class="admin">Admin</p>
+      <p class="doctor-name">{{ user1.nom_complet }}</p>
+      <p  class="admin">{{user1.role}}</p>
     </div>
-    <img [src]="user1.image" alt="Doctor Image" class="doctor-image border-[#3A8EF6] border-2">
+    <img [src]="user1.image" *ngIf="user1?.image" alt="Doctor Image" class="doctor-image border-[#3A8EF6] border-2">
   </div>
 </header>

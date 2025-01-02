@@ -38,7 +38,7 @@ export class RechercheComponent {
   async onPageLoad(): Promise<void> {
     console.log('Fetching DPIs for personnel ID:', this.id);
     try {
-      const response = await axios.get('http://localhost:8000/recherche/DPIS', {
+      const response = await axios.get<{ all_dpis: DpiCards[] }>('http://localhost:8000/recherche/DPIS', {
         params: { personnel_id: this.id },
       });
       this.dpis = response.data.all_dpis;
@@ -46,7 +46,7 @@ export class RechercheComponent {
       console.error('Error:', error);
     }
     try {
-      const response = await axios.get(
+      const response = await axios.get<{ all_etablissements: Etab[] }>(
         'http://localhost:8000/recherche/get-etablissements',
         {
           params: { personnel_id: this.id },

@@ -1,7 +1,5 @@
-
-<div class="sidebar h-screen flex flex-col fixed top-[65px] left-0 z-50 bg-white shadow-lg">
-  <!-- Menu Items: Scrollable if content exceeds the sidebar height -->
-  <ul class="menu flex-1 overflow-y-auto">
+<div class="sidebar">
+  <ul class="menu mt-10">
     <li *ngFor="let item of filteredItems">
       <a [href]="item.link" class="menu-item" [ngClass]="{'active': item.label === activeItem}">
         <img [src]="item.icon" alt="{{ item.label }}" class="icon" />
@@ -9,11 +7,10 @@
       </a>
     </li>
   </ul>
-
-  <!-- Footer Section: Increased space for items to fit -->
-  <ul class="footer mt-auto overflow-y-auto h-[230px] p-4">
+  <ul class="footer">
     <li *ngFor="let item of filteredfooterItems">
-      <a [href]="item.link" class="menu-item" [ngClass]="{'active': item.label === activeItem}">
+      <a [href]="item.link" class="menu-item" [ngClass]="{'active': item.label === activeItem}"
+      (click)="handleFooterItemClick(item.action)">
         <img [src]="item.icon" alt="{{ item.label }}" class="icon" />
         <span>{{ item.label }}</span>
       </a>

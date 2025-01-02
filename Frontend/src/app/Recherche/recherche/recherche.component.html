@@ -10,12 +10,12 @@
     <div class="content">
     <app-rech-header [dpis]="dpis" [role]="role" [etablissements]="etablissements">
     </app-rech-header>
-    <div class="cards">
+     <div class="cards">
       <app-patient-card
         *ngFor="let dpi of paginatedDpis let i=index"
         [dpi]="dpi" [i]="(currentPage - 1) * pageSize + i" [etablissements]="etablissements">
       </app-patient-card>
-    </div>
+      </div>
 
     <!-- Pagination Controls -->
     <div class="pagination">

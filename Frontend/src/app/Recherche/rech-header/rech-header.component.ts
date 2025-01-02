@@ -4,12 +4,12 @@ import { AjouterDPIComponent } from '../ajouter-dpi/ajouter-dpi.component';
 import { DpiCards } from '../recherche/recherche.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { ScannerComponent } from '../scanner/scanner.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import axios from 'axios';
 
 @Component({
   selector: 'app-rech-header',
-  imports: [CommonModule, AjouterDPIComponent, ScannerComponent],
+  imports: [CommonModule, AjouterDPIComponent, ScannerComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './rech-header.component.html',
   styleUrl: './rech-header.component.css',
 })
@@ -53,6 +53,20 @@ export class RechHeaderComponent {
   }
   openScannerPanel() {
     this.isScannerPanelVisible = true;
+  }
+
+  inputValue: string = ''; // Stores the input value temporarily
+  nss: number | null = null; // Stores the final NSS value
+
+  saveInputValue() {
+    // Convert the inputValue to a number and store it in nss
+    const parsedValue = Number(this.inputValue);
+    if (!isNaN(parsedValue)) {
+      this.nss = parsedValue;
+      console.log('NSS saved:', this.nss);
+    } else {
+      console.error('Invalid input: Please enter a valid number');
+    }
   }
 
   onSubmit() {

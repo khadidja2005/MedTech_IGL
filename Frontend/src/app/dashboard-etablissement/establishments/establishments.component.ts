@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
+import axios from 'axios';
+import { Notyf } from 'notyf';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-establishments',
@@ -10,23 +14,13 @@ import { Etablissement } from '../../../types/etablissement';
   styleUrls: ['./establishments.component.css']
 })
 export class EstablishmentsComponent implements OnInit {
+  notyf: Notyf | undefined;
   searchTerm: string = '';
   showModal: boolean = false;
   currentPage: number = 1;
   establishmentsPerPage: number = 6;
   
-  establishments: Etablissement[] = [
-    {
-      id: 1,
-      nom_etablissement: 'Etablissement 1',
-      adresse: '8 W. South St.Buford, GA 30518',
-      telephone: 123456789,
-      email: 'email@gmail.com',
-      type: 'HOPITAL',
-
-    }
-    
-  ];
+  establishments: Etablissement[] = [];
 
   newEstablishment: Etablissement = {
     id: 0,
@@ -37,6 +31,11 @@ export class EstablishmentsComponent implements OnInit {
     type: 'HOPITAL',
   };
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.notyf = new Notyf();
+    }
+  }
   get filteredEstablishments(): Etablissement[] {
     return this.establishments.filter(est => 
       est.nom_etablissement.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -56,8 +55,18 @@ export class EstablishmentsComponent implements OnInit {
     return Math.ceil(this.filteredEstablishments.length / this.establishmentsPerPage);
   }
 
-  ngOnInit(): void {
-    // Initialize component
+  async ngOnInit() {
+    try {
+     const response = await axios.get('http://localhost:8000/dashboard/etablissements');
+     //console.log(response.data);
+     this.establishments = response.data.data;
+    
+    }catch(e){
+      console.log(e); 
+      if (this.notyf) {
+        this.notyf.error('Erreur lors du chargement des établissements');
+      };
+    }
   }
 
   onSearch(event: any): void {
@@ -86,11 +95,34 @@ export class EstablishmentsComponent implements OnInit {
     };
   }
 
-  addEstablishment(): void {
+  async addEstablishment():Promise< void> {
     if (this.validateNewEstablishment()) {
-      this.newEstablishment.id = this.establishments.length + 1;
-      this.establishments.push({...this.newEstablishment});
-      this.closeModal();
+      try {
+        console.log(this.newEstablishment);
+        const response = await axios.post('http://localhost:8000/dashboard/etablissements/create/user/', {
+          nom_etablissement: this.newEstablishment.nom_etablissement,
+          adresse: this.newEstablishment.adresse,
+          telephone: this.newEstablishment.telephone,
+          email: this.newEstablishment.email,
+        });
+        console.log(response.data);
+        if (this.notyf){
+          this.notyf?.success('Etablissement ajouté avec succès');
+          setTimeout(()=> {
+          this.newEstablishment.id = this.establishments.length + 1;
+        this.establishments.push({...this.newEstablishment});
+        this.closeModal();
+          } , 2000)
+
+        }
+  
+        
+        } catch (e) {
+          console.log(e);
+          if (this.notyf) {
+            this.notyf.error('Erreur lors de l\'ajout de l\'établissement');
+        }
+      }
     }
   }
   
