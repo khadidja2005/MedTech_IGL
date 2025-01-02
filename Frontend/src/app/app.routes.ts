@@ -14,6 +14,7 @@ import { BddComponent } from './controle-bdd/bdd/bdd.component';
 import { PharmacieComponent } from './Pharmacie/pharmacie/pharmacie.component';
 import { ArchiveComponent } from './PharmacieArchive/archive/archive.component';
 import { LaborantinComponent } from './Laborantin/laborantin/laborantin.component';
+import { ArchiveComponent as LaborantinArchiveComponent } from './LaborantinArchive/archive/archive.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -34,4 +35,5 @@ export const routes: Routes = [
   { path: 'pharmacie', component: PharmacieComponent },
   { path: 'pharmacie/archive', component: ArchiveComponent },
   { path: 'laborantin', component: LaborantinComponent },
+  { path: 'laborantin/archive', component: LaborantinArchiveComponent },
 ];

@@ -13,8 +13,7 @@ from BDD.models import (
 @require_http_methods(["GET"])
 def archive_labo(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        laborantin = data.get("laborantin")
+        laborantin = request.GET.get("laborantin")
         if not laborantin:
             return JsonResponse({"error": "Laborantin not provided"}, status=400)
         try:
