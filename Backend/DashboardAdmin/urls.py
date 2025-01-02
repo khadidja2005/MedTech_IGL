@@ -5,11 +5,12 @@ urlpatterns = [
     # Etablissement CRUD
     path('etablissements/', views.get_all_etablissements, name='get_all_etablissements'),
     path('etablissements/<str:etablissement_id>/', views.get_etablissement, name='get_etablissement'),
-    path('etablissements/', views.create_etablissement, name='create_etablissement'),
+    path('etablissements/create/user/', views.create_etablissement, name='create_etablissement'),
     path('etablissements/<str:etablissement_id>/update/', views.update_etablissement, name='update_etablissement'),
     path('etablissements/<str:etablissement_id>/delete/', views.delete_etablissement, name='delete_etablissement'),
     
     # Personnel Medical Operations
+    path ('personnel-medical/', views.personnel_medical_list_create, name='get_all_personnel_medical'),
     path('etablissements/<str:etablissement_id>/personnel/', views.get_personnel_medical_by_etablissement, name='get_personnel_medical_by_etablissement'),
     path('etablissements/<str:etablissement_id>/personnel/add/', views.add_personnel_medical_to_etablissement, name='add_personnel_medical_to_etablissement'),
     path('etablissements/<str:etablissement_id>/personnel/<str:personnel_id>/update/', views.update_personnel_medical_in_etablissement, name='update_personnel_medical_in_etablissement'),

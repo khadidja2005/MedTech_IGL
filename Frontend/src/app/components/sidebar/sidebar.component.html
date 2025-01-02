@@ -9,7 +9,8 @@
   </ul>
   <ul class="footer">
     <li *ngFor="let item of filteredfooterItems">
-      <a [href]="item.link" class="menu-item" [ngClass]="{'active': item.label === activeItem}">
+      <a [href]="item.link" class="menu-item" [ngClass]="{'active': item.label === activeItem}"
+      (click)="handleFooterItemClick(item.action)">
         <img [src]="item.icon" alt="{{ item.label }}" class="icon" />
         <span>{{ item.label }}</span>
       </a>

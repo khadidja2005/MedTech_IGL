@@ -3,7 +3,6 @@ from django.db import models
 
 
 class Etablissement(models.Model):
-
     class TypeChoices(models.TextChoices):
         HOPITAL = "HOPITAL", "Hopital"
         CLINIQUE = "CLINIQUE", "Clinique"

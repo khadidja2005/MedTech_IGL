@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component , Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import axios from 'axios';
+import { Notyf } from 'notyf';
+import { Router } from '@angular/router';
 
 export type PersonnelMedicalRole =
   | 'MEDECIN'
@@ -29,7 +31,7 @@ export interface PersonnelMedical {
   styleUrl: './employe-inf.component.css'
 })
 export class EmployeInfComponent {
-
+  notyf: Notyf | undefined;
   user1 = {
     Admin: true,
     name: "Mohamed Reda",
@@ -38,28 +40,28 @@ export class EmployeInfComponent {
   };
   
   personnels: PersonnelMedical[] = [
-    {
-      id:0,
-      lienPhoto: 'assets/images/medecin1.jpg',
-      nom_complet: 'Jean Dupont',
-      email: 'jean.dupont@exemple.com',
-      specialite: 'Cardiologie',
-      telephone: 123456789,
-      password: 'password123',
-      role: 'MEDECIN',
-    },
-    {
-      id:2,
-      lienPhoto: 'assets/images/medecin2.jpg',
-      nom_complet: 'Alice Martin',
-      email: 'alice.martin@exemple.com',
-      specialite: 'Radiologie',
-      telephone: 987654321,
-      password: 'password123',
-      role: 'RADIOLOGUE',
-    },
+
   ];
-  
+    constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
+      if (isPlatformBrowser(this.platformId)) {
+        this.notyf = new Notyf();
+      }
+    }
+  async ngOnInit() {
+    try {
+     const response = await axios.get('http://localhost:8000/dashboard/personnel-medical/');
+    // console.log(response.data);
+     this.personnels = response.data;
+    
+    }catch(e){
+      console.log(e); 
+      if (this.notyf) {
+        this.notyf.error('Erreur lors du chargement des employees');
+      };
+    }
+  }
+
+
   private validateEmailFormat(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -162,10 +164,39 @@ export class EmployeInfComponent {
     }, 3000);
   }
   
-  submitNewPersonnel(): void {
+ async submitNewPersonnel(): Promise<void> {
     if (this.validateNewPersonnel()) {
-      this.togglePersonnelModal('');
-      this.showPersonnelModal = false;
+      console.log(this.newPersonnel);
+      try {
+        console.log(this.newPersonnel);
+        const response = await axios.post('http://localhost:8000/dashboard/personnel-medical/', {
+          lienPhoto : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+          nom_complet: this.newPersonnel.nom_complet,
+          role: this.newPersonnel.role,
+          telephone: this.newPersonnel.telephone,
+          email: this.newPersonnel.email,
+          specialite: this.newPersonnel.specialite,
+          password:Math.random().toString(36).substring(2, 10) ,
+        });
+        console.log(response.data);
+        if (this.notyf){
+          this.notyf?.success('emploee a ete ajouté avec succès');
+          setTimeout(()=> {
+          this.newPersonnel.id = this.personnels.length + 1;
+        this.personnels.push({...this.newPersonnel});
+          this.togglePersonnelModal('');
+          this.showPersonnelModal = false;
+          } , 2000)
+
+        }
+  
+        
+        } catch (e) {
+          console.log(e);
+          if (this.notyf) {
+            this.notyf.error('Erreur lors de l\'ajout de l\'employee');
+        }
+      }
     } else {
       this.showError();
     }
