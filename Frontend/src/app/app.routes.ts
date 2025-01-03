@@ -18,6 +18,8 @@ import { ArchiveComponent as LaborantinArchiveComponent } from './LaborantinArch
 import { RadiologueComponent } from './Radiologue/radiologue/radiologue.component';
 import { ArchiveComponent as RadiologueArchiveComponent } from './RadiologueArchive/archive/archive.component';
 import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
+import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/page-affichage-etablissement/page-affichage-etablissement.component';
+
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation', component: ConsultationPageComponent },
@@ -41,4 +43,12 @@ export const routes: Routes = [
   { path: 'radiologue', component: RadiologueComponent },
   { path: 'radiologue/archive', component: RadiologueArchiveComponent },
   { path: 'bilan-bio', component: BilanBioComponent },
+  {path : "authcode" , component : RecoverpageComponent},
+  {path : "verificationcode" , component : CodepageComponent},
+  {path : "resetpassword" , component : ResetpasswordpageComponent},
+  {path : "dashboard/etablissement" , component : PageListEtablissemetsComponent } , 
+  {path : "dashboard/employee" , component : PageEmployesComponent} , 
+  {path : "dashboard/Controlbdd" , component : BddComponent} ,
+  {path : "dashboard/etablissement/30" , component : PageAffichageEtablissementComponent},
+
 ];
