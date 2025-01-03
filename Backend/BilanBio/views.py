@@ -56,7 +56,7 @@ def valider_bilan_bio(request):
         data = json.loads(request.body)
         bilan_id = data.get("bilan_id")
         if not bilan_id:
-            return JsonResponse({"error": "Invalid request"})
+            return JsonResponse({"error": "'bilan_id' is required"})
         try:
             bilan = BilanBio.objects.get(id=bilan_id)
         except BilanBio.DoesNotExist:
@@ -266,23 +266,22 @@ def ajouter_resultat_bio(request):
             laborantin=laborantin,
         )
         resultat.save()
-        return JsonResponse({"success": "Resultat added"})
+        return JsonResponse({"message": "Resultat added", "id": resultat.id})
     else:
-        return JsonResponse({"error": "Invalid request"})
+        return JsonResponse({"message": "Invalid request"})
 
 
 @csrf_exempt
 def modifier_resultat_bio(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
+        id = data.get("id")
         valeur_mesure = data.get("valeur_mesure")
         date_mesure = data.get("date_mesure")
         heure_mesure = data.get("heure_mesure")
-        parametre = data.get("parametre")
         norme = data.get("norme")
         laborantin_id = data.get("laborantin_id")
-        if not bilan_id:
+        if not id:
             return JsonResponse({"error": "Billan id is required"})
         if not valeur_mesure:
             return JsonResponse({"error": "Valeur mesure is required"})
@@ -290,24 +289,17 @@ def modifier_resultat_bio(request):
             return JsonResponse({"error": "Date mesure is required"})
         if not heure_mesure:
             return JsonResponse({"error": "Heure mesure is required"})
-        if not parametre:
-            return JsonResponse({"error": "Parametre is required"})
         if not norme:
             return JsonResponse({"error": "Norme is required"})
         if not laborantin_id:
             return JsonResponse({"error": "Laborantin id is required"})
         try:
-            bilan = BilanBio.objects.get(id=bilan_id)
-        except BilanBio.DoesNotExist:
-            return JsonResponse({"error": "BilanBio not found"})
-        try:
             laborantin = PersonnelMedical.objects.get(id=laborantin_id)
         except PersonnelMedical.DoesNotExist:
             return JsonResponse({"error": "Laborantin not found"})
-        if parametre not in bilan.parametres.split(","):
-            return JsonResponse({"error": "Parametre not found in bilan"})
-        resultat = ResultatBio.objects.get(bilan_bio=bilan, parametre=parametre)
-        if not resultat:
+        try:
+            resultat = ResultatBio.objects.get(id=id)
+        except ResultatBio.DoesNotExist:
             return JsonResponse({"error": "Resultat not found"})
         if resultat.laborantin != laborantin:
             return JsonResponse(

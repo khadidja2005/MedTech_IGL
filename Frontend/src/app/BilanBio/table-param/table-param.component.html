@@ -38,7 +38,13 @@
       </div>
 
       <!-- Buttons -->
-      <div class="flex justify-end gap-4" *ngIf="role === 'laborantin'">
+      <div
+        class="flex justify-end gap-4"
+        *ngIf="
+          (role === 'laborantin' && !bilan.est_resultat) ||
+          (role === 'medecin' && !bilan.est_complet)
+        "
+      >
         <button (click)="openPopup(param, i)">
           <img src="/assets/images/modifier.png" class="h-5 w-5" />
         </button>
@@ -48,6 +54,8 @@
         *ngIf="isPopupVisible && currentIndex === i"
         [isVisible]="isPopupVisible"
         [param]="param"
+        [bilan_id]="bilan.id"
+        [laborantin_id]="laborantin"
         (closePopup)="closePopup()"
         (saveChanges)="updateParam($event)"
       ></app-saisir-resultat>

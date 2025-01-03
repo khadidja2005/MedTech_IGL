@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Resultat } from '../bilan-bio/bilan-bio.component';
-
+import axios from 'axios';
 @Component({
   selector: 'app-ajouter-param',
   imports: [ReactiveFormsModule, CommonModule],
@@ -15,6 +15,7 @@ import { Resultat } from '../bilan-bio/bilan-bio.component';
   styleUrl: './ajouter-param.component.css',
 })
 export class AjouterParamComponent {
+  @Input() bilan_id!: number;
   @Input() isVisible: boolean = false;
   @Output() closePanel = new EventEmitter<void>();
   @Output() saveParam = new EventEmitter<Resultat>(); // Emit the added consultation
@@ -27,7 +28,7 @@ export class AjouterParamComponent {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.ajoutForm.valid) {
       const formValue = this.ajoutForm.value;
 
@@ -42,11 +43,25 @@ export class AjouterParamComponent {
         heure_mesure: null,
         laborantin_nom: null,
       };
-
-      // Emit the new consultation to the parent
-      this.saveParam.emit(newParam);
-      this.closePanel.emit(); // Close the panel after adding the consultation
-      this.ajoutForm.reset(); // Reset the form
+      let bool = false;
+      await axios
+        .post('http://localhost:8000/bilanbio/ajouter/param', {
+          bilan_id: this.bilan_id,
+          parametre: newParam.parametre,
+        })
+        .then((response) => {
+          console.log(response);
+          bool = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      if (bool) {
+        // Emit the new consultation to the parent
+        this.saveParam.emit(newParam);
+        this.closePanel.emit(); // Close the panel after adding the consultation
+        this.ajoutForm.reset(); // Reset the form
+      }
     }
   }
   closesPanel(): void {

@@ -51,10 +51,10 @@ interface data {
   styleUrl: './bilan-bio.component.css',
 })
 export class BilanBioComponent {
-  role: string = 'laborantin';
-  laborantin = 1324; //localstorage
+  role: string = 'laborantin'; //localstorage
+  laborantin = 1368; //localstorage
   user = 'name'; //localstorage
-  bilan_id = 671; //navigation
+  bilan_id = 673; //navigation
   activeItem: string;
   constructor() {
     if (this.role == 'laborantin') {
@@ -87,7 +87,29 @@ export class BilanBioComponent {
         params: { bilan_id: this.bilan_id },
       })
       .then((response) => {
-        this.params = response.data.resultats;
+        if (response.data.est_resultat) {
+          this.params = response.data.resultats;
+        } else {
+          if (
+            response.data.parametres != null ||
+            response.data.parametres != ' ' ||
+            response.data.parametres != ''
+          ) {
+            let parametres = response.data.parametres.split(',');
+            for (let i = 0; i < parametres.length; i++) {
+              this.params.push({
+                id: 0,
+                valeur_mesure: null,
+                parametre: parametres[i],
+                norme: null,
+                laborantin: null,
+                date_mesure: null,
+                heure_mesure: null,
+                laborantin_nom: null,
+              });
+            }
+          }
+        }
         this.bilan = {
           id: this.bilan_id,
           ordre: 1,

@@ -9,7 +9,10 @@
         *ngIf="(role === 'admin' || role === 'medecin') && !bilan.est_complet"
         class="actions mb-4"
       >
-        <button class="delete-button flex items-center gap-1">
+        <button
+          class="delete-button flex items-center gap-1"
+          (click)="delete()"
+        >
           <img src="/assets/images/delete.png" class="h-5 w-5" />
           Supprimer
         </button>
@@ -49,7 +52,7 @@
           >Medecin :</span
         >
         <span *ngIf="role == 'laborantin'" class="value text-lg items-center">{{
-          bilan.medecin
+          bilan.medecin_nom
         }}</span>
         <span class="label text-lg">Patient :</span>
         <span class="value text-lg">{{ bilan.patient }}</span>
@@ -68,11 +71,17 @@
       </button>
       <app-ajouter-param
         [isVisible]="isAddPanelVisible"
+        [bilan_id]="bilan.id"
         (closePanel)="closeAddPanel()"
         (saveParam)="addParam($event)"
       >
       </app-ajouter-param>
-      <button class="terminer-button" (click)="terminate()">terminer</button>
+      <div
+        *ngIf="params.length > 0 && !bilan.est_complet"
+        class="buttons-container"
+      >
+        <button class="terminer-button" (click)="terminate()">terminer</button>
+      </div>
     </div>
     <div
       *ngIf="role == 'laborantin' && !bilan.est_resultat"

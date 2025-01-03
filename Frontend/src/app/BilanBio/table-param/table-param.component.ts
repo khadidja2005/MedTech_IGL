@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { SaisirResultatComponent } from '../saisir-resultat/saisir-resultat.component';
 import { Resultat } from '../bilan-bio/bilan-bio.component';
-
+import { bilan } from '../bilan-bio/bilan-bio.component';
 @Component({
   selector: 'app-table-param',
   imports: [SaisirResultatComponent, CommonModule],
@@ -11,6 +11,7 @@ import { Resultat } from '../bilan-bio/bilan-bio.component';
 })
 export class TableParamComponent {
   @Input() params!: Resultat[];
+  @Input() bilan!: bilan;
   @Input() laborantin!: number;
   @Input() user!: string;
   @Input() role!: string;

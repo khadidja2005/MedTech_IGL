@@ -180,7 +180,7 @@ class ResultatBio(models.Model):
     valeur_mesure = models.CharField(max_length=100)
     date_mesure = models.DateField()
     heure_mesure = models.TimeField()
-    parametre = models.CharField(max_length=100)
+    parametre = models.CharField(max_length=500)
     norme = models.CharField(max_length=50)
     bilan_bio = models.ForeignKey(BilanBio, on_delete=models.CASCADE)
     laborantin = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)
