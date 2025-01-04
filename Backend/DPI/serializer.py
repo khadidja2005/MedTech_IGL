@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from BDD.models import *
 
+from BDD.serializer import *
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
@@ -25,9 +26,10 @@ class AntecedantSerializer (serializers.ModelSerializer):
 class DPI_Serializer ( serializers.ModelSerializer):
     patient = PatientSerializer( source = 'patient_id' , read_only = True)
     etablissement = EtablissementSerializer(source='etablissement_id', read_only=True)
+    medecin = PersonnelMedicalSerializer(source = "medecin_id" , read_only = True)
     class Meta : 
         model = DPI
-        fields = ['id', 'date_creation', 'patient', 'etablissement', 'createur_id']
+        fields = ['id', 'date_creation', 'patient', 'etablissement', 'createur_id' , "medecin"]
 
 class PersonnelMedicalSerializer(serializers.ModelSerializer):
     class Meta:
