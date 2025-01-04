@@ -7,6 +7,9 @@ import { Etablissement } from '../../../types/etablissement';
 import { Patient } from '../../../types/patient';
 import { Antecedent } from '../../../types/antecedent';
 import { Hospitalisation } from '../../../types/hospitalisation';
+import { Notyf } from 'notyf';
+import axios from 'axios';
+import { ActivatedRoute } from '@angular/router';
 
 
 export interface Mutuelle {
@@ -64,6 +67,8 @@ export interface BilanRadio extends BaseBilan {
   styleUrls: ['./dpi-info.component.css']
 })
 export class DpiInfoComponent implements OnInit {
+  id : number = 0
+  notyf : Notyf | undefined
   selectedMenu: number = 1;
   editingField: string | null = null;
   tempValue: string = '';
@@ -128,9 +133,26 @@ export class DpiInfoComponent implements OnInit {
   showQrModal: boolean = false;
   showStatusDropdown: boolean = false;
 
-
+  constructor(private route: ActivatedRoute) {
+    this.combineBilans();
+    this.filteredBilans = this.combinedBilans;
+  }
   async ngOnInit() {
+      // Get the ID once
+      this.route.params.subscribe(params => {
+        this.id = params['id'];
+        // Use the ID to fetch data or whatever you need
+      });
     await this.generateQRCode();
+    const response = await axios.get(`http://localhost:8000/dpipage/dpi/${this.id}/`);
+    console.log(response.data)
+    this.dpi = response.data
+    try {
+    } catch (e) {
+      if (this.notyf) {
+       this.notyf.error("error durant le fetching de dpi")
+      }
+    }
   }
 
   async generateQRCode() {
@@ -615,10 +637,6 @@ deleteAntecedent(id: number) {
     { value: 'radio', label: 'Radiologique', color: '#0CF045' }
   ];
 
-  constructor() {
-    this.combineBilans();
-    this.filteredBilans = this.combinedBilans;
-  }
 
   combineBilans() {
     // Convert radio bilans

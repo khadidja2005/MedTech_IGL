@@ -9,7 +9,7 @@ import { EtablissementPersonnelMedical } from '../../../types/etablissementPerso
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
 import { Notyf } from 'notyf';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser, NgClass } from '@angular/common';
 
 
@@ -47,7 +47,8 @@ interface CompleteDPI {
 })
 export class PersonnalsMedicauxComponent {
   notyf: Notyf | undefined;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
+  id: number = 0;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router , private route: ActivatedRoute) {
     if (isPlatformBrowser(this.platformId)) {
       this.notyf = new Notyf();
     }
@@ -80,8 +81,12 @@ export class PersonnalsMedicauxComponent {
   }[] = [
   ];
   async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+      // Use the ID to fetch data or whatever you need
+    });
     try {
-     const response = await axios.get('http://localhost:8000/dashboard/etablissements/30/personnel/');
+     const response = await axios.get(`http://localhost:8000/dashboard/etablissements/${this.id}/personnel/`);
      //console.log(response.data);
      this.personnels = response.data.data;
     
@@ -93,7 +98,7 @@ export class PersonnalsMedicauxComponent {
     }
 
     try {
-      const response = await axios.get('http://localhost:8000/dashboard/etablissements/30/dpis/');
+      const response = await axios.get(`http://localhost:8000/dashboard/etablissements/${this.id}/dpis/`);
       //console.log(response.data);
       this.DPIList = response.data.data;
      
@@ -750,7 +755,7 @@ export class PersonnalsMedicauxComponent {
         this.newPersonnel.id = newId;
         this.personnels.push({ ...this.newPersonnel });
         try {
-          const response = await axios.post('http://localhost:8000/dashboard/etablissements/30/personnel/add/', {
+          const response = await axios.post(`http://localhost:8000/dashboard/etablissements/${this.id}/personnel/add/`, {
             lienPhoto: this.newPersonnel.lienPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             nom_complet: this.newPersonnel.nom_complet,
             role: this.newPersonnel.role,

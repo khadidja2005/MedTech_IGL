@@ -1,7 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Input, Output, EventEmitter, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import axios from 'axios';
+import { Notyf } from 'notyf';
 
 
 @Component({
@@ -11,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './modifier-details.component.css'
 })
 export class ModifierDetailsComponent {
+  notyf:Notyf | undefined;
   @Input() isVisible: boolean = false;
   @Input() label!: string;
   @Input() detail!: string;
@@ -19,12 +23,12 @@ export class ModifierDetailsComponent {
   detailForm: FormGroup;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder ,@Inject(PLATFORM_ID) private platformId: Object,private router: Router , private route: ActivatedRoute) {
     this.detailForm = this.fb.group({
-    detail: ['', Validators.required],
-
-    });
-
+    detail: ['', Validators.required] },);
+        if (isPlatformBrowser(this.platformId)) {
+          this.notyf = new Notyf();
+        }
   }
 
 
@@ -35,13 +39,35 @@ export class ModifierDetailsComponent {
 
       });
     }
+      // Get the ID once
+      this.route.params.subscribe(params => {
+        const id = params['id'];
+        // Use the ID to fetch data or whatever you need
+      })
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.detailForm.valid) {
       const formValue = this.detailForm.value;
       const updatedData: Partial<String> = formValue.detail;
-      this.saveChanges.emit(updatedData);
+      console.log(updatedData)
+      try {
+        const response = await axios.put(
+          "http://localhost:8000/soins/dpi/soins/65/update/",
+          {description :  updatedData}
+        );
+        console.log(response.data);
+        if (this.notyf) {
+          this.notyf.success("Information sauvegardée avec succès");
+        }
+        this.saveChanges.emit(updatedData);
+        this.closePopup.emit();
+      } catch (e) {
+        console.log(e);
+        if (this.notyf) {
+          this.notyf.error("Erreur durant la sauvegarde");
+        }
+      }
     }
   }
 }
