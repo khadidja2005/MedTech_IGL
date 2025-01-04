@@ -11,6 +11,34 @@ import axios from 'axios';
 import { Notyf } from 'notyf';
 import { Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser, NgClass } from '@angular/common';
+
+
+interface CompleteDPI {
+  patient: {
+    nom_complet: string;
+    date_naissance: string;
+    nss: string;
+    email: string;
+    telephone: number;
+    adresse: string;
+  };
+  mutuelles: {
+    mutuelle1: {
+      nom: string;
+      telephone: number;
+      email: string;
+      type_couverture: string;
+    };
+    mutuelle2: {
+      nom: string;
+      telephone: number;
+      email: string;
+      type_couverture: string;
+    };
+  };
+}
+
+
 @Component({
   selector: 'app-personnals-medicaux',
   imports: [CommonModule, FormsModule],
@@ -313,12 +341,110 @@ export class PersonnalsMedicauxComponent {
     this.showMutuelleStep = false;
   }
 
+  completeDPI: CompleteDPI = {
+    patient: {
+      nom_complet: '',
+      date_naissance: '',
+      nss: '',
+      email: '',
+      telephone: 0,
+      adresse: ''
+    },
+    mutuelles: {
+      mutuelle1: {
+        nom: '',
+        telephone: 0,
+        email: '',
+        type_couverture: ''
+      },
+      mutuelle2: {
+        nom: '',
+        telephone: 0,
+        email: '',
+        type_couverture: ''
+      }
+    }
+  };
+
+
   saveDPIWithMutuelle() {
-    // Save both DPI and Mutuelle data
-    this.submitNewDPI();
+    // Sauvegarder les informations des mutuelles
+    this.completeDPI.mutuelles = {
+      mutuelle1: { ...this.mutuelle1 },
+      mutuelle2: { ...this.mutuelle2 }
+    };
+
+    // Créer un nouveau DPI avec toutes les informations
+    const newDPI = {
+      dpi_id: Math.max(0, ...this.DPIList.map(d => d.dpi_id)) + 1,
+      patient_id: Math.floor(Math.random() * 1000), // Simuler un ID unique
+      nss: parseInt(this.completeDPI.patient.nss),
+      nom_complet: this.completeDPI.patient.nom_complet,
+      date_creation: new Date().toISOString()
+    };
+
+    // Ajouter le nouveau DPI à la liste
+    this.DPIList.push(newDPI);
+
+    // Réinitialiser le formulaire et fermer les modales
+    this.resetCompleteDPIForm();
     this.showMutuelleStep = false;
     this.showDPIModal = false;
+
+    // Afficher le message de succès
+    if (this.notyf) {
+      this.notyf.success('DPI créé avec succès');
+    }
   }
+
+  // Nouvelle méthode pour réinitialiser tout le formulaire
+  resetCompleteDPIForm() {
+    this.completeDPI = {
+      patient: {
+        nom_complet: '',
+        date_naissance: '',
+        nss: '',
+        email: '',
+        telephone: 0,
+        adresse: ''
+      },
+      mutuelles: {
+        mutuelle1: {
+          nom: '',
+          telephone: 0,
+          email: '',
+          type_couverture: ''
+        },
+        mutuelle2: {
+          nom: '',
+          telephone: 0,
+          email: '',
+          type_couverture: ''
+        }
+      }
+    };
+    
+    this.resetDPIForm(); 
+    this.mutuelle1 = {
+      nom: '',
+      email: '',
+      telephone: 0,
+      type_couverture: '',
+      id: 0,
+      patient_id: 0,
+      numero_adherent: 0
+    };
+    this.mutuelle2 = {
+      nom: '',
+      email: '',
+      telephone: 0,
+      type_couverture: '',
+      id: 0,
+      patient_id: 0,
+      numero_adherent: 0
+    };
+  }
+
 
   mutuelle1: Mutuelle = {
     nom: '',
@@ -339,8 +465,12 @@ export class PersonnalsMedicauxComponent {
     patient_id: 0,
     numero_adherent: 0,
   };
+
+  
   returnFirst() {
-    this.showDPIModal = false; // Assuming you track steps with currentStep variable
+    this.showDPIModal = false;
+    this.showMutuelleStep = false;
+    this.resetCompleteDPIForm();
   }
 
   DPIValidationErrors: {
@@ -437,6 +567,15 @@ export class PersonnalsMedicauxComponent {
 
   nextStep() {
     if (this.validateDPIForm()) {
+      // Sauvegarder les informations du patient dans completeDPI
+      this.completeDPI.patient = {
+        nom_complet: this.patient.nom_complet,
+        date_naissance: this.patient.date_naissance,
+        nss: this.patient.nss,
+        email: this.patient.email,
+        telephone: this.patient.telephone,
+        adresse: this.patient.adresse
+      };
       this.showMutuelleStep = true;
     }
   }
