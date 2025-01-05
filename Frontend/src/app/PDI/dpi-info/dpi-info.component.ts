@@ -1,5 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import QRCode from 'qrcode';
 import { DPI } from '../../../types/dpi';
@@ -9,7 +9,7 @@ import { Antecedent } from '../../../types/antecedent';
 import { Hospitalisation } from '../../../types/hospitalisation';
 import { Notyf } from 'notyf';
 import axios from 'axios';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 export interface Mutuelle {
@@ -65,6 +65,7 @@ export interface BilanRadio extends BaseBilan {
   imports: [CommonModule, FormsModule],
   templateUrl: './dpi-info.component.html',
   styleUrls: ['./dpi-info.component.css']
+  
 })
 export class DpiInfoComponent implements OnInit {
   id : number = 0
@@ -75,7 +76,12 @@ export class DpiInfoComponent implements OnInit {
   showGenderDropdown: boolean = false;  // Add this line
   mutuelleModalMode: any;
   dpiService: any;
+  antecedents: Antecedent [] = [
+  ];
+  Hospitalisations: Hospitalisation[] = [
 
+  ];
+  combinedBilanss: CombinedBilan[] = [];
   // Function to change the selected menu
   selectMenu(menuNumber: number): void {
     this.selectedMenu = menuNumber;
@@ -88,7 +94,7 @@ export class DpiInfoComponent implements OnInit {
     id: 1,
     createur_id: 1,
     date_creation: '2024-12-21',
-    patient: 'Sam Mahmoudi',
+    patient: 1,
     etablissement_id: 1
   };
 
@@ -102,38 +108,31 @@ export class DpiInfoComponent implements OnInit {
 
 
   patient1: Patient = {
-    id: 1,
-    nss: '12345678901234',
-    nom_complet: 'Sarah Benali',
-    date_naissance: '1995-06-15',
-    adresse: '45 Rue des Fleurs, Alger, Algeria',
-    telephone: 213558123456,
-    email: 'sarah.benali@example.com',
-    password: 'securepassword123',
-    lienPhoto: '',
-    lieu_naissance: 'Oran, Algeria',
-    genre: 'Femme',
-    statueMatrimonial: 'Célibataire'
+    id: 0,
+    nss: '',
+    nom_complet: '',
+    date_naissance: '',
+    lieu_naissance: '',
+    adresse: '',
+    telephone: 0,
+    email: '',
+    genre: '',
+    statueMatrimonial: '',
+    password: '',
+    lienPhoto: ''
   };
 
    medecins :string[] = [
-    "Amine Bensalem",
-    "Leila Hamdi",
-    "Yacine Belkacem",
-    "Souad Khelifi",
-    "Mohamed Reda",
-    "Nadia Toumi",
-    "Karim Moulay",
-    "Sarah Meziane",
-    "Fares Chebbi",
-    "Salima Chabane"
-];
 
+];
   qrCodeDataUrl: string = '';
   showQrModal: boolean = false;
   showStatusDropdown: boolean = false;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router , private route: ActivatedRoute) {
+          if (isPlatformBrowser(this.platformId)) {
+            this.notyf = new Notyf();
+          }
     this.combineBilans();
     this.filteredBilans = this.combinedBilans;
   }
@@ -144,15 +143,69 @@ export class DpiInfoComponent implements OnInit {
         // Use the ID to fetch data or whatever you need
       });
     await this.generateQRCode();
-    const response = await axios.get(`http://localhost:8000/dpipage/dpi/${this.id}/`);
-    console.log(response.data)
-    this.dpi = response.data
+    
+    //console.log(response.data)
     try {
+    const response = await axios.get(`http://localhost:8000/soins/dpipage/${this.id}/`);
+    this.dpi.date_creation = response.data.date_creation
+    this.dpi.id = response.data.id
+    this.dpi.etablissement_id = response.data.etablissement.id
+    this.dpi.createur_id = response.data.createur ? response.data.createur.id : response.data.medecin.id  
+    this.dpi.patient = response.data.patient_id.id
+    this.patient1 = response.data.patient_id
+    this.medecins = response.data.medecin ? response.data.medecin.nom_complet :  "unknown"
+    this.user1.id = response.data.medecin ? response.data.medecin.id  : response.data.createur.id
+    this.user1.name = response.data.medecin ? response.data.medecin.nom_complet : response.data.createur.nom_complet
+    this.user1.profession = response.data.medecin ? response.data.medecin.role: response.data.createur.role
+    this.user1.Admin = response.data.medecin ? false  : true
     } catch (e) {
+      console.log(e)
       if (this.notyf) {
        this.notyf.error("error durant le fetching de dpi")
+
       }
     }
+    
+    try {
+     const response2 = await axios.get(`http://localhost:8000/soins/dpipage/antecedants/${this.id}/`)
+     //console.log(response2.data)
+     this.antecedents = response2.data
+    }catch(e){
+      if (this.notyf) {
+        this.notyf.error("error durant le fetching des antecedants")
+       }
+    }
+    try {
+      const response3 = await axios.get(`http://localhost:8000/soins/dpipage/hospitalizations/${this.id}/`)
+      //console.log(response3.data)
+      this.Hospitalisations = response3.data
+     }catch(e){
+       if (this.notyf) {
+         this.notyf.error("error durant le fetching des hospitalisations")
+        }
+     }
+     try {
+      const response4 = await axios.get(`http://localhost:8000/soins/dpipage/bilans/${this.id}/`)
+      //console.log(response4.data)
+      this.combinedBilanss = response4.data 
+      this.combineBilans();
+     }catch(e){
+       if (this.notyf) {
+         this.notyf.error("error durant le fetching des bilans")
+        }
+     }
+
+
+     try {
+      const response5 = await axios.get(`http://localhost:8000/soins/dpipage/mutuelles/${this.id}/`)
+      //console.log(response5.data)
+      this.mutuelles = response5.data
+     }catch(e){
+       if (this.notyf) {
+         this.notyf.error("error durant le fetching des bilans")
+        }
+     }
+
   }
 
   async generateQRCode() {
@@ -296,35 +349,7 @@ export class DpiInfoComponent implements OnInit {
     }
   }
 
-  antecedents: Antecedent [] = [
-    {
-      id: 1,
-      type: 'Type 1',
-      nom: 'Antécédent 1',
-      description: 'Description 1',
-      date_debut: '2023-01-01',
-      date_fin: '2023-12-31',
-      DPI_id: 1,
-    },
-    {
-      id: 2,
-      type: 'Type 2',
-      nom: 'Antécédent 2',
-      description: 'Description 2',
-      date_debut: '2022-05-15',
-      date_fin: '2022-10-20',
-      DPI_id: 2,
-    },
-    {
-      id: 3,
-      type: 'Type 2',
-      nom: 'Antécédent 3',
-      description: 'Description 3',
-      date_debut: '2020-02-25',
-      date_fin: '2021-05-29',
-      DPI_id: 3,
-    },
-  ];
+
 
   
   getTypeColor(type: string): string {
@@ -513,112 +538,12 @@ deleteAntecedent(id: number) {
   }
 }
 
-  Hospitalisations: Hospitalisation[] = [
-    {
-      id: 1,
-      date_debut: '2024-12-01',
-      date_fin: '',
-      DPI: 1,
-      medecin_responsable: 1,
-    },
-    {
-      id: 2,
-      date_debut: '2024-11-15',
-      date_fin: '2024-11-20',
-      DPI: 2,
-      medecin_responsable: 2,
-    },
-    {
-      id: 3,
-      date_debut: '2024-10-01',
-      date_fin: '2024-10-15',
-      DPI: 3,
-      medecin_responsable: 3,
-    },
-  ];
+
 
   bilans: BilanRadio[] = [
-    {
-      id: 1,
-      date_debut: '2024-12-01',
-      date_fin: '2024-12-05',
-      type_radio: 'IRM',
-      est_complet: true,
-      est_resultat: true,
-      description: 'IRM cérébrale pour évaluation neurologique',
-      medecin: 'doc1',
-      Consultation: 0,
-      resultat_id: 1,
-      etablissement: 0,
-      patient: ''
-    },
-    {
-      id: 2,
-      date_debut: '2024-11-20',
-      date_fin: '2024-11-22',
-      type_radio: 'SCANNER',
-      est_complet: false,
-      est_resultat: false,
-      description: 'Scanner thoracique pour diagnostic précoce',
-      medecin: 'doc2',
-      Consultation: 1,
-      resultat_id: 2,
-      etablissement: 0,
-      patient: ''
-    },
-    {
-      id: 3,
-      date_debut: '2024-10-15',
-      date_fin: '2024-10-18',
-      type_radio: 'RADIO',
-      est_complet: true,
-      est_resultat: true,
-      description: 'Radiographie abdominale pour contrôle postopératoire',
-      medecin: 'MED003',
-      Consultation: 2,
-      resultat_id: 1,
-      etablissement: 0,
-      patient: ''
-    },
   ];
 
   bilansBio: BilanBio[] = [
-    {
-      id: 1,
-      date_debut: '2024-12-03',
-      date_fin: '2024-12-04',
-      parametres: 'Glycémie, Cholestérol, Créatinine',
-      est_complet: true,
-      est_resultat: true,
-      medecin: 'MED001',
-      Consultation: 2,
-      etablissement: 1,
-      patient: ''
-    },
-    {
-      id: 2,
-      date_debut: '2024-11-25',
-      date_fin: '2024-11-26',
-      parametres: 'Hémogramme complet',
-      est_complet: false,
-      est_resultat: false,
-      medecin: 'MED003',
-      Consultation: null,
-      etablissement: 1,
-      patient: ''
-    },
-    {
-      id: 3,
-      date_debut: '2024-10-10',
-      date_fin: '2024-10-11',
-      parametres: 'Tests hépatiques, Ionogramme',
-      est_complet: true,
-      est_resultat: true,
-      medecin: 'MED002',
-      Consultation: 1,
-      etablissement: 2,
-      patient: ''
-    }
   ];
 
  
@@ -639,25 +564,29 @@ deleteAntecedent(id: number) {
 
 
   combineBilans() {
-    // Convert radio bilans
-    const radioBilans = this.bilans.map(bilan => ({
-      ...bilan,
-      type: 'radio' as const
-    }));
+    // Initialisation des bilans combinés
+    this.combinedBilans = this.combinedBilanss.map(bilan => {
+        if ('type_radio' in bilan) {
+            return {
+                ...bilan,
+                type: 'radio' as const
+            };
+        } else {
+            return {
+                ...bilan,
+                type: 'bio' as const
+            };
+        }
+    });
 
-    // Convert bio bilans
-    const bioBilans = this.bilansBio.map(bilan => ({
-      ...bilan,
-      type: 'bio' as const
-    }));
-
-    // Combine and shuffle
-    this.combinedBilans = [...radioBilans, ...bioBilans]
-      .sort(() => Math.random() - 0.5);
-  }
+    // Mise à jour des bilans filtrés
+    this.filteredBilans = this.combinedBilans;
+    
+    return this.combinedBilans;
+}
   
 
-  combinedBilans: CombinedBilan[] = [];
+  combinedBilans: CombinedBilan[] = []
   filteredBilans: CombinedBilan[] = []; 
 
 
@@ -734,35 +663,7 @@ deleteAntecedent(id: number) {
     this.toggleFilterModal();
   }
 
-  mutuelles: Mutuelle[] = [
-    {
-      id: 1,
-      patient_id: 1,
-      nom: 'Mutuelle Santé Plus',
-      numero_adherent: 12345678,
-      type_couverture: 'Complète',
-      telephone: 0o555123456,
-      email: 'contact@mutuellesanteplus.dz',
-    },
-    {
-      id: 2,
-      patient_id: 2,
-      nom: 'Assurance Maladie Universelle',
-      numero_adherent: 87654321,
-      type_couverture: 'Partielle',
-      telephone: 0o666234567,
-      email: 'info@amu.dz',
-    },
-    {
-      id: 3,
-      patient_id: 3,
-      nom: 'Mutuelle Bien-Être',
-      numero_adherent: 56781234,
-      type_couverture: 'Spécialisée',
-      telephone: 0o77734567 ,
-      email: 'support@bienetre.dz',
-    },
-  ];
+  mutuelles: Mutuelle[] = [];
 
   showHospitalizationModal = false;
   hospitalizationModalMode: 'add' | 'view' = 'add';
@@ -950,7 +851,7 @@ validateMutuelle(): boolean {
 }
 
 // Fixed addMutuelle function
-addMutuelle() {
+async addMutuelle() {
   if (this.validateMutuelle()) {
       const newId = 0;
       
@@ -964,8 +865,20 @@ addMutuelle() {
           email: this.newMutuelle.email,
           telephone: this.newMutuelle.telephone
       };
+      try {
+        const response = await axios.post(`http://localhost:8000/soins/dpipage/${this.id}/mutuelles/add/`, mutuelle);
+        console.log(response.data)
+        if (this.notyf) {
+          this.notyf.success('Mutuelle ajoutée avec succès');
+          this.mutuelles.push(mutuelle);
+        }
+      }catch (e){
 
-      this.mutuelles.push(mutuelle);
+        console.error('Error adding mutuelle:', e);
+        if (this.notyf) {
+          this.notyf.error("error durant l'ajout de mutuelle")
+         }
+      }
       this.toggleMutuelleModal();
   }
 }
@@ -999,21 +912,34 @@ handleClick(event: MouseEvent) {
   showEtablissementDropdown = false;
   selectedEtablissement: Etablissement | null = null;
 
-  deleteDPI() {
+  async deleteDPI() {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce DPI ?')) {
-      // Call your service method to delete the DPI
-      this.dpiService.deleteDPI(this.dpi.id).subscribe({
-        next: () => {
-          // Show success message
-          alert('DPI supprimé avec succès');
-          // Refresh the page or update the list
+      try {
+        const response = await axios.delete(`http://localhost:8000/soins/dpipage/dpi/${this.id}/delete/`);
+        console.log(response.data)
+        if (this.notyf) {
+          this.notyf.success('DPI supprimé avec succès');
           window.location.reload();
-        },
-        error: (error: any) => {
-          console.error('Error deleting DPI:', error);
-          alert('Erreur lors de la suppression du DPI');
         }
-      });
+        this.dpiService.deleteDPI(this.dpi.id).subscribe({
+          next: () => {
+            // Show success message
+            alert('DPI supprimé avec succès');
+            // Refresh the page or update the list
+            window.location.reload();
+          },
+          error: (error: any) => {
+            console.error('Error deleting DPI:', error);
+            alert('Erreur lors de la suppression du DPI');
+          }
+        });
+      } catch (e){
+        console.error('Error deleting DPI:', e);
+        if (this.notyf) {
+          this.notyf.error("error durant la suppression de dpi")
+         }
+      }
+      // Call your service method to delete the DPI
     }
   }
 

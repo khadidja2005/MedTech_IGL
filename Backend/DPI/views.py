@@ -207,9 +207,9 @@ def get_mutuelles(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-def add_mutuelle(request):
+def add_mutuelle(request , dpi_id):
     """Add new mutuelle for patient"""
-    dpi = get_object_or_404(DPI, id=request.data.get('dpi_id'))
+    dpi = get_object_or_404(DPI, id=dpi_id)
     data = request.data.copy()
     data['patient_id'] = dpi.patient.id
     

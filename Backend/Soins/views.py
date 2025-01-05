@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from BDD.models import Soins, DPI, Hospitalisation, PersonnelMedical
-from .serializer import SoinsSerializer , PersonnelMedicalSerializer
+from BDD.models import *
+from .serializer import *
 @api_view(['GET'])
 def get_all_soins(request):
     """Get all soins for a DPI"""
@@ -131,3 +131,82 @@ def delete_soin(request , soin_id):
     )
     soin.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def get_dpi_by_id(request, dpi_id ):
+    """
+    Get specific soin (medical care record) by ID.
+    Verifies user has permission to access this medical record.
+    """
+    # Get the soin object
+    soin = get_object_or_404(DPI, id=dpi_id)
+    serializer = DPI_Serializer(soin)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def get_antecedants_by_dpi(request , dpi_id):
+    antecedants = Antecedent.objects.filter(DPI_id = dpi_id )
+    serializer = AntecedentSerializer(antecedants , many = True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def get_hospitalizations_by_dpi(request , dpi_id):
+    antecedants = Hospitalisation.objects.filter(DPI = dpi_id )
+    serializer = HospitalisationSerializer(antecedants , many = True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_all_bilans(request , dpi_id):
+    """Get all bilans (bio and radio) for a DPI in chronological order"""
+    # Get consultations for this DPI
+    consultations = Consultation.objects.filter(Hospitalisation__DPI_id=dpi_id)
+    
+    # Get both types of bilans
+    bilans_bio = BilanBio.objects.filter(Consultation__in=consultations)
+    bilans_radio = BilanRadio.objects.filter(Consultation__in=consultations)
+    
+    # Serialize both types
+    bio_serializer = BilanBioSerializer(bilans_bio, many=True)
+    radio_serializer = BilanRadioSerializer(bilans_radio, many=True)
+    
+    # Combine and sort by date
+    all_bilans = sorted(
+        bio_serializer.data + radio_serializer.data,
+        key=lambda x: x['date_debut'],
+        reverse=True
+    )
+    
+    return Response(all_bilans)
+
+
+@api_view(['GET'])
+def get_mutuelles_by_dpi(request , dpi_id):
+    """Get all mutuelles for a patient in DPI"""
+    dpi = get_object_or_404(DPI, id=dpi_id)
+    mutuelles = Mutuelle.objects.filter(patient_id=dpi.patient)
+    serializer = MutuelleSerializer(mutuelles, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def add_mutuelle(request , dpi_id):
+    """Add new mutuelle for patient"""
+    dpi = get_object_or_404(DPI, id=dpi_id)
+    data = request.data.copy()
+    data['patient_id'] = dpi.patient.id
+    
+    serializer = MutuelleSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+def delete_dpi(request , dpi_id):
+    try :
+        dpi = get_object_or_404(DPI , id = dpi_id)
+        dpi.delete()
+        return Response(status = status.HTTP_200_OK)
+    except :
+        return Response(status = status.HTTP_404_NOT_FOUND)  
