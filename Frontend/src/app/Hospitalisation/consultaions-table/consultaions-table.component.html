@@ -1,28 +1,36 @@
-<div class="bg-transparent text-main_color font-poppins w-full max-w-screen-lg mx-auto">
+<div
+  class="bg-transparent text-main_color font-poppins w-full max-w-screen-lg mx-auto"
+>
   <div class="grid gap-3">
     <!-- Headers -->
-    <div class="bg-white grid grid-cols-4 px-6 py-3 uppercase text-main_color font-medium rounded-lg">
+    <div
+      class="bg-white grid grid-cols-4 px-6 py-3 uppercase text-main_color font-medium rounded-lg"
+    >
       <div class="text-left">Consultation</div>
       <div class="text-center">Medecin</div>
       <div class="text-center">Date</div>
-      </div>
+    </div>
 
     <!-- Consultation Rows -->
-    <div *ngFor="let consultation of consultations let i = index"
-         class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+    <div
+      *ngFor="let consultation of consultations; let i = index"
+      class="grid grid-cols-4 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+    >
       <!-- Icon and Reference -->
       <div class="flex items-center gap-4 text-left">
-        <span><img src='/assets/images/Consultation.png' class="w-6 h-6"> </span>
-        <span class=" text-main_color">Consultation {{ i+1  }}</span>
+        <span
+          ><img src="/assets/images/Consultation.png" class="w-6 h-6" />
+        </span>
+        <span class="text-main_color">Consultation {{ i + 1 }}</span>
       </div>
 
       <!-- Medecin -->
       <div class="text-main_color text-center">
-        {{ getMedecinName(consultation.medecin) }}
+        {{ consultation.medecin }}
       </div>
 
       <!-- Date -->
-      <div class=" text-main_color text-center">
+      <div class="text-main_color text-center">
         {{ consultation.date }}
       </div>
 
@@ -30,7 +38,8 @@
       <div class="text-center">
         <button
           class="bg-blue_light text-blue px-4 py-2 rounded-lg text-sm hover:bg-blue-200 transition-colors text-left"
-          (click)="onConsult(consultation)">
+          (click)="onConsult(consultation)"
+        >
           Consulter
         </button>
       </div>

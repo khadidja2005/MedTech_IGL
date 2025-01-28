@@ -13,8 +13,7 @@ from BDD.models import (
 @require_http_methods(["GET"])
 def archive_labo(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        laborantin = data.get("laborantin")
+        laborantin = request.GET.get("laborantin")
         if not laborantin:
             return JsonResponse({"error": "Laborantin not provided"}, status=400)
         try:
@@ -49,8 +48,7 @@ def archive_labo(request):
 
 def get_bilans(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        laborantin = data.get("laborantin")
+        laborantin = request.GET.get("laborantin")
         if not laborantin:
             return JsonResponse({"error": "Laborantin not provided"}, status=400)
         try:
@@ -68,6 +66,7 @@ def get_bilans(request):
             etablissement.append(ep.etablissement)
         bilans = []
         for bilan in BilanBio.objects.all():
+            print(bilan.id)
             etab = bilan.Consultation.Hospitalisation.DPI.etablissement_id
             if etab in etablissement and not bilan.est_resultat:
                 count += 1
@@ -75,6 +74,7 @@ def get_bilans(request):
                     {
                         "id": bilan.id,
                         "date": bilan.date_debut.strftime("%Y-%m-%d"),
+                        "etablissement_id": etab.id,
                         "etablissement": etab.nom_etablissement,
                     }
                 )

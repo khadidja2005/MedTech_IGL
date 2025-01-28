@@ -16,13 +16,11 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(["GET"])
 def get_info_hospitalisation(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
             )
-
         try:
             # Fetch the Hospitalisation object
             hospitalisation = Hospitalisation.objects.get(id=hospitalisation_id)
@@ -34,13 +32,13 @@ def get_info_hospitalisation(request):
     # Ensure all fields are JSON-serializable
     response_data = {
         "date_debut": hospitalisation.date_debut.strftime("%Y-%m-%d"),
-        "medecin_responsable": hospitalisation.medecin_responsable.nom_complet,
+        "medecin": hospitalisation.medecin_responsable.nom_complet,
+        "date_fin": (
+            hospitalisation.date_fin.strftime("%Y-%m-%d")
+            if hospitalisation.date_fin
+            else None
+        ),
     }
-
-    if hospitalisation.date_fin:
-        response_data["date_fin"] = hospitalisation.date_fin.strftime("%Y-%m-%d")
-    else:
-        response_data["etat"] = "en cours"
 
     # Return the response as JSON
     return JsonResponse(response_data)
@@ -48,9 +46,7 @@ def get_info_hospitalisation(request):
 
 def get_consultations(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
-        print(hospitalisation_id)
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -83,9 +79,7 @@ def get_consultations(request):
 
 def get_soins(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
-        print(hospitalisation_id)
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -100,7 +94,7 @@ def get_soins(request):
             )
 
         # Fetch all Consultation objects related to the Hospitalisation
-        soins = Soins.objects.filter(hospitalisation=hospitalisation_id)
+        soins = Soins.objects.filter(hospitalisation=hospitalisation)
 
         # Ensure all fields are JSON-serializable
         response_data = [
@@ -122,9 +116,7 @@ def get_soins(request):
 
 def get_all_medecins(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        hospitalisation_id = data.get("hospitalisation_id")
-        print(hospitalisation_id)
+        hospitalisation_id = request.GET.get("hospitalisation_id")
         if not hospitalisation_id:
             return JsonResponse(
                 {"error": "hospitalisation_id is required."}, status=400
@@ -143,12 +135,11 @@ def get_all_medecins(request):
         medecins = etablissement_personnel_medical.objects.filter(
             etablissement=etablissement_id
         )
-        print(medecins)
 
         response = [
             {
                 "id": medecin.personnel_medical.id,
-                "nom_complet": medecin.personnel_medical.nom_complet,
+                "nom": medecin.personnel_medical.nom_complet,
             }
             for medecin in medecins
         ]
@@ -185,10 +176,17 @@ def modifier(request):
             hospitalisation.medecin_responsable = medecin
 
         if date_debut:
-            hospitalisation.date_debut = date_debut
+            hospitalisation.date_debut = datetime.strptime(
+                date_debut, "%d/%m/%Y"
+            ).strftime("%Y-%m-%d")
         if date_fin:
-            hospitalisation.date_fin = date_fin
-
+            hospitalisation.date_fin = datetime.strptime(date_fin, "%d/%m/%Y").strftime(
+                "%Y-%m-%d"
+            )
+        else:
+            status = data.get("status")
+            if status == "fini":
+                hospitalisation.date_fin = None
         hospitalisation.save()
         return JsonResponse({"message": "Hospitalisation updated successfully."})
     else:
@@ -228,7 +226,9 @@ def ajouter_consultation(request):
             Medecin=medecin,
         )
         consultation.save()
-        return JsonResponse({"message": "Consultation added successfully."})
+        return JsonResponse(
+            {"message": "Consultation added successfully.", "id": consultation.id}
+        )
     else:
         return JsonResponse({"error": "Invalid request method."}, status=405)
 
@@ -256,7 +256,7 @@ def ajouter_soin(request):
         if not heure:
             return JsonResponse({"error": "'heure' is required."}, status=400)
         if not type_soins:
-            return JsonResponse({"error": "'type_soins' is required."}, status=400)
+            return JsonResponse({"error": "'type_soin' is required."}, status=400)
         try:
             hospitalisation = Hospitalisation.objects.get(id=hospitalisation_id)
         except Hospitalisation.DoesNotExist:
@@ -297,7 +297,7 @@ def ajouter_soin(request):
             dose=dose,
         )
         soin.save()
-        return JsonResponse({"message": "Soins added successfully."})
+        return JsonResponse({"message": "Soins added successfully.", "id": soin.id})
     else:
         return JsonResponse({"error": "Invalid request method."}, status=405)
 
