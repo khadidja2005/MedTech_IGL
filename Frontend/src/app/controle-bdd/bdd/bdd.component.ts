@@ -12,6 +12,8 @@ import axios from 'axios';
   styleUrl: './bdd.component.css'
 })
 export class BddComponent {
+  activeItem : string = "Control de BDD";
+  role : string = "admin";
   notyf: Notyf | undefined;
     constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router) {
       if (isPlatformBrowser(this.platformId)) {
@@ -27,7 +29,7 @@ export class BddComponent {
         this.notyf.success('Base de données initialisée avec succès');
       };
      }catch(e){
-       console.log(e); 
+       console.log(e);
        if (this.notyf) {
          this.notyf.error('Erreur lors du chargement de la base de données');
        };

@@ -3,6 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
 
+interface ConsultationResponse {
+  id: number;
+  date: string;
+  resume: string;
+  ordonnances: any[];
+  bilans_bio: any[];
+  bilans_radio: any[];
+}
+
 @Component({
   selector: 'app-consultation-info',
   standalone: true,

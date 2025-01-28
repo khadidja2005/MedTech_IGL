@@ -51,7 +51,15 @@ export class PageBilanComponent implements OnInit {
   bilan!: BilanRadio;
   result!: ResultatRadio;
   userRole: 'medecin' | 'radiologue' = 'medecin';
-
+  activeItem: string;
+  constructor() {
+    if (this.userRole == 'radiologue') {
+      this.activeItem = 'Bilans';
+    }
+    else {
+      this.activeItem = 'DPI';
+    }
+  }
   ngOnInit() {
     // Mock data for demonstration
     this.bilan = {

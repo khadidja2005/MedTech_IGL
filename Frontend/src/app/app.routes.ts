@@ -14,6 +14,8 @@ import { BddComponent } from './controle-bdd/bdd/bdd.component';
 import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/page-affichage-etablissement/page-affichage-etablissement.component';
 import { SoinComponent } from './Soin/soin/soin.component';
 import { DpiComponent } from './PDI/dpi/dpi.component';
+import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
+import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 // import { DpiComponent } from './PDI/dpi/dpi.component';
 // import { BddComponent } from './controle-bdd/bdd/bdd.component';
 // import { PageListEtablissemetsComponent } from './dashboard-etablissement/page-list-etablissemets/page-list-etablissemets.component';
@@ -27,7 +29,7 @@ export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation', component: ConsultationPageComponent },
   { path: 'login', component: LoginpageComponent },
-  { path: 'ordannace', component: OrdonnanceComponent },
+  { path: 'ordannance', component: OrdonnanceComponent },
   {path : "authcode" , component : RecoverpageComponent},
   {path : "verificationcode" , component : CodepageComponent},
   {path : "resetpassword" , component : ResetpasswordpageComponent},
@@ -36,6 +38,9 @@ export const routes: Routes = [
   {path : "dashboard/Controlbdd" , component : BddComponent} ,
   {path : 'dashboard/etablissement/:id' , component : PageAffichageEtablissementComponent},
   {path : "soin/:id" , component : SoinComponent } ,
-{path : "dpi/:id" , component : DpiComponent}
+{path : "dpi/:id" , component : DpiComponent},
+  {path : "bdd" , component : BddComponent},
+  {path : "bilanradio" , component : PageBilanComponent},
+  {path : "bilanbio" , component : BilanBioComponent}
 
 ];

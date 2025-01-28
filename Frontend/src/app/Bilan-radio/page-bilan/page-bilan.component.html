@@ -1,10 +1,12 @@
-  <!-- Fix the header so it stays at the top -->
-  <app-header-pdi ></app-header-pdi>
-
-  <!-- Main content -->
-  <div class="layout flex pt-[60px]"> <!-- Add padding-top for spacing below the fixed header -->
-    <app-sidebar></app-sidebar>
-    <div class="bg-[#F3F8FF] flex-1 ml-52 mt-3"> <!-- Adjusted for sidebar width -->
+<div class="app-layout">
+  <!-- Header -->
+  <app-header-pdi class="header"></app-header-pdi>
+  <!-- Main Content -->
+  <div class="main-section">
+    <!-- Sidebar -->
+    <app-sidebar class="sidebar" [activeItem]="activeItem" [role]="userRole"></app-sidebar>
+    <!--real main-->
+    <div class="content">
     <ng-container *ngIf="bilan">
     <app-bilan-display-radiologue
       *ngIf="isRadiologue()"
@@ -23,5 +25,6 @@
       [bilan]="bilan">
     </app-bilan-display>
 </ng-container>
+</div>
 </div>
 </div>

@@ -10,5 +10,7 @@ import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.compo
   styleUrl: './consultation-page.component.css'
 })
 export class ConsultationPageComponent {
+  role : string = 'medecin';
+  activeItem : string = 'DPI';
 
 }

@@ -6,14 +6,14 @@
       </div>
       <div *ngIf="canEditConsultation" class="flex justify-between gap-4 w-full">
         <button class="w-full" (click)="modifyConsultation()">
-          <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1">
+          <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-lg p-1">
             <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">
             <p class="text-lg font-semibold text-[#FCBC05] ml-2">modifier</p>
           </div>
         </button>
         
         <button class="w-full" (click)="deleteConsultation()">
-          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1">
+          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-lg p-1">
             <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
             <p class="text-lg font-semibold text-[#FF3E3E]">supprimer</p>
           </div>
@@ -22,7 +22,7 @@
     </div>
   
     <!-- Doctor's Name and Date: Positioned in the top-right corner -->
-    <div class="etab-createur absolute top-4 right-4 p-8 text-[24px] ">
+    <div class="etab-createur absolute top-4 right-4 p-8 text-[20px] ">
       <div class="mb-4">
         <span class="font-bold font-poppins">Médecin: </span>
         <span class="text-[#4B6386] font-bold">{{consultation.Medecin}}</span>
@@ -113,9 +113,9 @@
   
 
     <div class="flex w-full max-w-[1250px] p-10 mx-6 mt-6 bg-white rounded-lg shadow-lg">
-        <p class="text-[24px] font-poppins font-bold pr-10 whitespace-nowrap">resumé:</p>
+        <p class="text-[20px] font-poppins font-bold pr-10 whitespace-nowrap">resumé:</p>
         <div class="w-full max-w-[900px]">
-          <p class="text-[24px] font-poppins font-bold text-[#4B6386] px-10 break-words overflow-hidden">
+          <p class="text-[20px] font-poppins font-bold text-[#4B6386] px-10 break-words overflow-hidden">
             {{consultation.resume}}
           </p>
         </div>
