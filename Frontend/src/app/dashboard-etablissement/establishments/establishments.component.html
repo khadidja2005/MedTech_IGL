@@ -5,7 +5,7 @@
             <input
               type="text"
               placeholder="Rechercher un établissement"
-              class="w-[1250px] h-[55px]  !text-[#4B6386] font-poppins text-xl pl-4 pr-14 py-2 rounded-2xl border-2 border-[#c7dfff]
+              class="w-full h-[55px]  !text-[#4B6386] font-poppins text-lg pl-4 pr-14 py-2 rounded-2xl border-2 border-[#c7dfff]
                focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-[#4B6386] placeholder-shown:font-semibold"
               [(ngModel)]="searchTerm"
               (input)="onSearch($event)"
@@ -19,12 +19,12 @@
             </div>
           </div>
   
-      <div class="flex gap-[590px]">
-        <div class="!text-[#4B6386] font-poppins font-semibold text-xl">Il existe {{filteredEstablishments.length}} établissements</div>
+      <div class="flex justify-between">
+        <div class="!text-[#4B6386] font-poppins font-semibold text-lg">Il existe {{filteredEstablishments.length}} établissements</div>
         <button  
-        class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-3"
+        class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-md !px-5 !py-3"
         (click)="openModal()">
-        <img src="assets/images/plus.png" alt="" class="pr-4">
+        <img src="assets/images/plus.png" alt="" class="pr-4 h-5 w-10">
        Ajouter un Etablissement
        </button>
       </div>
@@ -40,12 +40,12 @@
         <div class="flex justify-between items-start mb-2">
           <h3 class="text-3xl font-semibold font-poppins mr-3 m-2">{{establishment.nom_etablissement}}</h3>
           <div class="gap-2">
-            <div class="text-[#3A8EF6] font-poppins text-center font-semibold text-xl">500</div>
-            <div class="text-[#3A8EF6] font-poppins text-center  text-lg">employés</div>
+            <div class="text-[#3A8EF6] font-poppins text-center font-semibold text-lg">500</div>
+            <div class="text-[#3A8EF6] font-poppins text-center  text-md">employés</div>
           </div>
         </div>
-        <div class="text-[#4B6386] text-xl font-poppins mb-7">{{establishment.email}}</div>
-        <div class="text-lg text-[#4B6386] font-poppins-thin">
+        <div class="text-[#4B6386] text-lg font-poppins mb-7">{{establishment.email}}</div>
+        <div class="text-md text-[#4B6386] font-poppins-thin">
           <div>{{establishment.adresse}}</div>
         </div>
       </div>

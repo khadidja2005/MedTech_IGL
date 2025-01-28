@@ -1,19 +1,19 @@
 <div  class="w-full px-10 mt-4">
-    <div class="flex mb-6">
-      <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
+    <div class="flex justify-between mb-6">
+      <h1 class="!font-bold font-poppins !text-xl text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
       <button *ngIf="canEditEmploye()" 
-              class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+              class="flex items-center justify-between rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-md !px-4 !py-2"
               (click)="createNewPersonnel('add')">
-        <img src="assets/images/plus.png" alt="ml-14" class="">
+        <img src="assets/images/plus.png" alt="ml-14 " class="p-1 h-7 w-8">
         Ajouter un personnel médical
       </button>
     </div>
      <!-- Personnel List Headers -->
-     <div class="flex !py-5 bg-white !my-4">
+     <div class="flex !py-3 bg-white !my-2">
         <div class="w-1/12 m-6"></div>
-        <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Nom</div>
-        <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Email</div>
-        <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Role</div>
+        <div class="w-4/12 !text-[#0C2757] !text-xl text-center">Nom</div>
+        <div class="w-4/12 !text-[#0C2757] !text-xl text-center">Email</div>
+        <div class="w-3/12 !text-[#0C2757] !text-xl text-center">Role</div>
         <div class="w-3/12"></div>
       </div>
 
@@ -23,15 +23,15 @@
           <div class="w-1/12 text-center m-6">
             <img class = " rounded-full" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="">
           </div>
-          <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">
+          <div class="w-4/12 !text-[#0C2757] !text-lg text-center">
             {{person.nom_complet}}
           </div>
-          <div class="w-4/12 !text-[25px] !text-[#0C2757]">
+          <div class="w-4/12 !text-lg !text-[#0C2757]">
             {{person.email}}
           </div>
           <div class="w-3/12 text-center">
             <span [ngClass]="{
-              'px-3 py-1 rounded-lg !text-[25px] ': true,
+              'px-3 py-1 rounded-lg !text-lg ': true,
               'bg-[#D865ED1A] text-[#D865ED]': person.role === 'MEDECIN',
               'bg-[#47F6A21A] text-[#0CF045]': person.role === 'RADIOLOGUE',
               'bg-[#FF34A01A] text-[#FF34A0]': person.role === 'LABORANTIN',

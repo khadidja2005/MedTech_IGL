@@ -1,7 +1,7 @@
 <div class="grid grid-cols-12 gap-2 p-4 font-poppins relative">
     <div class="consultation flex-col col-span-3 p-4">
       <!-- Etablissement Header -->
-      <div class="flex font-bold mb-6 text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
+      <div class="flex font-bold mb-6 text-[#0C2757] text-xxl">
         <span>Etablissement &nbsp;</span>
         <span>{{ Etablissement.id}}</span>
       </div>
@@ -9,23 +9,23 @@
       <!-- Edit/Delete Buttons -->
       <div *ngIf="canEditEtablissement()" class="flex justify-between gap-4 w-full">
         <button class="w-full" (click)="modifyEtablissement()">
-          <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1">
-            <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">
-            <p class="text-lg font-semibold text-[#FCBC05] ml-2">modifier</p>
+          <div class=" bg-[rgba(252,188,5,0.1)] flex items-center rounded-md p-1">
+            <img src="assets/images/pencil.png" alt="modifier" class="w-4 h-4">
+            <p class="text-sm font-semibold text-[#FCBC05] ml-2">modifier</p>
           </div>
         </button>
         
         <button class="w-full" (click)="deleteEtablissement()">
-          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1">
-            <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
-            <p class="text-lg font-semibold text-[#FF3E3E]">supprimer</p>
+          <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-md p-1">
+            <img src="assets/images/x.png" alt="supprimer" class="w-6 h-6">
+            <p class="text-sm font-semibold text-[#FF3E3E]">supprimer</p>
           </div>
         </button>
       </div>
     </div>
 </div>
       <!-- Menu Tabs -->
-      <div class="flex text-[#4B6386]  text-[35px] p-2 rounded-lg border-b border-gray-200">
+      <div class="flex text-[#4B6386]  text-xl p-2 rounded-lg">
         <div class="flex w-full justify-between">
           <div 
             class="menu-item text-center py-2 flex-1 cursor-pointer"
@@ -57,7 +57,7 @@
       
         <!-- Nom Input -->
         <div class="mt-6">
-          <label class="block font-medium text-xl mb-2">
+          <label class="block font-medium text-lg mb-2">
             Nom
           </label>
           <input
@@ -73,7 +73,7 @@
       
         <!-- Adresse Input -->
         <div class="mt-6">
-          <label class="block font-medium text-xl mb-2">
+          <label class="block font-medium text-lg mb-2">
             Adresse
           </label>
           <input
@@ -89,7 +89,7 @@
       
         <!-- Email Input -->
         <div class="mt-6">
-          <label class="block font-medium text-xl mb-2">
+          <label class="block font-medium text-lg mb-2">
             Email
           </label>
           <input
@@ -105,7 +105,7 @@
       
         <!-- Téléphone Input -->
         <div class="mt-6">
-          <label class="block font-medium text-xl mb-2">
+          <label class="block font-medium text-lg mb-2">
             Téléphone
           </label>
           <input
@@ -134,23 +134,23 @@
       <div class="mt-6">
         <!-- Personnel Medical Section -->
         <div *ngIf="selectedMenu === 1" class="w-full px-10">
-          <div class="flex mb-6">
-            <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
+          <div class="flex mb-6 justify-between">
+            <h1 class="!font-bold font-poppins !text-lg text-[#0C2757] mr-[150px]">Liste des personnels médicaux</h1>  
             <button *ngIf="canEditEtablissement()" 
-                    class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+                    class="flex justify-between rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-lg !px-5 !py-2"
                     (click)="togglePersonnelSelectionModal()">
-              <img src="assets/images/plus.png" alt="ml-14" class="">
+              <img src="assets/images/plus.png" alt="ml-14" class="h-6 w-6">
               Ajouter un personnel médical
             </button>
           </div>
   
           <!-- Personnel List Headers -->
-          <div class="flex !py-5 bg-white !my-4">
+          <div class="flex py-3 bg-white mx-6 w-full">
             <div class="w-1/12 m-6"></div>
-            <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Nom</div>
-            <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">Email</div>
-            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Role</div>
-            <div class="w-3/12"></div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Nom</div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Email</div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Role</div>
+            <div class="w-2/12"></div>
           </div>
   
               <!-- Personnel List -->
@@ -159,15 +159,15 @@
           <div class="w-1/12 text-center m-6">
             <img class = " rounded-full" src= "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"           alt="">
           </div>
-          <div class="w-4/12 !text-[#0C2757] !text-[25px] text-center">
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">
             {{person.nom_complet}}
           </div>
-          <div class="w-4/12 !text-[25px] !text-[#0C2757]">
+          <div class="w-3/12 !text-lg !text-[#0C2757]">
             {{person.email}}
           </div>
           <div class="w-3/12 text-center">
             <span [ngClass]="{
-              'px-3 py-1 rounded-lg !text-[25px] ': true,
+              'px-3 py-1 rounded-lg !text-lg ': true,
               'bg-[#D865ED1A] text-[#D865ED]': person.role === 'MEDECIN',
               'bg-[#47F6A21A] text-[#0CF045]': person.role === 'RADIOLOGUE',
               'bg-[#FF34A01A] text-[#FF34A0]': person.role === 'LABORANTIN',
@@ -177,7 +177,7 @@
               {{person.role}}
             </span>
           </div>
-          <div class="w-3/12 text-center">
+          <div class="w-2/12 text-center">
             <button *ngIf="!canEditEtablissement"
             class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
               Consulter
@@ -197,23 +197,22 @@
   
         <!-- DPI Section -->
         <div *ngIf="selectedMenu === 2">
-          <div class="flex ml-10 mb-6">
-            <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757] mr-[650px]">Liste des PDI</h1>  
-            <button *ngIf="canEditEtablissement()" 
-                    class="flex items-center rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] !px-5 !py-2"
+          <div class="flex ml-10 mb-6 justify-between">
+            <h1 class="!font-bold font-poppins !text-lg text-[#0C2757] mr-[650px]">Liste des PDI</h1>  
+            <button *ngIf="canEditEtablissement() " 
+                    class="flex items-center justify-between rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-lg !px-5 !py-2"
                     (click)="toggleDPIModal('add')">
-              <img src="assets/images/plus.png" alt="" class="pr-4">
+              <img src="assets/images/plus.png" alt="" class=" h-6 w-6">
               Ajouter un PDI
             </button>
           </div>
   
           <!-- DPI List Headers -->
           <div class="flex py-5 bg-white mx-6">
-            
-            <div class="w-3/12 !text-[#0C2757] !text-[25px] ml-14 ">Nom</div>
-            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">NSS</div>
-            <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Patient</div>
-            <div class="w-2/12"></div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg ml-24 ">Nom</div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg text-center">NSS</div>
+            <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Patient</div>
+            <div class="w-3/12"></div>
           </div>
   
           <!-- DPI List -->
@@ -222,16 +221,16 @@
               <div class="w-1/12 ml-14">
                 <img src="assets/images/folder.png" alt="" class="w-14 h-14">
               </div>
-              <div class="w-2/12 !text-[#0C2757] !text-[25px] ">
+              <div class="w-3/12 !text-[#0C2757] !text-lg ">
                 {{dpi.dpi_id}}
               </div>
-              <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">
+              <div class="w-3/12 !text-[#0C2757] !text-lg text-center">
                 {{dpi.nss}}
               </div>
-              <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">
+              <div class="w-3/12 !text-[#0C2757] !text-lg text-center">
                 {{dpi.nom_complet}}
               </div>
-              <div class="w-2/12 text-center">
+              <div class="w-3/12 text-center">
                 <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
                   Consulter
                 </button>

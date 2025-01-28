@@ -10,5 +10,7 @@ import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.compo
   styleUrl: './page-list-etablissemets.component.css'
 })
 export class PageListEtablissemetsComponent {
+  role = "medecin";
+  activeItem = "Etablissements";
 
 }

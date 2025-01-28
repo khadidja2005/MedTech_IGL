@@ -10,14 +10,25 @@
     <form [formGroup]="hospitalisationForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="medecin_responsable">Medecin responsable:</label>
-        <select id="medecin_responsable" formControlName="medecin_responsable" class="form-control">
-          <option *ngFor="let medecin of medecins" [value]="medecin">{{ medecin }}</option>
+        <select
+          id="medecin_responsable"
+          formControlName="medecin_responsable"
+          class="form-control"
+        >
+          <option *ngFor="let medecin of medecins" [value]="medecin.id">
+            {{ medecin.nom }}
+          </option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="date_debut">Date Debut:</label>
-        <input id="date_debut" type="date" formControlName="date_debut" class="form-control" />
+        <input
+          id="date_debut"
+          type="date"
+          formControlName="date_debut"
+          class="form-control"
+        />
       </div>
 
       <div class="form-group">
@@ -30,13 +41,16 @@
 
       <div class="form-group" *ngIf="showEndDate">
         <label for="date_fin">Date fin:</label>
-        <input id="date_fin" type="date" formControlName="date_fin" class="form-control" />
+        <input
+          id="date_fin"
+          type="date"
+          formControlName="date_fin"
+          class="form-control"
+        />
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="hospitalisationForm.invalid">
-          Sauvegarder
-        </button>
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
       </div>
     </form>
   </div>

@@ -1,20 +1,20 @@
 <div class="grid grid-cols-12 gap-2 p-4 font-poppins">
   <div class="dpi col-span-3 p-4">
-    <h1 class="font-bold mb-6 text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
+    <h1 class="font-bold mb-6 text-[#0C2757] text-xl">
       {{dpi.id}}
     </h1>
     <div *ngIf="canEditDPI()" class="flex justify-between gap-4 w-full">
       <button class="w-full" (click)="modifyDPI()">
         <div class="bg-[rgba(252,188,5,0.1)] flex items-center rounded-[18px] p-1 ">
-          <img src="assets/images/pencil.png" alt="modifier" class="w-8 h-8">
-          <p class="text-lg font-semibold text-[#FCBC05] ml-2">modifier</p>
+          <img src="assets/images/pencil.png" alt="modifier" class="w-3 h-3">
+          <p class="text-sm font-semibold text-[#FCBC05] ml-2">modifier</p>
         </div>
       </button>
       
       <button class="w-full" (click)="deleteDPI()">
         <div class="bg-[rgba(255,62,62,0.1)] flex items-center rounded-[18px] p-1 ">
-          <img src="assets/images/x.png" alt="supprimer" class="w-8 h-8">
-          <p class="text-lg font-semibold text-[#FF3E3E] ">supprimer</p>
+          <img src="assets/images/x.png" alt="supprimer" class="w-4 h-4">
+          <p class="text-sm font-semibold text-[#FF3E3E] ">supprimer</p>
         </div>
       </button>
     </div>
@@ -89,7 +89,7 @@
   <div class="col-span-2"></div>
 
   <!-- Etablissement and Creator Section -->
-  <div class="etab-createur col-span-5 p-4 text-[24px]">
+  <div class="etab-createur col-span-5 p-4 text-lg">
     <div class="mb-4">
       <span class="font-bold">Etablissement: </span>
       <span class="text-[#4B6386] font-bold">{{dpi.etablissement_id}}</span>
@@ -106,9 +106,9 @@
       *ngIf="!showQrModal"
       src="assets/images/Qr.png"
       alt="QR Icon"
-      class="w-[120px] h-[120px]"
+      class="w-[80px] h-[80px]"
     >
-    <p *ngIf="!showQrModal" class="mt-2 font-poppins text-[30px] text-[#0C2757] font-bold">QR code</p>
+    <p *ngIf="!showQrModal" class="mt-2 font-poppins text-xl text-[#0C2757] font-bold">QR code</p>
   </div>
 </div>
 
@@ -128,7 +128,7 @@
 <div class="w-full p-4">
   
   <!-- Menu Section -->
-  <div class="flex text-[#4B6386] text-[35px] p-2 rounded-lg">
+  <div class="flex text-[#4B6386] text-lg p-2 rounded-lg">
     <div 
       class="menu-item text-center py-2 mr-[70px] ml-10 w-[400px] cursor-pointer"
       [ngClass]="{'text-[#3A8EF6] !border-b-2 !border-[#3A8EF6] pb-2': selectedMenu === 1}"
@@ -170,20 +170,20 @@
        <!-- Nom complet -->
       <div class="flex w-[800px] bg-white p-4 shadow-lg rounded-xl relative ">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Nom complet: </span>
+          <span class="font-bold font-poppins text-lg text-black">Nom complet: </span>
           <ng-container *ngIf="editingField !== 'nom_complet'; else editNomComplet">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.nom_complet}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.nom_complet}}</span>
           </ng-container>
           <ng-template #editNomComplet>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
+              class="font-bold font-poppins !text-lg !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
             <button 
             (click)="saveEdit()"
-            class="absolute top-2 right-2 rounded-[80px] bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] text-white text-center font-poppins text-[25px] px-4 py-2"
+            class="absolute top-2 right-2 rounded-[80px] bg-gradient-to-r from-[#3A8EF6] to-[#6F3AFA] text-white text-center font-poppins text-lg px-4 py-2"
           >
             OK
           </button>
@@ -193,7 +193,7 @@
           *ngIf="editingField !== 'nom_complet'&& canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="h-6 w-6 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('nom_complet', patient1.nom_complet)"
         />
       </div>
@@ -201,8 +201,8 @@
       <!-- Genre -->
       <div class="flex w-[300px] bg-white p-4 shadow-lg rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Genre: </span>
-          <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.genre}}</span>
+          <span class="font-bold font-poppins text-lg text-black">Genre: </span>
+          <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.genre}}</span>
         </div>
         <button     
          *ngIf="canEditDPI()"      
@@ -226,14 +226,14 @@
       <!-- Date de naissance -->
       <div class="flex w-[600px] bg-white p-4 shadow-lg rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Date de naissance: </span>
+          <span class="font-bold font-poppins text-lg text-black">Date de naissance: </span>
           <ng-container *ngIf="editingField !== 'date_naissance'; else editDateNaissance">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.date_naissance}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.date_naissance}}</span>
           </ng-container>
           <ng-template #editDateNaissance>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
+              class="font-bold font-poppins !text-lg !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
@@ -249,7 +249,7 @@
           *ngIf="editingField !== 'date_naissance'&& canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="h-6 w-6 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('date_naissance', patient1.date_naissance)"
         />
       </div>
@@ -257,14 +257,14 @@
       <!-- Email -->
       <div class="flex w-[550px] bg-white p-4 shadow-lg rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Email: </span>
+          <span class="font-bold font-poppins text-lg text-black">Email: </span>
           <ng-container *ngIf="editingField !== 'email'; else editEmail">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.email}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.email}}</span>
           </ng-container>
           <ng-template #editEmail>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[300px]"
+              class="font-bold font-poppins !text-lg !text-[#4B6386] border-b outline-none bg-transparent w-[300px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
@@ -280,7 +280,7 @@
           *ngIf="editingField !== 'email'&& canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="h-6 w-6 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('email', patient1.email)"
         />
       </div>
@@ -288,14 +288,14 @@
       <!-- Adresse -->
       <div class="flex w-[630px] bg-white p-4 shadow-lg rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Adresse: </span>
+          <span class="font-bold font-poppins text-lg text-black">Adresse: </span>
           <ng-container *ngIf="editingField !== 'adresse'; else editAdresse">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.adresse}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.adresse}}</span>
           </ng-container>
           <ng-template #editAdresse>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[400px]"
+              class="font-bold font-poppins !text-md !text-[#4B6386] border-b outline-none bg-transparent w-[400px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
@@ -311,16 +311,16 @@
           *ngIf="editingField !== 'adresse'&& canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="h-6 w-6 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('adresse', patient1.adresse)"
         />
       </div>
     
       <!-- Statut matrimonial -->
-      <div class="flex w-[490px] bg-white p-4 shadow-lg rounded-xl relative">
+      <div class="flex w-[490px] bg-white p-4 shadow-md rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Statut matrimonial: </span>
-          <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.statueMatrimonial}}</span>
+          <span class="font-bold font-poppins text-lg text-black">Statut matrimonial: </span>
+          <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.statueMatrimonial}}</span>
         </div>
         <button       
           *ngIf="canEditDPI()"    
@@ -330,7 +330,7 @@
           </button>
         <div
           *ngIf="showStatusDropdown && canEditDPI()"
-          class="absolute top-16 right-2 bg-white shadow-lg rounded-xl p-2 z-10"
+          class="absolute top-16 right-2 bg-white shadow-md rounded-xl p-2 z-10"
         >
           <div
             *ngFor="let status of getAvailableStatuses()"
@@ -343,16 +343,16 @@
       </div>
     
       <!-- Lieu de naissance -->
-      <div class="flex w-[800px] bg-white p-4 shadow-lg rounded-xl relative">
+      <div class="flex w-[800px] bg-white p-4 shadow-md rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Lieu de naissance: </span>
+          <span class="font-bold font-poppins text-lg text-black">Lieu de naissance: </span>
           <ng-container *ngIf="editingField !== 'lieu_naissance'; else editLieuNaissance">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.lieu_naissance}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.lieu_naissance}}</span>
           </ng-container>
           <ng-template #editLieuNaissance>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[500px]"
+              class="font-bold font-poppins !text-lg !text-[#4B6386] border-b outline-none bg-transparent w-[500px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
@@ -368,7 +368,7 @@
           *ngIf="editingField !== 'lieu_naissance' && canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="w-5 h-5 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('lieu_naissance', patient1.lieu_naissance)"
         />
       </div>
@@ -376,14 +376,14 @@
       <!-- Téléphone -->
       <div class="flex w-[400px] bg-white p-4 shadow-lg rounded-xl relative">
         <div>
-          <span class="font-bold font-poppins text-[25px] text-black">Téléphone: </span>
+          <span class="font-bold font-poppins text-lg text-black">Téléphone: </span>
           <ng-container *ngIf="editingField !== 'telephone'; else editTelephone">
-            <span class="font-bold font-poppins text-[25px] text-[#4B6386]">{{patient1.telephone}}</span>
+            <span class="font-bold font-poppins text-lg text-[#4B6386]">{{patient1.telephone}}</span>
           </ng-container>
           <ng-template #editTelephone>
             <input 
               [(ngModel)]="tempValue"
-              class="font-bold font-poppins !text-[25px] !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
+              class="font-bold font-poppins !text-md !text-[#4B6386] border-b outline-none bg-transparent w-[200px]"
               (keyup.enter)="saveEdit()"
               (keyup.escape)="cancelEdit()"
             >
@@ -399,7 +399,7 @@
           *ngIf="editingField !== 'telephone' && canEditDPI()"
           src="assets/images/edit.png"
           alt="edit"
-          class="w-8 h-8 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
+          class="h-6 w-6 mt-2 mr-1 absolute top-2 right-2 cursor-pointer"
           (click)="startEditing('telephone', patient1.telephone)"
         />
       </div>
@@ -412,28 +412,28 @@
 
 
     <div class="flex m-6 justify-between items-center !mt-10">
-      <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757]">Liste des Antecedants</h1>
+      <h1 class="!font-bold font-poppins !text-xl text-[#0C2757]">Liste des Antecedants</h1>
       <button *ngIf="canEditAntecedant()" 
-      class="flex rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] px-5 py-3"
+      class="flex rounded-[20px] shadow-md !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-lg px-5 py-3"
         (click)="toggleModal()">
-        <img src="assets/images/plus.png" alt="" class="pr-4">
+        <img src="assets/images/plus.png" alt="" class="h-6 w-6">
         Ajouter un antecedant
       </button>
     </div>
     
     <div class="w-full space-y-4 px-6">
       <!-- Ligne d'en-tête -->
-      <div class="flex py-5 bg-white">
+      <div class="flex py-3 bg-white">
         <div class="w-2/12 mx-2"></div> <!-- Colonne vide -->
-        <div class="w-3/12 !text-[#0C2757] !text-[25px]">Nom</div>
-        <div class="w-3/12 !text-[#0C2757] !text-[25px]">Type</div>
-        <div class="w-3/12 !text-[#0C2757] !text-[25px]">Date Début</div>
-        <div class="w-2/12 !text-[#0C2757] !text-[25px]">Date Fin</div>
+        <div class="w-3/12 !text-[#0C2757] !text-lg">Nom</div>
+        <div class="w-3/12 !text-[#0C2757] !text-lg">Type</div>
+        <div class="w-3/12 !text-[#0C2757] !text-lg">Date Début</div>
+        <div class="w-2/12 !text-[#0C2757] !text-lg">Date Fin</div>
         <div class="w-2/12"></div> <!-- Colonne vide -->
       </div>
       
       <div *ngIf="showModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div class="bg-white rounded-lg w-[1200px] p-6 ">
+        <div class="bg-white rounded-md w-[1200px] p-6 ">
             <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
                 {{ modalMode === 'add' ? 'Ajouter un antécédent' : 
                     modalMode === 'view' ? 'Détails de l\'antécédent' : 
@@ -501,18 +501,18 @@
           </button>
           </div>
           <!-- Nom -->
-          <div class="w-4/12 !text-[#0C2757] !text-[25px]">{{ antecedent.nom }}</div>
+          <div class="w-4/12 !text-[#0C2757] !text-lg">{{ antecedent.nom }}</div>
           <!-- Type -->
-          <div class="w-3/12 !text-[#0C2757] !text-[25px]">{{ antecedent.type }}</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg">{{ antecedent.type }}</div>
           <!-- Date Début -->
-          <div class="w-3/12 !text-[#0C2757] !text-[25px]">{{ antecedent.date_debut | date: 'yyyy-MM-dd' }}</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg">{{ antecedent.date_debut | date: 'yyyy-MM-dd' }}</div>
           <!-- Date Fin -->
-          <div class="w-2/12 !text-[#0C2757] !text-[25px]">{{ antecedent.date_fin | date: 'yyyy-MM-dd' }}</div>
+          <div class="w-2/12 !text-[#0C2757] !text-lg">{{ antecedent.date_fin | date: 'yyyy-MM-dd' }}</div>
           <!-- Dernière colonne avec des icônes -->
           <div class="w-2/12 text-center flex ml-4">
             <button *ngIf="canEditAntecedant()" 
             (click)="toggleModal('edit', antecedent)" class="p-2">
-            <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8 mr-2 mt-2">
+            <img src="assets/images/edit.png" alt="Edit" class="h-6 w-6 mr-2 mt-2">
           </button>
           <button *ngIf="canEditAntecedant()" 
           (click)="deleteAntecedent(antecedent.id)" class="p-2">
@@ -521,7 +521,7 @@
           <button *ngIf="!canEditAntecedant()" 
            
 
-          class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+          class="!text-[#3A8EF6] font-poppins !text-lg !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
             Consulter
           </button>
           </div>
@@ -539,12 +539,12 @@
     <div *ngIf="selectedMenu === 2">
       
       <div class="flex m-6 justify-between items-center !mt-10">
-        <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757]">Liste des Hospitalisations</h1>
+        <h1 class="!font-bold font-poppins !text-xl text-[#0C2757]">Liste des Hospitalisations</h1>
         <button 
         *ngIf="canEditAntecedant()"
         (click)="toggleHospitalizationModal('add')" 
-        class="btn btn-primary flex rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] px-5 py-3">
-          <img src="assets/images/plus.png" alt="Add" class="pr-4">
+        class="btn btn-primary flex rounded-[20px] shadow-md !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-lg px-5 py-3">
+          <img src="assets/images/plus.png" alt="Add" class="h-6 w-6">
           Ajouter une Hospitalisation
         </button>
       </div>
@@ -553,16 +553,16 @@
         <!-- Ligne d'en-tête -->
         <div class="flex py-5 bg-white">
           <div class="w-1/12 ml-2"></div> <!-- Colonne vide -->
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] ">Hospitalisation</div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px]">date Début</div>
-          <div class="w-2/12 !text-[#0C2757] !text-[25px]">date Fin</div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px]">Médecin résponsable</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg ">Hospitalisation</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg">date Début</div>
+          <div class="w-2/12 !text-[#0C2757] !text-lg">date Fin</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg">Médecin résponsable</div>
           <div class="w-2/12"></div> <!-- Colonne vide -->
         </div>
         
 
         <div *ngIf="showHospitalizationModal" class="fixed !z-50 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div class="bg-white rounded-lg w-[800px] p-6">
+          <div class="bg-white rounded-md w-[800px] p-6">
               <h1 class="text-center font-bold font-poppins !text-5xl text-[#4B6386] m-4 mt-6">
                   {{ hospitalizationModalMode === 'add' ? 'Ajouter une hospitalisation' : 'Détails de l\'hospitalisation' }}
               </h1>
@@ -659,20 +659,20 @@
             <img src="assets/images/doc.png" alt="">
           </div>
           <!-- Nom -->
-          <div class="w-2/12 !text-[#0C2757] !text-[25px] text-center ">{{ Hospitalisation.id }}</div>
+          <div class="w-2/12 !text-[#0C2757] !text-lg text-center ">{{ Hospitalisation.id }}</div>
           <!-- Type -->
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">{{ Hospitalisation.date_debut | date: 'yyyy-MM-dd'  }}</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">{{ Hospitalisation.date_debut | date: 'yyyy-MM-dd'  }}</div>
           <!-- Date Début -->
-          <div class="w-2/12 !text-[25px] text-center" [ngStyle]="{'color': Hospitalisation.date_fin ? '#0C2757' : '#0CF045'}">
+          <div class="w-2/12 !text-lg text-center" [ngStyle]="{'color': Hospitalisation.date_fin ? '#0C2757' : '#0CF045'}">
             {{ Hospitalisation.date_fin ? (Hospitalisation.date_fin | date: 'yyyy-MM-dd') : 'encore' }}
           </div>
           <!-- Date Fin -->
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">{{ Hospitalisation.medecin_responsable }}</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">{{ Hospitalisation.medecin_responsable }}</div>
           <!-- Dernière colonne avec une icône -->
           <div class="w-2/12 text-center flex ml-4">
             <button 
             
-            class="  !text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+            class="  !text-[#3A8EF6] font-poppins !text-lg !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
               Consulter
             </button>
           </div>
@@ -686,10 +686,10 @@
 
     <div *ngIf="selectedMenu === 3">
       <div class="flex m-6 justify-between items-center !mt-10">
-        <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757]">Liste des Bilans</h1>
+        <h1 class="!font-bold font-poppins !text-xl text-[#0C2757]">Liste des Bilans</h1>
         <button 
           (click)="toggleFilterModal()"
-          class="flex items-center gap-2 text-xl px-4 py-2 bg-white rounded-lg shadow"
+          class="flex items-center gap-2 text-xl px-4 py-2 bg-white rounded-md shadow"
         >
           <img src="assets/images/filter.png" alt="filter" class="mx-4">
          <span>Filter</span> 
@@ -793,9 +793,9 @@
         <!-- Header Row -->
         <div class="flex py-5 bg-white">
           <div class="w-1/12 ml-2"></div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Bilans</div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">Type</div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">date</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Bilans</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">Type</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">date</div>
           <div class="w-2/12"></div>
         </div>
     
@@ -807,8 +807,8 @@
           <div class="ml-2 w-1/12 text-center">
             <img src="assets/images/doc.png" alt="">
           </div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">{{ bilan.id }}</div>
-          <div class="w-3/12 text-[25px] text-center">
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">{{ bilan.id }}</div>
+          <div class="w-3/12 text-lg text-center">
             <span 
               class="px-3 py-1 rounded"
               [ngStyle]="getBilanTypeStyle(bilan.type)"
@@ -816,9 +816,9 @@
               {{ getBilanDisplayType(bilan) }}
             </span>
           </div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center">{{ bilan.date_debut | date: 'yyyy-MM-dd' }}</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg text-center">{{ bilan.date_debut | date: 'yyyy-MM-dd' }}</div>
           <div class="w-2/12 text-center flex ml-4">
-            <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+            <button class="!text-[#3A8EF6] font-poppins !text-lg !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
               Consulter
             </button>
           </div>
@@ -831,12 +831,12 @@
 
     <div *ngIf="selectedMenu === 4">
       <div class="flex m-6 justify-between items-center !mt-10">
-        <h1 class="!font-bold font-poppins !text-[35px] text-[#0C2757]">Liste des Mutuelles</h1>
+        <h1 class="!font-bold font-poppins !text-xl text-[#0C2757]">Liste des Mutuelles</h1>
         <button 
         *ngIf="canEditDPI()"
         (click)="toggleMutuelleModal() "
-        class="flex rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-[25px] px-5 py-3">
-          <img src="assets/images/plus.png" alt="" class="pr-4">
+        class="flex rounded-[20px] shadow-lg !bg-[#3A8EF6] !text-white text-center font-bold font-poppins !text-lg px-5 py-3">
+          <img src="assets/images/plus.png" alt="" class="h-6 w-6">
           Ajouter un Mutuelle
         </button>
       </div>
@@ -845,9 +845,9 @@
         <!-- Ligne d'en-tête -->
         <div class="flex py-5 bg-white">
           <div class="w-1/12 "></div> <!-- Colonne vide -->
-          <div class="w-4/12 !text-[#0C2757] !text-[25px] ">Nom de Mutuelle</div>
-          <div class="w-3/12 !text-[#0C2757] !text-[25px] ">numéro adherent</div>
-          <div class="w-2/12 !text-[#0C2757] !text-[25px] ">type de coverture</div>
+          <div class="w-4/12 !text-[#0C2757] !text-lg ">Nom de Mutuelle</div>
+          <div class="w-3/12 !text-[#0C2757] !text-lg ">numéro adherent</div>
+          <div class="w-2/12 !text-[#0C2757] !text-lg ">type de coverture</div>
           <div class="w-2/12"></div> <!-- Colonne vide -->
         </div>
       
@@ -940,7 +940,7 @@
           <div class="w-3/12 !text-[#0C2757] !text-[25px] text-center ">{{ Mutuelle.type_couverture }}</div>
           <!-- Dernière colonne avec une icône -->
           <div class="w-2/12 text-center flex ml-4">
-            <button class="!text-[#3A8EF6] font-poppins !text-[23px] !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
+            <button class="!text-[#3A8EF6] font-poppins !text-lg !border-[#3A8EF6] !border-2 !px-4 !py-1 !bg-[#3A8EF633] !rounded-[10px]">
               Consulter
             </button>
           </div>

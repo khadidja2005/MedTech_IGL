@@ -10,5 +10,7 @@ import { DpiInfoComponent } from "../dpi-info/dpi-info.component";
   styleUrl: './dpi.component.css'
 })
 export class DpiComponent {
+  role = "medecin";
+  activeItem="DPI"
 
 }

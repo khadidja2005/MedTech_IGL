@@ -25,7 +25,7 @@ class Admin(models.Model):
         max_length=10,
         null=True,
     )
-    password = models.CharField(max_length=100 , unique=True)
+    password = models.CharField(max_length=100, unique=True)
     lienPhoto = models.URLField()
 
 
@@ -42,7 +42,7 @@ class PersonnelMedical(models.Model):
     email = models.EmailField(max_length=100)
     specialite = models.CharField(max_length=100)
     telephone = models.CharField(max_length=10)
-    password = models.CharField(max_length=100 , unique=True)
+    password = models.CharField(max_length=100, unique=True)
     role = models.CharField(
         max_length=10,
         choices=RoleChoices.choices,
@@ -62,7 +62,7 @@ class Patient(models.Model):
     adresse = models.CharField(max_length=100, null=True)
     telephone = models.CharField(max_length=10, null=True)
     email = models.EmailField(max_length=100, null=True)
-    password = models.CharField(max_length=100, unique=True , null=True)
+    password = models.CharField(max_length=100, unique=True, null=True)
     lienPhoto = models.URLField()
     lieu_naissance = models.CharField(max_length=100, null=True)
     genre = models.CharField(max_length=100, null=True)
@@ -149,7 +149,7 @@ class Soins(models.Model):
             "Administration de medicament",
         )
 
-        AUTRES = "AUTRES", "Autres"
+        AUTRES = "AUTRE", "Autre"
 
     date = models.DateField()
     heure = models.TimeField()
@@ -180,7 +180,7 @@ class ResultatBio(models.Model):
     valeur_mesure = models.CharField(max_length=100)
     date_mesure = models.DateField()
     heure_mesure = models.TimeField()
-    parametre = models.CharField(max_length=100)
+    parametre = models.CharField(max_length=500)
     norme = models.CharField(max_length=50)
     bilan_bio = models.ForeignKey(BilanBio, on_delete=models.CASCADE)
     laborantin = models.ForeignKey(PersonnelMedical, on_delete=models.CASCADE)

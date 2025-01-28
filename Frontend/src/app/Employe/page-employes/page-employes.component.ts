@@ -10,5 +10,7 @@ import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.compo
   styleUrl: './page-employes.component.css'
 })
 export class PageEmployesComponent {
+  role="admin";
+  activeItem="Employés";
 
 }

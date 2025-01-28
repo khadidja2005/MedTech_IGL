@@ -11,9 +11,12 @@
 }
 
 .sidebar {
-  @apply shadow-md;
+  @apply shadow-md flex h-screen;
 }
 
 .content {
   @apply flex-col flex-1 overflow-y-auto bg-blue_lighter p-6;
+}
+.content > app-ordonnace-details {
+  @apply mb-12 p-8;
 }
