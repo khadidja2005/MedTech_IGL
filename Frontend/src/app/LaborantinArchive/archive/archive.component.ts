@@ -35,7 +35,7 @@ export class ArchiveComponent {
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
-  laborantin = 1324; //locale storage
+  laborantin = localStorage.getItem('id') || '';
   etablissements: Etab[] = [];
 
   bilans: BilanLabo[] = [];
@@ -52,6 +52,7 @@ export class ArchiveComponent {
           params: { laborantin: this.laborantin },
         }
       );
+      console.log(response.data);
       for (const ord of response.data.bilans) {
         this.bilans.push({
           id: ord.id,

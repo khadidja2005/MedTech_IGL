@@ -36,7 +36,7 @@ interface data {
 export class LaborantinComponent {
   role = 'radiologue';
   activeItem = 'Bilans';
-  laborantin = 1324; //locale storage
+  laborantin = localStorage.getItem('id') || '';
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
@@ -57,6 +57,7 @@ export class LaborantinComponent {
           params: { laborantin: this.laborantin },
         }
       );
+      console.log(response.data);
       for (const ord of response.data.bilans) {
         this.bilans.push({
           id: ord.id,
