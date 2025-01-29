@@ -62,8 +62,17 @@ def get_etablissement(request, etablissement_id):
 
 @api_view(["GET"])
 def get_all_etablissements(request):
+    id = request.GET.get("id")
     try:
-        etablissements = Etablissement.objects.all()
+        if not id:
+            return Response({"status": "error", "message": "Id not provided"})
+        user = PersonnelMedical.objects.get(id=id)
+        if user:
+            etablissements = etablissement_personnel_medical.objects.filter(
+                personnel_medical_id=id
+            )
+        else:
+            etablissements = Etablissement.objects.all()
         data = [
             {
                 "id": etab.id,
@@ -133,45 +142,46 @@ def get_personnel_medical_by_etablissement(request, etablissement_id):
     try:
         # First verify the establishment exists
         etablissement = get_object_or_404(Etablissement, id=etablissement_id)
-        
+
         # Get personnel medical using the through model
-        personnel_medical = PersonnelMedical.objects.filter(
-            etablissement_personnel_medical__etablissement=etablissement
-        ).select_related(
-            'etablissement_personnel_medical'
-        ).values(
-            'id',
-            'nom_complet',
-            'email',
-            'specialite',
-            'telephone',
-            'role',
-            'lienPhoto'  # Added this since it's in your PersonnelMedical model
+        personnel_medical = (
+            PersonnelMedical.objects.filter(
+                etablissement_personnel_medical__etablissement=etablissement
+            )
+            .select_related("etablissement_personnel_medical")
+            .values(
+                "id",
+                "nom_complet",
+                "email",
+                "specialite",
+                "telephone",
+                "role",
+                "lienPhoto",  # Added this since it's in your PersonnelMedical model
+            )
         )
 
         if not personnel_medical.exists():
-            return Response({
-                "status": "success",
-                "message": "No medical personnel found for this establishment",
-                "data": []
-            })
+            return Response(
+                {
+                    "status": "success",
+                    "message": "No medical personnel found for this establishment",
+                    "data": [],
+                }
+            )
 
-        return Response({
-            "status": "success",
-            "data": list(personnel_medical)
-        })
+        return Response({"status": "success", "data": list(personnel_medical)})
 
     except Etablissement.DoesNotExist:
-        return Response({
-            "status": "error",
-            "message": "Establishment not found"
-        }, status=status.HTTP_404_NOT_FOUND)
-    
+        return Response(
+            {"status": "error", "message": "Establishment not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     except Exception as e:
-        return Response({
-            "status": "error",
-            "message": f"An error occurred: {str(e)}"
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {"status": "error", "message": f"An error occurred: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
 
 
 @api_view(["POST"])
@@ -278,37 +288,36 @@ def delete_personnel_medical_from_etablissement(
 def get_dpis_by_etablissement(request, etablissement_id):
     try:
         # Get DPIs directly using the etablissement_id field
-        dpis = DPI.objects.filter(
-            etablissement_id=etablissement_id
-        ).select_related(
-            'patient'  # Join with patient table efficiently
-        ).values(
-            'id',               # DPI id
-            'patient__id',      # Patient id
-            'patient__nss',     # NSS
-            'patient__nom_complet',  # Full name
-            'date_creation'     # Creation date
+        dpis = (
+            DPI.objects.filter(etablissement_id=etablissement_id)
+            .select_related("patient")  # Join with patient table efficiently
+            .values(
+                "id",  # DPI id
+                "patient__id",  # Patient id
+                "patient__nss",  # NSS
+                "patient__nom_complet",  # Full name
+                "date_creation",  # Creation date
+            )
         )
 
         # Format the response data
-        formatted_dpis = [{
-            'dpi_id': dpi['id'],
-            'patient_id': dpi['patient__id'],
-            'nss': dpi['patient__nss'],
-            'nom_complet': dpi['patient__nom_complet'],
-            'date_creation': dpi['date_creation']
-        } for dpi in dpis]
+        formatted_dpis = [
+            {
+                "dpi_id": dpi["id"],
+                "patient_id": dpi["patient__id"],
+                "nss": dpi["patient__nss"],
+                "nom_complet": dpi["patient__nom_complet"],
+                "date_creation": dpi["date_creation"],
+            }
+            for dpi in dpis
+        ]
 
-        return Response({
-            "status": "success",
-            "data": formatted_dpis
-        })
+        return Response({"status": "success", "data": formatted_dpis})
 
     except Exception as e:
-        return Response({
-            "status": "error",
-            "message": str(e)
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -367,6 +376,8 @@ def delete_dpi(request, dpi_id):
         return Response(
             {"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
 @api_view(["GET", "POST"])
 def personnel_medical_list_create(request):
     if request.method == "GET":
@@ -390,8 +401,7 @@ def personnel_medical_detail(request, pk):
         personnel = PersonnelMedical.objects.get(pk=pk)
     except PersonnelMedical.DoesNotExist:
         return Response(
-            {"error": "PersonnelMedical not found."}, 
-            status=status.HTTP_404_NOT_FOUND
+            {"error": "PersonnelMedical not found."}, status=status.HTTP_404_NOT_FOUND
         )
 
     if request.method == "GET":
@@ -408,6 +418,6 @@ def personnel_medical_detail(request, pk):
     elif request.method == "DELETE":
         personnel.delete()
         return Response(
-            {"message": "PersonnelMedical deleted successfully."}, 
-            status=status.HTTP_204_NO_CONTENT
+            {"message": "PersonnelMedical deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
         )

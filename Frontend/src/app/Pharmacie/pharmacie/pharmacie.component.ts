@@ -39,7 +39,7 @@ interface data {
 export class PharmacieComponent {
   role = 'pharmacien';
   activeItem = 'Ordonnance';
-  pharmacien = 1295; //locale storage
+  pharmacien = localStorage.getItem('id');
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
@@ -53,6 +53,7 @@ export class PharmacieComponent {
   }
   // Fonction exécutée au chargement
   async onPageLoad(): Promise<void> {
+    console.log('Pharmacien:', this.pharmacien);
     try {
       const response = await axios.get<data>(
         'http://localhost:8000/pharmacie/home',

@@ -1,4 +1,4 @@
-import { Component , Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Etablissement } from '../../../types/etablissement';
 import { PersonnelMedical } from '../../../types/personnelMedical';
 import { DPI } from '../../../types/dpi';
@@ -11,7 +11,6 @@ import axios from 'axios';
 import { Notyf } from 'notyf';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser, NgClass } from '@angular/common';
-
 
 interface CompleteDPI {
   patient: {
@@ -38,7 +37,6 @@ interface CompleteDPI {
   };
 }
 
-
 @Component({
   selector: 'app-personnals-medicaux',
   imports: [CommonModule, FormsModule],
@@ -48,7 +46,11 @@ interface CompleteDPI {
 export class PersonnalsMedicauxComponent {
   notyf: Notyf | undefined;
   id: number = 0;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object , private router : Router , private route: ActivatedRoute) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.notyf = new Notyf();
     }
@@ -63,51 +65,60 @@ export class PersonnalsMedicauxComponent {
   };
 
   user1 = {
-    Admin: true,
-    name: 'Mohamed Reda',
-    id: 1,
-    profession: 'infermier',
+    Admin: localStorage.getItem('role') ? true : false,
+    name: localStorage.getItem('nom_complet'),
+    id: localStorage.getItem('id'),
+    profession: localStorage.getItem('role'),
   };
 
-  personnels: PersonnelMedical[] = [
-
-  ];
+  personnels: PersonnelMedical[] = [];
   DPIList: {
-    dpi_id: number,
-    patient_id: number,
-    nss: number,
-    nom_complet: string,
-    date_creation: string
-  }[] = [
-  ];
+    dpi_id: number;
+    patient_id: number;
+    nss: number;
+    nom_complet: string;
+    date_creation: string;
+  }[] = [];
   async ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.id = params['id'];
       // Use the ID to fetch data or whatever you need
     });
     try {
-     const response = await axios.get(`http://localhost:8000/dashboard/etablissements/${this.id}/personnel/`);
-     //console.log(response.data);
-     this.personnels = response.data.data;
-    
-    }catch(e){
-      console.log(e); 
+      const response = await axios.get<{ data: PersonnelMedical[] }>(
+        `http://localhost:8000/dashboard/etablissements/${this.id}/personnel/`
+      );
+      //console.log(response.data);
+      this.personnels = response.data.data;
+    } catch (e) {
+      console.log(e);
       if (this.notyf) {
         this.notyf.error('Erreur lors du chargement des employees');
-      };
+      }
     }
 
     try {
-      const response = await axios.get(`http://localhost:8000/dashboard/etablissements/${this.id}/dpis/`);
+      const response = await axios.get(
+        `http://localhost:8000/dashboard/etablissements/${this.id}/dpis/`
+      );
       //console.log(response.data);
-      this.DPIList = response.data.data;
-     
-     }catch(e){
-       console.log(e); 
-       if (this.notyf) {
-         this.notyf.error('Erreur lors du chargement des DPIs');
-       };
-     }
+      this.DPIList = (
+        response.data as {
+          data: {
+            dpi_id: number;
+            patient_id: number;
+            nss: number;
+            nom_complet: string;
+            date_creation: string;
+          }[];
+        }
+      ).data;
+    } catch (e) {
+      console.log(e);
+      if (this.notyf) {
+        this.notyf.error('Erreur lors du chargement des DPIs');
+      }
+    }
   }
 
   etablissementPersonnel: EtablissementPersonnelMedical[] = [
@@ -243,19 +254,18 @@ export class PersonnalsMedicauxComponent {
     statueMatrimonial: 'Célibataire',
   };
 
-  newDPI : {
-    dpi_id: number,
-    patient_id: number,
-    nss: number,
-    nom_complet: string,
-    date_creation: string ,
-    
-  }= {
+  newDPI: {
+    dpi_id: number;
+    patient_id: number;
+    nss: number;
+    nom_complet: string;
+    date_creation: string;
+  } = {
     dpi_id: 0,
     patient_id: 0,
     date_creation: new Date().toISOString(),
     nom_complet: '',
-    nss : 0,
+    nss: 0,
   };
 
   validateNewDPI(): boolean {
@@ -353,39 +363,38 @@ export class PersonnalsMedicauxComponent {
       nss: '',
       email: '',
       telephone: 0,
-      adresse: ''
+      adresse: '',
     },
     mutuelles: {
       mutuelle1: {
         nom: '',
         telephone: 0,
         email: '',
-        type_couverture: ''
+        type_couverture: '',
       },
       mutuelle2: {
         nom: '',
         telephone: 0,
         email: '',
-        type_couverture: ''
-      }
-    }
+        type_couverture: '',
+      },
+    },
   };
-
 
   saveDPIWithMutuelle() {
     // Sauvegarder les informations des mutuelles
     this.completeDPI.mutuelles = {
       mutuelle1: { ...this.mutuelle1 },
-      mutuelle2: { ...this.mutuelle2 }
+      mutuelle2: { ...this.mutuelle2 },
     };
 
     // Créer un nouveau DPI avec toutes les informations
     const newDPI = {
-      dpi_id: Math.max(0, ...this.DPIList.map(d => d.dpi_id)) + 1,
+      dpi_id: Math.max(0, ...this.DPIList.map((d) => d.dpi_id)) + 1,
       patient_id: Math.floor(Math.random() * 1000), // Simuler un ID unique
       nss: parseInt(this.completeDPI.patient.nss),
       nom_complet: this.completeDPI.patient.nom_complet,
-      date_creation: new Date().toISOString()
+      date_creation: new Date().toISOString(),
     };
 
     // Ajouter le nouveau DPI à la liste
@@ -411,25 +420,25 @@ export class PersonnalsMedicauxComponent {
         nss: '',
         email: '',
         telephone: 0,
-        adresse: ''
+        adresse: '',
       },
       mutuelles: {
         mutuelle1: {
           nom: '',
           telephone: 0,
           email: '',
-          type_couverture: ''
+          type_couverture: '',
         },
         mutuelle2: {
           nom: '',
           telephone: 0,
           email: '',
-          type_couverture: ''
-        }
-      }
+          type_couverture: '',
+        },
+      },
     };
-    
-    this.resetDPIForm(); 
+
+    this.resetDPIForm();
     this.mutuelle1 = {
       nom: '',
       email: '',
@@ -437,7 +446,7 @@ export class PersonnalsMedicauxComponent {
       type_couverture: '',
       id: 0,
       patient_id: 0,
-      numero_adherent: 0
+      numero_adherent: 0,
     };
     this.mutuelle2 = {
       nom: '',
@@ -446,10 +455,9 @@ export class PersonnalsMedicauxComponent {
       type_couverture: '',
       id: 0,
       patient_id: 0,
-      numero_adherent: 0
+      numero_adherent: 0,
     };
   }
-
 
   mutuelle1: Mutuelle = {
     nom: '',
@@ -471,7 +479,6 @@ export class PersonnalsMedicauxComponent {
     numero_adherent: 0,
   };
 
-  
   returnFirst() {
     this.showDPIModal = false;
     this.showMutuelleStep = false;
@@ -579,7 +586,7 @@ export class PersonnalsMedicauxComponent {
         nss: this.patient.nss,
         email: this.patient.email,
         telephone: this.patient.telephone,
-        adresse: this.patient.adresse
+        adresse: this.patient.adresse,
       };
       this.showMutuelleStep = true;
     }
@@ -719,12 +726,12 @@ export class PersonnalsMedicauxComponent {
     }
   }
   getPersonnelsForCurrentEtablissement(): PersonnelMedical[] {
-    return this.personnels
+    return this.personnels;
   }
 
   // Obtenir les DPIs de l'établissement courant
-  getDPIsForCurrentEtablissement(){
-    return this.DPIList
+  getDPIsForCurrentEtablissement() {
+    return this.DPIList;
   }
 
   // Méthode pour ajouter un personnel à l'établissement
@@ -750,35 +757,40 @@ export class PersonnalsMedicauxComponent {
         // Get the next available ID
         const maxId = Math.max(0, ...this.personnels.map((p) => p.id));
         const newId = maxId + 1;
-      
+
         // Create new personnel with the new ID
         this.newPersonnel.id = newId;
         this.personnels.push({ ...this.newPersonnel });
         try {
-          const response = await axios.post(`http://localhost:8000/dashboard/etablissements/${this.id}/personnel/add/`, {
-            lienPhoto: this.newPersonnel.lienPhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-            nom_complet: this.newPersonnel.nom_complet,
-            role: this.newPersonnel.role,
-            telephone: this.newPersonnel.telephone,
-            email: this.newPersonnel.email,
-            specialite: this.newPersonnel.specialite,
-            password: Math.random().toString(36).substring(2, 10),
-          });
+          const response = await axios.post(
+            `http://localhost:8000/dashboard/etablissements/${this.id}/personnel/add/`,
+            {
+              lienPhoto:
+                this.newPersonnel.lienPhoto ||
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              nom_complet: this.newPersonnel.nom_complet,
+              role: this.newPersonnel.role,
+              telephone: this.newPersonnel.telephone,
+              email: this.newPersonnel.email,
+              specialite: this.newPersonnel.specialite,
+              password: Math.random().toString(36).substring(2, 10),
+            }
+          );
           console.log(response.data);
           if (this.notyf) {
             this.notyf.success('Employee a été ajouté avec succès');
             setTimeout(() => {
-              this.newPersonnel.id = response.data.id; // Use the ID from the response
+              this.newPersonnel.id = (response.data as { id: number }).id; // Use the ID from the response
               this.personnels.push({ ...this.newPersonnel });
               this.togglePersonnelModal('');
               this.showPersonnelModal = false;
             }, 2000);
           }
-        }catch (e){
+        } catch (e) {
           console.log(e);
           if (this.notyf) {
-            this.notyf.error('Erreur lors de l\'ajout de l\'employee');
-        }
+            this.notyf.error("Erreur lors de l'ajout de l'employee");
+          }
         }
         // Add the link with establishment - now passing the new ID
         this.addPersonnelToEtablissement(newId);

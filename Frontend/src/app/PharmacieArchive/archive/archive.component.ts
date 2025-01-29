@@ -31,7 +31,7 @@ interface data {
 export class ArchiveComponent {
   role = 'pharmacien';
   activeItem = 'Ordonnance';
-  pharmacien = 1295; //locale storage
+  pharmacien = localStorage.getItem('id') || '';
   etablissements: Etab[] = [];
 
   ordonnances: OrdonnancePharma[] = [];
