@@ -1,0 +1,249 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F8FF; /* Fond bleu clair */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Barre supérieure */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff; /* Couleur blanche */
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .top-bar .brand {
+    font-size: 20px;
+    color: #0C2757; /* Bleu nuit */
+    font-weight: bold;
+  }
+  
+  .top-bar .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-info img.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+  }
+  
+  .user-info div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .user-name {
+    color: #0C2757; /* Bleu nuit */
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .user-role {
+    color: #3A8EF6; /* Bleu ciel */
+    font-size: 14px;
+  }
+  
+  /* Conteneur principal */
+  .container {
+    display: flex;
+    margin-top: 60px; /* Pour laisser de l'espace sous la barre supérieure */
+  }
+  
+  /* Menu latéral */
+  .sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 60px; /* Aligner sous la barre supérieure */
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Conteneur des éléments du menu */
+  .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+  }
+  
+  /* Les éléments de menu */
+  .menu li {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #4B6386; /* Couleur avant clic */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    width: 100%; /* S'assurer que l'élément prend toute la largeur du sidebar */
+  }
+  
+  /* Effet de survol */
+  .menu li:hover {
+    color: #fff;
+    background-color: #a3ceef; /* Bleu clair transparent au survol */
+  }
+  
+  /* Lorsque l'élément est actif */
+  .menu li.active {
+    background-color: #a3ceef; /* Bleu clair pour le carré */
+    color: #3A8EF6; /* Le titre devient bleu foncé (#3A8EF6) */
+    border-radius: 5px;
+  }
+  
+  /* Section en bas du menu */
+  .menu-bottom {
+    margin-top: auto;
+  }
+  
+  .menu-bottom ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Les éléments de la section en bas */
+  .menu-bottom li {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #4B6386; /* Couleur avant clic */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%; /* Largeur égale à celle du menu */
+  }
+  
+  /* Effet de survol pour les éléments en bas */
+  .menu-bottom li:hover {
+    color: #fff;
+    background-color: #a3ceef; /* Bleu clair transparent au survol */
+  }
+  
+  /* Lorsque l'élément en bas est actif */
+  .menu-bottom li.active {
+    background-color: #a3ceef; /* Bleu clair pour le carré */
+    color: #3A8EF6; /* Le titre devient bleu foncé (#3A8EF6) */
+    border-radius: 5px;
+  }
+  
+  /* Contenu principal */
+  .main-content {
+    flex: 1;
+    margin-left: 250px; /* Largeur du menu latéral */
+    padding: 20px;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .tabs button {
+    flex: 1;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease, color 0.3s ease;
+  }
+  
+  .tabs button.active {
+    color: #0C2757;
+    border-bottom: 2px solid #3A8EF6;
+  }
+  
+  /* Contenu des onglets */
+  .tab-content {
+    display: block;
+    margin-top: 20px;
+  }
+  
+  /* Formulaire */
+  .form {
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .form label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Conteneur des boutons Annuler et Suivant */
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end; /* Aligne les boutons à droite */
+    gap: 10px; /* Espace entre les boutons */
+  }
+  
+  /* Boutons Annuler et Suivant */
+  .btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-next {
+    background-color: #3A8EF6;
+    color: #fff;
+    border: none;
+  }
+  
+  .btn-next:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-cancel {
+    background-color: #fff;
+    color: #3A8EF6;
+    border: 2px solid #3A8EF6;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #f0f8ff;
+  }
+  

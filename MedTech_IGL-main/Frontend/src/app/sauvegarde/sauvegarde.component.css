@@ -1,0 +1,168 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F8FF; /* Fond bleu clair */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Barre supérieure */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff; /* Couleur blanche */
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .top-bar .logo h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #0C2757;
+    font-weight: bold;
+  }
+  
+  .top-bar .navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .top-bar .navbar ul li {
+    margin: 0 15px;
+  }
+  
+  .top-bar .navbar ul li a {
+    text-decoration: none;
+    color: gray;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .top-bar .navbar ul li a:hover {
+    color: #3A8EF6;
+  }
+  
+  /* Conteneur principal */
+  .password-reset-container {
+    max-width: 400px;
+    margin: 100px auto ;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+  }
+  
+  /* Titre */
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #0C2757;
+  }
+  
+  /* Informations de l'utilisateur */
+  .user-info {
+    margin-bottom: 20px;
+  }
+  
+  .profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0C2757;
+    margin: 0;
+  }
+  
+  .user-role {
+    font-size: 14px;
+    color: #3A8EF6;
+    margin: 0;
+  }
+  
+  /* Formulaire */
+  .password-form {
+    text-align: left;
+  }
+  
+  label {
+    font-size: 14px;
+    color: #4B6386;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #3A8EF6;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #4B6386;
+  }
+  
+  /* Bouton principal */
+  .btn-primary {
+    width: 40%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3A8EF6, #6F3AFA);
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 15ch;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #6F3AFA, #3A8EF6);
+  }
+  
+  /* Lien d'annulation */
+  .cancel-link {
+    display: block;
+    margin-top: 15px;
+    margin-left: 22ch;
+    text-decoration: none;
+    color: #4B6386;
+    font-size: 14px;
+  }
+  
+  .cancel-link:hover {
+    text-decoration: underline;
+  }
+  

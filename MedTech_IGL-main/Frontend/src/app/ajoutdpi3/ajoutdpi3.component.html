@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres Patient</title>
+  <link rel="stylesheet" href="ajoutdpi3.component.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu latéral -->
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><i class="icon">🏢</i> Établissement</li>
+        <li><i class="icon">👥</i> Employés</li>
+        <li><i class="icon">📁</i> DPIs</li>
+      </ul>
+      <div class="menu-bottom">
+        <ul>
+          <li><i class="icon">💾</i> Contrôle de BDD</li>
+          <li><i class="icon">🔓</i> Se déconnecter</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <header class="top-bar">
+        <span class="brand">Medtech</span>
+        <div class="user-info">
+          <div>
+            <span class="user-name">Mina Khelifi</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <img src="user-avatar.png" alt="Avatar" class="avatar">
+        </div>
+      </header>
+
+      <!-- Formulaire -->
+      <div class="tabs">
+        <button class="tab active" data-target="create-dpi">Créer DPI</button>
+      </div>
+
+      <div id="create-dpi" class="tab-content active">
+        <form class="form">
+          <!-- Section Mutuelle 1 -->
+          <h3>Mutuelle 1 :</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="mutuelle1-name">Nom Complet</label>
+              <input type="text" id="mutuelle1-name" placeholder="Nom Complet">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle1-phone">Téléphone</label>
+              <input type="tel" id="mutuelle1-phone" placeholder="Téléphone">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle1-email">Email</label>
+              <input type="email" id="mutuelle1-email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle1-coverage">Type de couverture</label>
+              <input type="text" id="mutuelle1-coverage" placeholder="Type de couverture">
+            </div>
+          </div>
+
+          <!-- Section Mutuelle 2 -->
+          <h3>Mutuelle 2 :</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="mutuelle2-name">Nom Complet</label>
+              <input type="text" id="mutuelle2-name" placeholder="Nom Complet">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle2-phone">Téléphone</label>
+              <input type="tel" id="mutuelle2-phone" placeholder="Téléphone">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle2-email">Email</label>
+              <input type="email" id="mutuelle2-email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="mutuelle2-coverage">Type de couverture</label>
+              <input type="text" id="mutuelle2-coverage" placeholder="Type de couverture">
+            </div>
+          </div>
+
+          <!-- Boutons -->
+          <div class="form-buttons">
+            <button type="button" class="btn btn-cancel" (click)="gotoajoutdp2()">Retour</button>
+            <button type="submit" class="btn btn-next">Sauvegarder</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

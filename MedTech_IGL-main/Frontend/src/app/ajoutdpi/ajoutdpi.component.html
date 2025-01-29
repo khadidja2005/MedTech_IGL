@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres Patient</title>
+  <link rel="stylesheet" href="ajoutdpi.component.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu latéral -->
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><i class="icon">🏢</i> Établissement</li>
+        <li><i class="icon">👥</i> Employés</li>
+        <li><i class="icon">📁</i> DPIs</li>
+      </ul>
+      
+      <!-- Section en bas du menu -->
+      <div class="menu-bottom">
+        <ul>
+          <li><i class="icon">💾</i> Contrôle de BDD</li>
+          <li><i class="icon">🔓</i> Se déconnecter</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <header class="top-bar">
+        <span class="brand">Medtech</span>
+        <div class="user-info">
+          <div>
+            <span class="user-name">Mina Khelifi</span>
+            <span class="user-role">Admin</span>
+          </div>
+          <img src="user-avatar.png" alt="Avatar" class="avatar">
+        </div>
+      </header>
+
+      <!-- Onglet "Créer DPI" souligné -->
+      <div class="tabs">
+        <button class="tab active" data-target="create-dpi">Créer DPI</button>
+      </div>
+
+      <!-- Contenu de l'onglet "Créer DPI" -->
+      <div id="create-dpi" class="tab-content active">
+        <form class="form">
+          <!-- Champs supplémentaires -->
+          <label for="full-name">Nom Complet</label>
+          <input type="text" id="full-name" placeholder="Nom Complet">
+
+          <label for="social-security">Numéro de Sécurité Sociale</label>
+          <input type="text" id="social-security" placeholder="Numéro de Sécurité Sociale">
+
+          <label for="institution">Établissement</label>
+          <input type="text" id="institution" placeholder="Établissement">
+
+          <!-- Conteneur des boutons Annuler et Suivant -->
+          <div class="form-buttons">
+            <button type="button" class="btn btn-cancel" (click)="gotorecherche()">Annuler</button>
+            <button type="button" class="btn btn-next" (click)="gotoajoutdp2()" >Suivant</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // JavaScript pour gérer l'activation des titres dans le menu
+    const menuItems = document.querySelectorAll('.menu li, .menu-bottom li');
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

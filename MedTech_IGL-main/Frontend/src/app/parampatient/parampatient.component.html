@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres Patient</title>
+  <link rel="stylesheet" href="parampatient.component.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu latéral -->
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><i class="icon">📁</i> DPIs</li>
+      </ul>
+      
+      <!-- Section en bas du menu -->
+      <div class="menu-bottom">
+        <ul>
+          <li><i class="icon">💾</i> Contrôle de BDD</li>
+          <li><i class="icon">🔓</i> Se déconnecter</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <header class="top-bar">
+        <span class="brand">Medtech</span>
+        <div class="user-info">
+          <div>
+            <span class="user-name">Mina Khelifi</span>
+            <span class="user-role">Patient</span>
+          </div>
+          <img src="user-avatar.png" alt="Avatar" class="avatar">
+        </div>
+      </header>
+
+      <!-- Onglet "Information" souligné -->
+      <div class="tabs">
+        <button class="tab active" data-target="information">Information</button>
+      </div>
+
+      <!-- Contenu de l'onglet Information -->
+      <div id="information" class="tab-content active">
+        <form class="form">
+          <!-- Champs supplémentaires pour le mot de passe -->
+          <label for="old-password">Ancien Mot De Passe</label>
+          <input type="password" id="old-password" placeholder="********">
+
+          <label for="new-password">Nouveau Mot De Passe</label>
+          <input type="password" id="new-password" placeholder="********">
+
+          <label for="confirm-password">Confirmer Nouveau Mot De Passe</label>
+          <input type="password" id="confirm-password" placeholder="********">
+
+          <button type="button" class="btn btn-right" (click)="gotorecherche()" >Sauvegarder</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // JavaScript pour gérer l'activation des titres dans le menu
+    const menuItems = document.querySelectorAll('.menu li, .menu-bottom li');
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

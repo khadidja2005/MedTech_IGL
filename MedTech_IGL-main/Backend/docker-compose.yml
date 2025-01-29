@@ -1,0 +1,35 @@
+# docker-compose.yml
+services:
+  web:
+    build: .
+    command:
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=medical_db
+      - DB_USER=medical_user
+      - DB_PASSWORD=medical_password
+      - DB_HOST=db
+      - DB_PORT=3306
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=medical_db
+      - MYSQL_USER=medical_user
+      - MYSQL_PASSWORD=medical_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

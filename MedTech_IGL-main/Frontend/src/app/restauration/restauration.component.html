@@ -1,0 +1,50 @@
+<header class="top-bar">
+  <div class="logo">
+    <h1>MedTech</h1>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="login-container">
+  <h2 class="title">Restaurer Mot de Passe</h2>
+  <form id="restoration-form">
+    <div class="form-group">
+      <label for="email">Entrer votre email</label>
+      <input 
+        id="email" 
+        type="email" 
+        placeholder="Email" 
+        class="form-control email-input" 
+        required />
+    </div>
+    <!-- Bouton avec redirection -->
+    <button type="button" class="btn btn-primary" id="submit-btn"  (click)="gotocode()">
+      Envoyer le code
+    </button>
+    <p class="cancel-text">
+      <a href="#" class="cancel-link">Annuler</a>
+    </p>
+  </form>
+</div>
+
+<script>
+  // Gestionnaire d'événements pour le bouton Envoyer le code
+  document.getElementById("submit-btn").addEventListener("click", function () {
+    const emailInput = document.getElementById("email").value;
+
+    // Vérifier que l'email est bien rempli
+    if (emailInput) {
+      // Redirection vers la page "Code"
+      window.location.href = "./code"; // Remplacez "code.html" par le chemin réel de votre page
+    } else {
+      alert("Veuillez entrer une adresse email valide.");
+    }
+  });
+</script>
