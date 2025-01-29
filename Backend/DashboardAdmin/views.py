@@ -68,9 +68,12 @@ def get_all_etablissements(request):
             return Response({"status": "error", "message": "Id not provided"})
         user = PersonnelMedical.objects.get(id=id)
         if user:
-            etablissements = etablissement_personnel_medical.objects.filter(
+            etablissements_perso = etablissement_personnel_medical.objects.filter(
                 personnel_medical_id=id
             )
+            etablissements = []
+            for etab in etablissements_perso:
+                etablissements.append(etab.etablissement)
         else:
             etablissements = Etablissement.objects.all()
         data = [

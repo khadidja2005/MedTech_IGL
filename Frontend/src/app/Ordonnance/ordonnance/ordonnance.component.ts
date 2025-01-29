@@ -4,7 +4,7 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { OrdonnaceDetailsComponent } from '../ordonnace-details/ordonnace-details.component';
 import { TableMedicamentComponent } from '../table-medicament/table-medicament.component';
-
+import { ActivatedRoute } from '@angular/router';
 export interface OrdonnancePageOrd {
   ordre: number;
   date: string;
@@ -28,32 +28,42 @@ export interface Patient {
 
 @Component({
   selector: 'app-ordonnance',
-  imports: [SidebarComponent, HeaderPDIComponent, OrdonnaceDetailsComponent, TableMedicamentComponent],
+  imports: [
+    SidebarComponent,
+    HeaderPDIComponent,
+    OrdonnaceDetailsComponent,
+    TableMedicamentComponent,
+  ],
   templateUrl: './ordonnance.component.html',
-  styleUrls: ['./ordonnance.component.css']
+  styleUrls: ['./ordonnance.component.css'],
 })
 export class OrdonnanceComponent implements OnInit {
-  role: string = 'medecin';
+  role: string = localStorage.getItem('role')?.toLowerCase() || 'medecin';
   ordonnance: any = {};
   medicaments: any[] = [];
   isLoading = false;
   errorMessage: string | null = null;
+  ordonnanceId: string = '';
   activeItem: string = ''; // Ajoutez cette ligne
   medecins: any[] = []; // Ajoutez cette ligne
   patients: any[] = []; // Ajoutez cette ligne
-
+  constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
-    const ordonnanceId = 1; // Replace with dynamic ID
-    this.loadOrdonnance(ordonnanceId);
+    this.route.params.subscribe((params) => {
+      const ordonnanceId = params['id'];
+      // Use the ID to fetch data or whatever you need
+      this.loadOrdonnance(ordonnanceId);
+    });
   }
 
   async loadOrdonnance(id: number): Promise<void> {
     this.isLoading = true;
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/ordonnances/`, {
+      const response = await axios.get(`http://127.0.0.1:8000/ordonnance/`, {
         params: { ordonnance_id: id },
       });
       this.ordonnance = response.data;
+      console.log(this.ordonnance);
       this.medicaments = response.data.medicaments;
     } catch (error) {
       this.errorMessage = 'Erreur lors du chargement des données.';
@@ -63,15 +73,27 @@ export class OrdonnanceComponent implements OnInit {
     }
   }
 
-  async addMedicament(nom: string, dosage: string, duree: string): Promise<void> {
+  async addMedicament(
+    nom: string,
+    dosage: string,
+    duree: string
+  ): Promise<void> {
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/ordonnances/ajouter/medicament`, {
-        ordonnance_id: this.ordonnance.ordre,
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/ordonnances/ajouter/medicament`,
+        {
+          ordonnance_id: this.ordonnance.ordre,
+          nom,
+          dosage,
+          duree,
+        }
+      );
+      this.medicaments.push({
+        id: response.data.medicament_id,
         nom,
         dosage,
         duree,
       });
-      this.medicaments.push({ id: response.data.medicament_id, nom, dosage, duree });
       alert('Médicament ajouté avec succès.');
     } catch (error) {
       console.error('Erreur lors de l’ajout du médicament:', error);
@@ -80,26 +102,16 @@ export class OrdonnanceComponent implements OnInit {
 
   async deleteMedicament(id: number): Promise<void> {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/ordonnances/supprimer/medicament`, {
-        data: { medicament_id: id },
-      });
-      this.medicaments = this.medicaments.filter(m => m.id !== id);
+      await axios.delete(
+        `http://127.0.0.1:8000/api/ordonnances/supprimer/medicament`,
+        {
+          data: { medicament_id: id },
+        }
+      );
+      this.medicaments = this.medicaments.filter((m) => m.id !== id);
       alert('Médicament supprimé avec succès.');
     } catch (error) {
       console.error('Erreur lors de la suppression du médicament:', error);
-    }
-  }
-
-  async validateOrdonnance(pharmacienId: number): Promise<void> {
-    try {
-      await axios.post(`http://127.0.0.1:8000/api/ordonnances/valider`, {
-        ordonnance_id: this.ordonnance.ordre,
-        pharmacien_id: pharmacienId,
-      });
-      this.ordonnance.estValide = true;
-      alert('Ordonnance validée avec succès.');
-    } catch (error) {
-      console.error('Erreur lors de la validation:', error);
     }
   }
 

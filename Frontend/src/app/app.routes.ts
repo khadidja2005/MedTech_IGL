@@ -26,7 +26,7 @@ export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation', component: ConsultationPageComponent },
   { path: 'login', component: LoginpageComponent },
-  { path: 'ordannace', component: OrdonnanceComponent },
+  { path: 'ordannace/:id', component: OrdonnanceComponent },
   { path: 'authcode', component: RecoverpageComponent },
   { path: 'verificationcode', component: CodepageComponent },
   { path: 'resetpassword', component: ResetpasswordpageComponent },
@@ -45,14 +45,19 @@ export const routes: Routes = [
   { path: 'radiologue', component: RadiologueComponent },
   { path: 'radiologue/archive', component: RadiologueArchiveComponent },
   { path: 'bilan-bio', component: BilanBioComponent },
-  {path : "authcode" , component : RecoverpageComponent},
-  {path : "verificationcode" , component : CodepageComponent},
-  {path : "resetpassword" , component : ResetpasswordpageComponent},
-  {path : "dashboard/etablissement" , component : PageListEtablissemetsComponent } , 
-  {path : "dashboard/employee" , component : PageEmployesComponent} , 
-  {path : "dashboard/Controlbdd" , component : BddComponent} ,
-  {path : 'dashboard/etablissement/:id' , component : PageAffichageEtablissementComponent},
-  {path : "soin/:id" , component : SoinComponent } ,
-{path : "dpi/:id" , component : DpiComponent}
-
+  { path: 'authcode', component: RecoverpageComponent },
+  { path: 'verificationcode', component: CodepageComponent },
+  { path: 'resetpassword', component: ResetpasswordpageComponent },
+  {
+    path: 'dashboard/etablissement',
+    component: PageListEtablissemetsComponent,
+  },
+  { path: 'dashboard/employee', component: PageEmployesComponent },
+  { path: 'dashboard/Controlbdd', component: BddComponent },
+  {
+    path: 'dashboard/etablissement/:id',
+    component: PageAffichageEtablissementComponent,
+  },
+  { path: 'soin/:id', component: SoinComponent },
+  { path: 'dpi/:id', component: DpiComponent },
 ];
