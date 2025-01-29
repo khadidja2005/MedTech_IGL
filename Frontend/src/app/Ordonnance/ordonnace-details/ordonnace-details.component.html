@@ -2,16 +2,19 @@
   <!-- Ordonnance Title -->
   <div class="flex items-center justify-between">
     <div>
-      <h6 class="soin-title mb-4">Ordonnance n° {{ ordonnance.ordre }}</h6>
+      <h6 class="soin-title mb-4">Ordonnance</h6>
 
       <!-- Action Buttons -->
-      <div *ngIf="(role === 'admin' || role === 'medecin')&&!ordonnance.termine" class="actions mb-4">
+      <div
+        *ngIf="(role === 'admin' || role === 'medecin') && !ordonnance.termine"
+        class="actions mb-4"
+      >
         <button class="delete-button flex items-center gap-1">
-          <img src="/assets/images/delete.png" class="h-5 w-5">
+          <img src="/assets/images/delete.png" class="h-5 w-5" />
           Supprimer
         </button>
         <button class="modify-button flex items-center gap-1">
-          <img src="/assets/images/edit.png" class="h-4 w-4">
+          <img src="/assets/images/edit.png" class="h-4 w-4" />
           Modifier
         </button>
       </div>
@@ -19,7 +22,6 @@
       <div *ngIf="role === 'pharmacien'">
         <p class="text-sm text-second">etablissement</p>
       </div>
-
     </div>
     <!-- Details Section -->
     <div class="details justify-end">
@@ -29,36 +31,64 @@
           <span class="value text-lg">{{ ordonnance.date }}</span>
         </span>
         <span>
-        <span class="label text-lg">Etat :</span>
-          <span *ngIf="!ordonnance.estValide" class="text-lg text-red font-semibold"> non valide </span>
-          <span *ngIf="ordonnance.estValide" class="text-lg text-etat font-semibold"> valide </span>
+          <span class="label text-lg">Etat :</span>
+          <span
+            *ngIf="!ordonnance.estValide"
+            class="text-lg text-red font-semibold"
+          >
+            non valide
+          </span>
+          <span
+            *ngIf="ordonnance.estValide"
+            class="text-lg text-etat font-semibold"
+          >
+            valide
+          </span>
         </span>
       </div>
       <div class="flex items-center justify-center gap-4">
-        <span *ngIf="role=='pharmacien'||role=='infermier'" class="label text-lg items-center">Medecin :</span>
-        <span *ngIf="role=='pharmacien'||role=='infermier'" class="value text-lg items-center">{{ getMedecinName(ordonnance.medecin_id) }}</span>
+        <span
+          *ngIf="role == 'pharmacien' || role == 'infermier'"
+          class="label text-lg items-center"
+          >Medecin :</span
+        >
+        <span
+          *ngIf="role == 'pharmacien' || role == 'infermier'"
+          class="value text-lg items-center"
+          >{{ getMedecinName(ordonnance.medecin_id) }}</span
+        >
         <span class="label text-lg">Patient :</span>
-        <span class="value text-lg">{{getPatientName(ordonnance.patient_id) }}</span>
+        <span class="value text-lg">{{
+          getPatientName(ordonnance.patient_id)
+        }}</span>
       </div>
     </div>
   </div>
   <!-- Footer Section -->
   <div class="footer">
-    <div *ngIf="role=='medecin' && !ordonnance.termine" class="buttons-container">
+    <div
+      *ngIf="role == 'medecin' && !ordonnance.termine"
+      class="buttons-container"
+    >
       <button class="add-button" (click)="openAddPanel()">
-        <img src="/assets/images/ajouter.png" class="h-5 w-5 items-center"> Ajouter un medicament</button>
-        <app-ajouter-medicament
+        <img src="/assets/images/ajouter.png" class="h-5 w-5 items-center" />
+        Ajouter un medicament
+      </button>
+      <app-ajouter-medicament
         [isVisible]="isAddPanelVisible"
         (closePanel)="closeAddPanel()"
-        (saveMedicament)="addMedicament($event)">
-        </app-ajouter-medicament>
-      <button class="terminer-button" (click)="terminate()">
-        terminer
-      </button>
+        (saveMedicament)="addMedicament($event)"
+      >
+      </app-ajouter-medicament>
+      <button class="terminer-button" (click)="terminate()">terminer</button>
     </div>
-    <div *ngIf="role=='pharmacien'&& !ordonnance.estValide" class="buttons-container">
+    <div
+      *ngIf="role == 'pharmacien' && !ordonnance.estValide"
+      class="buttons-container"
+    >
       <button class="valider-button" (click)="valider()">
         valider l'ordonnance
       </button>
     </div>
+  </div>
 </div>

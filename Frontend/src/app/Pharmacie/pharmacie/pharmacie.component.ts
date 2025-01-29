@@ -5,6 +5,7 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { PharmaHeaderComponent } from '../pharma-header/pharma-header.component';
 import { OrdonnanceCardComponent } from '../ordonnance-card/ordonnance-card.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export interface OrdonnancePharma {
   id: number;
   date_debut: string;
@@ -37,9 +38,10 @@ interface data {
   styleUrl: './pharmacie.component.css',
 })
 export class PharmacieComponent {
+  constructor(private router: Router) {}
   role = 'pharmacien';
   activeItem = 'Ordonnance';
-  pharmacien = 1295; //locale storage
+  pharmacien = localStorage.getItem('id');
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
@@ -53,6 +55,7 @@ export class PharmacieComponent {
   }
   // Fonction exécutée au chargement
   async onPageLoad(): Promise<void> {
+    console.log('Pharmacien:', this.pharmacien);
     try {
       const response = await axios.get<data>(
         'http://localhost:8000/pharmacie/home',
@@ -132,5 +135,8 @@ export class PharmacieComponent {
   onResetFilter() {
     this.filteredOrdonnances = [...this.ordonnances];
     this.currentPage = 1; // Reset to first page
+  }
+  navigateOrd(id: number) {
+    this.router.navigate([`ordannace//${id}`]);
   }
 }

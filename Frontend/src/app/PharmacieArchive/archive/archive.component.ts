@@ -7,6 +7,7 @@ import { OrdonnanceCardComponent } from '../../Pharmacie/ordonnance-card/ordonna
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { ArchiveHeaderComponent } from '../archive-header/archive-header.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 interface ord {
   id: number;
   date: string;
@@ -29,9 +30,10 @@ interface data {
   styleUrl: './archive.component.css',
 })
 export class ArchiveComponent {
+  constructor(private router: Router) {}
   role = 'pharmacien';
   activeItem = 'Ordonnance';
-  pharmacien = 1295; //locale storage
+  pharmacien = localStorage.getItem('id') || '';
   etablissements: Etab[] = [];
 
   ordonnances: OrdonnancePharma[] = [];
@@ -125,5 +127,8 @@ export class ArchiveComponent {
   onResetFilter() {
     this.filteredOrdonnances = [...this.ordonnances];
     this.currentPage = 1; // Reset to first page
+  }
+  navigateOrd(id: number) {
+    this.router.navigate([`ordannace//${id}`]);
   }
 }

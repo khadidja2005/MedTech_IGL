@@ -4,12 +4,26 @@
   <!-- Main Content -->
   <div class="main-section">
     <!-- Sidebar -->
-    <app-sidebar class="sidebar" [activeItem]="activeItem" [role]="role"></app-sidebar>
+    <app-sidebar
+      class="sidebar"
+      [activeItem]="activeItem"
+      [role]="role"
+    ></app-sidebar>
 
     <!--real main-->
     <div class="content">
-    <app-ordonnace-details [medicaments]="medicaments" [medecins]="medecins" [patients]="patients" [ordonnance]="ordonnance" [role]="role"></app-ordonnace-details>
-    <app-table-medicament [medicaments]="medicaments" [role]="role"></app-table-medicament>
+      <app-ordonnace-details
+        [medicaments]="medicaments"
+        [medecins]="medecins"
+        [patients]="patients"
+        [ordonnance]="ordonnance"
+        [role]="role"
+        [id]="ordonnanceId"
+      ></app-ordonnace-details>
+      <app-table-medicament
+        [medicaments]="medicaments"
+        [role]="role"
+      ></app-table-medicament>
     </div>
   </div>
 </div>
