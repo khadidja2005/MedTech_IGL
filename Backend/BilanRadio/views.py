@@ -10,8 +10,7 @@ from BDD.models import BilanRadio, ResultatRadio, PersonnelMedical
 @require_http_methods(["GET"])
 def get_info_bilan_radio(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
+        bilan_id = request.GET.get("bilan_id")
         if not bilan_id:
             return JsonResponse({"error": "bilan_id is required"})
         try:
@@ -24,9 +23,15 @@ def get_info_bilan_radio(request):
                 "id": resultat.id,
                 "piece_jointe": resultat.piece_jointe,
                 "date": resultat.date,
-                "compte_rendu": resultat.compte_rendu,
-                "radiologue_compte_rendu": resultat.radiologue_compte_rendu.nom_complet,
-                "radiologue_compte_rendu_id": resultat.radiologue_compte_rendu.id,
+                "compte_rendu": resultat.compte_rendu if resultat.compte_rendu else "",
+                "radiologue_compte_rendu": (
+                    resultat.radiologue_compte_rendu.nom_complet
+                    if resultat.compte_rendu
+                    else ""
+                ),
+                "radiologue_compte_rendu_id": (
+                    resultat.radiologue_compte_rendu.id if resultat.compte_rendu else 0
+                ),
                 "radiologue": resultat.radiologue.nom_complet,
                 "radiologue_id": resultat.radiologue.id,
             }
@@ -44,6 +49,7 @@ def get_info_bilan_radio(request):
                 "medecin_id": bilan.Consultation.Medecin.id,
                 "medecin": bilan.Consultation.Medecin.nom_complet,
                 "resultats": resultat_response,
+                "patient_name": bilan.Consultation.Hospitalisation.DPI.patient.nom_complet,
             }
         )
     else:
@@ -193,8 +199,9 @@ def ajouter_resultat_radio_pdf(request):
 def ajouter_resultat_radio_compte_rendu(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        print(data)
         bilan_id = data.get("bilan_id")
-        compte = data.get("compte-rendu")
+        compte = data.get("compte_rendu")
         radiologue_id = data.get("radiologue_id")
         if not bilan_id:
             return JsonResponse({"error": "bilan_id is required"})
@@ -229,11 +236,9 @@ def ajouter_resultat_radio_compte_rendu(request):
 
 
 @csrf_exempt
-def supprimer_resultat_radio_compte_rendu(request):
+def supprimer_resultat_radio_compte_rendu(request, bilan_id):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
-        radiologue_id = data.get("radiologue_id")
+        radiologue_id = request.GET.get("radiologue_id")
         if not bilan_id:
             return JsonResponse({"error": "bilan_id is required"})
         if not radiologue_id:

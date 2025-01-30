@@ -7,7 +7,7 @@
   <app-sidebar></app-sidebar>
   <div class="bg-[#F3F8FF] flex-1">
     <!-- Adjusted for sidebar width -->
-    <ng-container *ngIf="bilan">
+    <ng-container *ngIf="!loading">
       <app-bilan-display-radiologue
         *ngIf="isRadiologue()"
         [bilan]="bilan"

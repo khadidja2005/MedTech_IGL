@@ -19,7 +19,7 @@ urlpatterns = [
         name="ajouter_resultat_radio_compte_rendu",
     ),
     path(
-        "supprimer/resultat/compte-rendu",
+        "supprimer/resultat/compte-rendu/<int:bilan_id>",
         views.supprimer_resultat_radio_compte_rendu,
         name="supprimer_resultat_radio_compte_rendu",
     ),
