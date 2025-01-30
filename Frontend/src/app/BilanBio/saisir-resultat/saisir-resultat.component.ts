@@ -69,8 +69,10 @@ export class SaisirResultatComponent {
           .post('http://localhost:8000/bilanbio/modifier/resultat', {
             id: this.param.id,
             ...updatedData,
-            date_mesure: Date.now(),
-            heure_mesure: new Date().getTime(),
+            date_mesure: new Date().toLocaleDateString('en-GB'),
+            heure_mesure: new Date()
+              .toLocaleTimeString('en-GB', { hour12: false })
+              .slice(0, 5),
             laborantin_id: this.laborantin_id,
           })
           .then((response) => {
