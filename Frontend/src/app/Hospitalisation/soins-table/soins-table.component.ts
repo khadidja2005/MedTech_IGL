@@ -2,7 +2,7 @@ import { Infermier } from './../../Soin/soin/soin.component';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SoinPageHospitalisation } from '../hospitalisation/hospitalisation.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-soins-table',
   standalone: true,
@@ -13,7 +13,7 @@ import { SoinPageHospitalisation } from '../hospitalisation/hospitalisation.comp
 export class SoinsTableComponent {
   @Input() soins!: SoinPageHospitalisation[];
   @Input() infermiers!: Infermier[];
-
+  constructor(private router: Router) {}
   getInfermierName(infermierId: number): string {
     // Convert infermierId to number since it might be coming as a string
     const id = Number(infermierId);
@@ -24,8 +24,7 @@ export class SoinsTableComponent {
   ngOnInit(): void {}
 
   onConsult(consultation: SoinPageHospitalisation): void {
-    console.log('Consulting:', consultation);
-    // Add your consultation logic here
+    this.router.navigate([`soin/${consultation.id}`]);
   }
   getFormattedDate(date: Date): string {
     return new Intl.DateTimeFormat('fr-FR', {

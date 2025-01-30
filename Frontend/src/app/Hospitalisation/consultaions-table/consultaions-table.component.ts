@@ -1,9 +1,8 @@
 import { medecin } from './../hospitalisation/hospitalisation.component';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Consultation } from '../../../types/consultation';
 import { ConsultationPageHospitalisation } from '../hospitalisation/hospitalisation.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-consultaions-table',
   standalone: true,
@@ -14,10 +13,11 @@ import { ConsultationPageHospitalisation } from '../hospitalisation/hospitalisat
 export class ConsultaionsTableComponent {
   @Input() consultations!: ConsultationPageHospitalisation[];
   @Input() medecins!: medecin[];
+  constructor(private router: Router) {}
   ngOnInit(): void {}
 
   onConsult(consultation: ConsultationPageHospitalisation): void {
-    // Add your consultation logic here
+    this.router.navigate([`consultation/${consultation.id}`]);
   }
   getFormattedDate(date: Date): string {
     return new Intl.DateTimeFormat('fr-FR', {

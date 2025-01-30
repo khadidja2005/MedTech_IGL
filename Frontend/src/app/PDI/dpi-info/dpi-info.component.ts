@@ -1074,4 +1074,7 @@ export class DpiInfoComponent implements OnInit {
       this.router.navigate([`bilan-bio/${bilan.id}`]);
     }
   }
+  navigateHospi(id: number) {
+    this.router.navigate([`hospitalisation/${id}`]);
+  }
 }

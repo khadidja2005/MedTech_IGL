@@ -33,11 +33,13 @@ export class RechercheComponent {
   dpis: DpiCards[] = [];
   etablissements: Etab[] = [];
   constructor(private router: Router) {}
+  load = false;
   ngOnInit(): void {
     this.onPageLoad();
   }
   // Fonction exécutée au chargement
   async onPageLoad(): Promise<void> {
+    this.load = true;
     console.log('Fetching DPIs for personnel ID:', this.id);
     try {
       const response = await axios.get<{ all_dpis: DpiCards[] }>(
@@ -61,6 +63,7 @@ export class RechercheComponent {
     } catch (error) {
       console.error('Error:', error);
     }
+    this.load = false;
   }
 
   pageSize = 6; // Items per page

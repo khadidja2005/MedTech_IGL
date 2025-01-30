@@ -103,8 +103,7 @@ def peut_valider(request):
 @csrf_exempt
 def peut_terminer(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
+        bilan_id = request.GET.get("bilan_id")
         if not bilan_id:
             return JsonResponse({"error": "Invalid request"})
         try:
@@ -140,8 +139,7 @@ def terminer(request):
 @csrf_exempt
 def supprimer_bilan_radio(request):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
+        bilan_id = request.GET.get("bilan_id")
         if not bilan_id:
             return JsonResponse({"error": "Invalid request"})
         try:
@@ -263,3 +261,41 @@ def supprimer_resultat_radio_compte_rendu(request, bilan_id):
         return JsonResponse({"success": "Compte rendu deleted"})
     else:
         return JsonResponse({"error": "Invalid request"})
+
+
+@csrf_exempt
+def modifier_type_bilan_radio(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        bilan_id = data.get("bilan_id")
+        type_radio = data.get("type_radio")
+        if not bilan_id:
+            return JsonResponse({"error": "bilan_id is required"})
+        if not type_radio:
+            return JsonResponse({"error": "type_radio is required"})
+        try:
+            bilan = BilanRadio.objects.get(id=bilan_id)
+        except BilanRadio.DoesNotExist:
+            return JsonResponse({"error": "BilanRadio not found"})
+        bilan.type_radio = type_radio
+        bilan.save()
+        return JsonResponse({"success": "Type modified"})
+
+
+@csrf_exempt
+def modifier_description(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        bilan_id = data.get("bilan_id")
+        description = data.get("description")
+        if not bilan_id:
+            return JsonResponse({"error": "bilan_id is required"})
+        if not description:
+            return JsonResponse({"error": "description is required"})
+        try:
+            bilan = BilanRadio.objects.get(id=bilan_id)
+        except BilanRadio.DoesNotExist:
+            return JsonResponse({"error": "BilanRadio not found"})
+        bilan.description = description
+        bilan.save()
+        return JsonResponse({"success": "Description modified"})
