@@ -7,6 +7,8 @@ import { BilanRadioCardComponent } from '../../Radiologue/bilan-radio-card/bilan
 import { ArchiveHeaderComponent } from '../archive-header/archive-header.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
+
 interface ord {
   id: number;
   date: string;
@@ -30,9 +32,9 @@ interface data {
   styleUrl: './archive.component.css',
 })
 export class ArchiveComponent {
-  role = 'radiologue';
+  role = localStorage.getItem('role')?.toLowerCase() || 'radiologue';
   activeItem = 'Bilans';
-  radiologue = 1321; //locale storage
+  radiologue = localStorage.getItem('id');
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
@@ -41,6 +43,7 @@ export class ArchiveComponent {
 
   bilans: Bilan[] = [];
   filteredBilans: Bilan[] = [...this.bilans]; // Holds the filtered results
+  constructor(private router: Router) {}
   ngOnInit(): void {
     this.onPageLoad();
   }
@@ -124,5 +127,8 @@ export class ArchiveComponent {
   onResetFilter() {
     this.filteredBilans = [...this.bilans];
     this.currentPage = 1; // Reset to first page
+  }
+  navigatebilan(id: number) {
+    this.router.navigate([`bilan-radio/${id}`]);
   }
 }

@@ -77,6 +77,7 @@ export class EstablishmentsComponent implements OnInit {
       );
       //console.log(response.data);
       this.establishments = response.data.data;
+      console.log(this.establishments);
     } catch (e) {
       console.log(e);
       if (this.notyf) {

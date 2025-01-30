@@ -6,6 +6,7 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { BilanRadioCardComponent } from '../bilan-radio-card/bilan-radio-card.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export interface Bilan {
   id: number;
   date_debut: string;
@@ -34,13 +35,13 @@ interface data {
   styleUrl: './radiologue.component.css',
 })
 export class RadiologueComponent {
-  role = 'radiologue';
+  role = localStorage.getItem('role')?.toLowerCase() || 'radiologue';
   activeItem = 'Bilans';
-
+  constructor(private router: Router) {}
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
-  radiologue = 1321; //locale storage
+  radiologue = localStorage.getItem('id');
   etablissements: Etab[] = [];
   bilans: Bilan[] = [];
   filteredBilans: Bilan[] = [...this.bilans]; // Holds the filtered results
@@ -127,5 +128,8 @@ export class RadiologueComponent {
   onResetFilter() {
     this.filteredBilans = [...this.bilans];
     this.currentPage = 1; // Reset to first page
+  }
+  navigatebilan(id: number) {
+    this.router.navigate([`bilan-radio/${id}`]);
   }
 }

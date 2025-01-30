@@ -21,7 +21,7 @@ import { BilanBioComponent } from './BilanBio/bilan-bio/bilan-bio.component';
 import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/page-affichage-etablissement/page-affichage-etablissement.component';
 import { SoinComponent } from './Soin/soin/soin.component';
 import { DpiComponent } from './PDI/dpi/dpi.component';
-
+import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation', component: ConsultationPageComponent },
@@ -60,4 +60,5 @@ export const routes: Routes = [
   },
   { path: 'soin/:id', component: SoinComponent },
   { path: 'dpi/:id', component: DpiComponent },
+  { path: 'bilan-radio/:id', component: PageBilanComponent },
 ];
