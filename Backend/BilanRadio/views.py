@@ -296,6 +296,8 @@ def modifier_description(request):
             bilan = BilanRadio.objects.get(id=bilan_id)
         except BilanRadio.DoesNotExist:
             return JsonResponse({"error": "BilanRadio not found"})
+        if description == "vide":
+            description = ""
         bilan.description = description
         bilan.save()
         return JsonResponse({"success": "Description modified"})

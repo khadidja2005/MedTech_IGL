@@ -54,7 +54,7 @@ interface data {
 export class BilanBioComponent {
   role: string = localStorage.getItem('role')?.toLowerCase() || 'laborantin'; //localstorage
   laborantin = parseInt(localStorage.getItem('id') || '1'); //localstorage
-  user = 'name'; //localstorage
+  user = localStorage.getItem('nom_complet') || 'nom'; //localstorage
   bilan_id = 673; //navigation
   activeItem: string;
   constructor(private route: ActivatedRoute) {
