@@ -10,6 +10,7 @@
     <!-- Hospitalisation Details -->
     <div class="content">
       <app-hospitalisation-details
+        *ngIf="!load"
         [consultations]="consultations"
         [hospitalisation]="hospitalisation"
         [soins]="soins"

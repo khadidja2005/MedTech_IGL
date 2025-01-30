@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./hospitalisation-details.component.css'],
 })
 export class HospitalisationDetailsComponent {
-  @Input() role: string = '';
+  role: string = '';
   selectedTab: string = 'consultations';
   isAddPanelVisible = false; // Flag to control the visibility of the "Add Consultation" panel
   isPopupVisible = false;
@@ -44,6 +44,7 @@ export class HospitalisationDetailsComponent {
   constructor(private router: Router) {}
   // Method to open the "Add Consultation" panel
   ngOnInit() {
+    console.log(this.hospitalisation.medecin);
     if (this.hospitalisation.medecin == localStorage.getItem('nom_complet')) {
       this.role = 'medecinResponsable';
     } else {

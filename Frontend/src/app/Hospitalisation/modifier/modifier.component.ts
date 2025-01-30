@@ -65,17 +65,13 @@ export class ModifierComponent implements OnInit {
 
   ngOnInit() {
     if (this.hospitalisation) {
-      const formattedStartDate = this.convertDateToInputFormat(
-        this.hospitalisation.date_debut
-      );
+      const formattedStartDate = this.hospitalisation.date_debut;
 
       this.hospitalisationForm.patchValue({
         medecin_responsable: this.hospitalisation.medecin,
         date_debut: formattedStartDate,
         status: this.hospitalisation.date_fin ? 'en cours' : 'fini',
-        date_fin: this.hospitalisation.date_fin
-          ? this.convertDateToInputFormat(this.hospitalisation.date_fin)
-          : '',
+        date_fin: this.hospitalisation.date_fin,
       });
 
       this.showEndDate = this.hospitalisation.date_fin != null;
@@ -100,6 +96,7 @@ export class ModifierComponent implements OnInit {
           : null,
       };
       this.saveChanges.emit(updatedData);
+      console.log('Updated hospitalisation:', updatedData);
       axios
         .post('http://localhost:8000/hospitalisation/modifier', {
           hospitalisation_id: this.hospitalisation_id,
