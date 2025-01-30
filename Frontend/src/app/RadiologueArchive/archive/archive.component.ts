@@ -30,9 +30,9 @@ interface data {
   styleUrl: './archive.component.css',
 })
 export class ArchiveComponent {
-  role = 'radiologue';
+  role = localStorage.getItem('role')?.toLowerCase() || 'radiologue';
   activeItem = 'Bilans';
-  radiologue = 1321; //locale storage
+  radiologue = localStorage.getItem('id');
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }

@@ -34,13 +34,13 @@ interface data {
   styleUrl: './radiologue.component.css',
 })
 export class RadiologueComponent {
-  role = 'radiologue';
+  role = localStorage.getItem('role')?.toLowerCase() || 'radiologue';
   activeItem = 'Bilans';
 
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
-  radiologue = 1321; //locale storage
+  radiologue = localStorage.getItem('id');
   etablissements: Etab[] = [];
   bilans: Bilan[] = [];
   filteredBilans: Bilan[] = [...this.bilans]; // Holds the filtered results

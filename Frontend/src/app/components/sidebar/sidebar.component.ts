@@ -1,5 +1,4 @@
 import { Component, Input, Inject, PLATFORM_ID } from '@angular/core';
-import { NgModule } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Notyf } from 'notyf';
 import { Router } from '@angular/router';

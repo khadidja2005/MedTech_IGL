@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { BilanDisplayMedValidComponent } from '../bilan-display-med-valid/bilan-display-med-valid.component';
 import { BilanDisplayComponent } from '../bilan-display-med/bilan-display.component';
 import { BilanDisplayRadiologueComponent } from '../bilan-display-radiologue/bilan-display-radiologue.component';
-import { SidebarComponent } from "../../components/sidebar/sidebar.component";
-import { HeaderPDIComponent } from "../../components/header-pdi/header-pdi.component";
-
-
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
+import { ActivatedRoute } from '@angular/router';
 export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
 
 export interface BilanRadio {
@@ -43,19 +42,18 @@ export interface ResultatRadio {
     BilanDisplayMedValidComponent,
     BilanDisplayComponent,
     SidebarComponent,
-    HeaderPDIComponent
-],
-  templateUrl: './page-bilan.component.html'
+    HeaderPDIComponent,
+  ],
+  templateUrl: './page-bilan.component.html',
 })
 export class PageBilanComponent implements OnInit {
   bilan!: BilanRadio;
   result!: ResultatRadio;
-  userRole: 'medecin' | 'radiologue' = 'medecin';
-
+  userRole: string = localStorage.getItem('role')?.toLowerCase() || 'medecin';
+  constructor(private route: ActivatedRoute) {}
   ngOnInit() {
-    // Mock data for demonstration
     this.bilan = {
-      id: 1,
+      id: this.route.snapshot.params['id'],
       date_debut: '2024-01-01',
       date_fin: '2024-01-02',
       type_radio: 'IRM',
@@ -66,7 +64,7 @@ export class PageBilanComponent implements OnInit {
       resultat_id: null,
       etablissement: 1,
       medecin: 'Dr. Sample',
-      patient: 'Patient Name'
+      patient: 'Patient Name',
     };
 
     this.result = {
@@ -76,7 +74,7 @@ export class PageBilanComponent implements OnInit {
       date: '2024-01-02',
       compte_rendu: '',
       radiologue_compte_rendu: null,
-      radiologue: 1
+      radiologue: 1,
     };
   }
 
