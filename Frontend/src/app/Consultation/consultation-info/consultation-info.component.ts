@@ -2,8 +2,30 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+interface response {
+  medecin: string;
+  resume: string;
+  date: string;
+  ordonnances: any[];
+  bilans_bio: any[];
+  bilans_radio: any[];
+}
+interface medecin {
+  id: number;
+  nom_complet: string;
+}
+interface medecinres {
+  medecins: medecin[];
+}
+interface ordres {
+  message: string;
+  ordonnance: any;
+}
+interface resBilan {
+  message: string;
+  bilan: any;
+}
 @Component({
   selector: 'app-consultation-info',
   standalone: true,
@@ -15,9 +37,7 @@ export class ConsultationInfoComponent implements OnInit {
   consultation: any = {};
   Ordonnances: any[] = [];
   combinedBilans: any[] = [];
-  medecins: string[] = [];
-  pharmaciens: string[] = [];
-
+  medecins: medecin[] = [];
   // States
   showModifyModal = false;
   showResumeModal = false;
@@ -27,7 +47,7 @@ export class ConsultationInfoComponent implements OnInit {
   showMedecinDropdown = false;
 
   // Fields for modals
-  selectedMedecin: string | null = null;
+  selectedMedecin: medecin | null = null;
   selectedDate: string | undefined;
   editedResume = '';
   newOrdonnance: any = {};
@@ -38,7 +58,7 @@ export class ConsultationInfoComponent implements OnInit {
   OrdonnanceValidationErrors: Record<string, string> = {};
   addOrdonnanceModalMode: 'add' | 'view' = 'add';
   addBilanModalMode: 'add' | 'view' = 'add';
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private routenon: Router) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.consultationId = parseInt(params['id']);
@@ -49,17 +69,37 @@ export class ConsultationInfoComponent implements OnInit {
 
   async loadConsultation(id: number): Promise<void> {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/consultation/${id}`
-      );
-      this.consultation = response.data;
-      this.Ordonnances = response.data.ordonnances || [];
-      this.combinedBilans = [
-        ...response.data.bilans_bio,
-        ...response.data.bilans_radio,
-      ];
+      await axios
+        .get<response>(`http://localhost:8000/consultation/`, {
+          params: {
+            consultation_id: id,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.consultation.medecin = response.data.medecin;
+          this.consultation.resume = response.data.resume;
+          this.consultation.date = response.data.date;
+          this.consultation.id = id;
+          this.Ordonnances = response.data.ordonnances;
+          this.combinedBilans = response.data.bilans_bio;
+          this.combinedBilans.push(...response.data.bilans_radio);
+        });
     } catch (error) {
       console.error('Error loading consultation:', error);
+    }
+    try {
+      await axios
+        .get<medecinres>(`http://localhost:8000/consultation/medecins/`, {
+          params: {
+            consultation_id: id,
+          },
+        })
+        .then((response) => {
+          this.medecins = response.data.medecins;
+        });
+    } catch (error) {
+      console.error('Error loading medecins:', error);
     }
   }
 
@@ -67,13 +107,12 @@ export class ConsultationInfoComponent implements OnInit {
     try {
       const data = {
         consultation_id: this.consultation.id,
-        date: this.selectedDate,
-        medecin_id: this.selectedMedecin,
+        date: this.selectedDate
+          ? new Date(this.selectedDate).toISOString().split('T')[0]
+          : '',
+        medecin_id: this.selectedMedecin?.id,
       };
-      await axios.post(
-        `http://127.0.0.1:8000/api/consultation/modifier/`,
-        data
-      );
+      await axios.post(`http://127.0.0.1:8000/consultation/modifier/`, data);
       alert('Consultation modifiée avec succès');
       this.showModifyModal = false;
       this.loadConsultation(this.consultation.id);
@@ -83,13 +122,21 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   async saveResume(): Promise<void> {
+    let data: any;
     try {
-      const data = {
-        consultation_id: this.consultation.id,
-        resume: this.editedResume,
-      };
+      if (!this.editedResume) {
+        data = {
+          consultation_id: this.consultation.id,
+          resume: 'vide',
+        };
+      } else {
+        data = {
+          consultation_id: this.consultation.id,
+          resume: this.editedResume,
+        };
+      }
       await axios.post(
-        `http://127.0.0.1:8000/api/consultation/modifier/resume/`,
+        `http://127.0.0.1:8000/consultation/modifier/resume/`,
         data
       );
       alert('Résumé modifié avec succès');
@@ -102,17 +149,18 @@ export class ConsultationInfoComponent implements OnInit {
 
   async addOrdonnance(): Promise<void> {
     try {
-      const data = {
-        consultation_id: this.consultation.id,
-        ...this.newOrdonnance,
-      };
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/consultation/ajouter/ordonnance/`,
-        data
-      );
-      this.Ordonnances.push(response.data);
-      alert('Ordonnance ajoutée avec succès');
-      this.showOrdonnanceModal = false;
+      await axios
+        .post<ordres>(
+          `http://127.0.0.1:8000/consultation/ajouter/ordonnance/`,
+          {
+            consultation_id: this.consultation.id,
+          }
+        )
+        .then((response) => {
+          this.Ordonnances.push(response.data.ordonnance);
+          console.log(this.Ordonnances);
+          alert('Ordonnance ajoutée avec succès');
+        });
     } catch (error) {
       console.error('Erreur lors de l’ajout d’une ordonnance:', error);
     }
@@ -124,11 +172,21 @@ export class ConsultationInfoComponent implements OnInit {
         consultation_id: this.consultation.id,
         ...this.newBilan,
       };
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/consultation/ajouter/bilan/`,
-        data
-      );
-      this.combinedBilans.push(response.data);
+      await axios
+        .post<resBilan>(
+          `http://127.0.0.1:8000/consultation/ajouter/bilan/`,
+          data
+        )
+        .then((response) => {
+          console.log(response.data);
+          const bilan = {
+            id: response.data.bilan,
+            type: this.newBilan.type,
+            etat: 'non finis',
+          };
+          this.combinedBilans.push(bilan);
+          console.log(this.combinedBilans);
+        });
       alert('Bilan ajouté avec succès');
       this.showBilanModal = false;
     } catch (error) {
@@ -147,24 +205,11 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   getBilanDisplayType(bilan: any): string {
-    return bilan.type === 'bio' ? 'Biologique' : 'Radiologique';
+    return bilan.type === 'bio' ? 'bio' : 'radio';
   }
 
   selectMenu(menuNumber: number): void {
     this.selectedMenu = menuNumber;
-  }
-
-  toggleOrdonnanceModal(mode: 'add' | 'view' = 'add', ordonnance?: any): void {
-    this.addOrdonnanceModalMode = mode;
-    this.OrdonnanceValidationErrors = {};
-
-    if (mode === 'view' && ordonnance) {
-      this.newOrdonnance = { ...ordonnance };
-    } else {
-      this.newOrdonnance = {};
-    }
-
-    this.showOrdonnanceModal = !this.showOrdonnanceModal;
   }
 
   toggleBilanModal(mode: 'add' | 'view' = 'add', bilan?: any): void {
@@ -181,7 +226,10 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   canEditConsultation(): boolean {
-    return true; // Replace with actual logic
+    return (
+      this.consultation.medecin_id ==
+      parseInt(localStorage.getItem('id') || '0')
+    );
   }
 
   modifyConsultation(): void {
@@ -191,8 +239,15 @@ export class ConsultationInfoComponent implements OnInit {
 
   deleteConsultation(): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette Consultation ?')) {
-      // TODO: Implement actual deletion logic
+      axios
+        .delete('http://localhost:8000/consultation/supprimer/', {
+          params: { consultation_id: this.consultation.id },
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
       alert('Consultation supprimée avec succès');
+      this.routenon.navigate(['/recherche']);
     }
   }
 
@@ -208,7 +263,7 @@ export class ConsultationInfoComponent implements OnInit {
     this.showMedecinDropdown = !this.showMedecinDropdown;
   }
 
-  selectMedecin(medecin: string): void {
+  selectMedecin(medecin: medecin): void {
     this.selectedMedecin = medecin;
     this.showMedecinDropdown = false;
   }
@@ -225,10 +280,6 @@ export class ConsultationInfoComponent implements OnInit {
     }
   }
 
-  canEditOrdonnance(): boolean {
-    return true; // Replace with actual logic
-  }
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -236,5 +287,15 @@ export class ConsultationInfoComponent implements OnInit {
     if (dropdown && !dropdown.contains(target)) {
       this.showMedecinDropdown = false;
     }
+  }
+  consulterBilan(bilan: any): void {
+    if (bilan.type === 'bio') {
+      this.routenon.navigate([`bilan-bio/${bilan.id}`]);
+    } else {
+      this.routenon.navigate([`bilan-radio/${bilan.id}`]);
+    }
+  }
+  consulterOrdonnance(ordonnance: any): void {
+    this.routenon.navigate([`ordannace/${ordonnance.id}`]);
   }
 }

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
 
 export interface BilanRadio {
@@ -40,14 +41,15 @@ interface peutTerminer {
 export class BilanDisplayComponent {
   @Input() bilan!: BilanRadio;
   @Input() medecin!: number;
-
+  puetTerminer: boolean = false;
+  loading = false;
   user1 = {
     Admin: localStorage.getItem('role') == 'ADMIN',
     name: localStorage.getItem('nom_complet'),
     id: localStorage.getItem('id'),
     profession: localStorage.getItem('role')?.toLowerCase(),
   };
-
+  constructor(private router: Router) {}
   showTypeModal = false;
   showResumeModal = false;
   showViewModal = false; // New variable for view-only modal
@@ -80,6 +82,7 @@ export class BilanDisplayComponent {
       .catch((error) => {
         console.log(error);
       });
+    this.router.navigate(['/recherche']);
   }
 
   modifyType() {
@@ -105,19 +108,7 @@ export class BilanDisplayComponent {
   modifyDescription() {
     if (this.caneditBilanMed()) {
       this.editedDescription = this.bilan.description;
-      console.log(this.editedDescription);
       this.showResumeModal = true;
-      axios
-        .post('http://localhost:8000/bilanradio/modifier/description', {
-          bilan_id: this.bilan.id,
-          description: this.bilan.description,
-        })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
   }
 
@@ -126,7 +117,7 @@ export class BilanDisplayComponent {
     axios
       .post('http://localhost:8000/bilanradio/modifier/description', {
         bilan_id: this.bilan.id,
-        description: this.bilan.description,
+        description: 'vide',
       })
       .then((response) => {
         console.log(response.data);
@@ -146,6 +137,17 @@ export class BilanDisplayComponent {
 
   saveDescription() {
     this.bilan.description = this.editedDescription;
+    axios
+      .post('http://localhost:8000/bilanradio/modifier/description', {
+        bilan_id: this.bilan.id,
+        description: this.bilan.description,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     this.showResumeModal = false;
   }
 
@@ -181,19 +183,18 @@ export class BilanDisplayComponent {
   }
 
   peutTerminer() {
-    let bool = false;
+    this.loading = true;
     axios
       .get<peutTerminer>('http://localhost:8000/bilanradio/peut-terminer', {
         params: { bilan_id: this.bilan.id },
       })
       .then((response) => {
-        console.log(response.data);
-        bool = response.data.peut_terminer;
+        this.puetTerminer = response.data.peut_terminer;
       })
       .catch((error) => {
         console.log(error);
       });
-    return bool;
+    this.loading = false;
   }
 
   caneditBilanMed() {
@@ -214,6 +215,7 @@ export class BilanDisplayComponent {
   }
 
   ngOnInit() {
+    this.peutTerminer();
     if (!this.bilan) {
       this.bilan = {
         id: 0,

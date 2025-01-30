@@ -19,7 +19,7 @@ export class BilanDetailsComponent {
   async terminate() {
     this.bilan.est_complet = true;
     await axios
-      .post('http://localhost:8000/bilanBio/terminer', {
+      .post('http://localhost:8000/bilanbio/terminer', {
         bilan_id: this.bilan.id,
       })
       .then((response) => {
@@ -66,7 +66,7 @@ export class BilanDetailsComponent {
   }
   async delete() {
     await axios
-      .post('http://localhost:8000/bilanBio/supprimer', {
+      .post('http://localhost:8000/bilanbio/supprimer', {
         bilan_id: this.bilan.id,
       })
       .then((response) => {

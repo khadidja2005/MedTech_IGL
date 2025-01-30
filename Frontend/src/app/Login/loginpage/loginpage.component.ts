@@ -50,13 +50,13 @@ export class LoginpageComponent {
       );
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('id', /*response.data.id*/ '1854');
+      localStorage.setItem('id', /*response.data.id*/ '1864');
       localStorage.setItem('email', response.data.email);
       role = response.data.role;
       localStorage.setItem('role', response.data.role);
       localStorage.setItem(
         'nom_complet',
-        /*response.data.nom_complet*/ 'Richard Ramirez'
+        /*response.data.nom_complet*/ 'Brian Wood'
       );
       if (this.notyf) {
         this.notyf.success('Login Successful');

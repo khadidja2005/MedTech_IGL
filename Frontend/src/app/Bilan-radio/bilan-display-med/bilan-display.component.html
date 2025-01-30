@@ -54,7 +54,7 @@
   </div>
 
   <button
-    *ngIf="caneditBilanMed() && peutTerminer()"
+    *ngIf="caneditBilanMed() && puetTerminer && !loading"
     (click)="saveBilan()"
     class="absolute top-[175px] right-14 rounded-2xl px-16 py-2 bg-[#3A8EF6] text-white text-2xl font-semibold"
   >
