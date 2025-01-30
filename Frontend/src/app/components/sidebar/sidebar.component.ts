@@ -60,7 +60,7 @@ export class SidebarComponent {
       label: 'Bilans',
       icon: '/assets/images/DPI.png',
       roles: ['radiologue', 'laborantin'],
-      link: '#',
+      link: this.bilanLink,
     },
     {
       label: 'Archive',
@@ -101,6 +101,16 @@ export class SidebarComponent {
         return '/laborantin/archive';
       case 'pharmacien':
         return '/pharmacie/archive';
+      default:
+        return '';
+    }
+  }
+  get bilanLink() {
+    switch (this.role) {
+      case 'radiologue':
+        return '/radiologue';
+      case 'laborantin':
+        return '/laborantin';
       default:
         return '';
     }

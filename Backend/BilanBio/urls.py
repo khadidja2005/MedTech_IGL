@@ -16,7 +16,7 @@ urlpatterns = [
         "modifier/resultat", views.modifier_resultat_bio, name="modifier_resultat_bio"
     ),
     path(
-        "supprimer/resultat",
+        "supprimer/resultat/<int:id_resultat>",
         views.supprimer_resultat_bio,
         name="supprimer_resultat_bio",
     ),

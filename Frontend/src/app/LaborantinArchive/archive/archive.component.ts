@@ -7,6 +7,7 @@ import { ArchiveHeaderComponent } from '../archive-header/archive-header.compone
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { BilanLabo } from '../../Laborantin/laborantin/laborantin.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 interface ord {
   id: number;
   date: string;
@@ -29,13 +30,14 @@ interface data {
   styleUrl: './archive.component.css',
 })
 export class ArchiveComponent {
+  constructor(private router: Router) {}
   role = 'radiologue';
   activeItem = 'Bilans';
 
   getNameEtablissemnt(id: number): string {
     return this.etablissements.find((e) => e.id === id)?.nom || 'Inconnu';
   }
-  laborantin = 1324; //locale storage
+  laborantin = localStorage.getItem('id') || '';
   etablissements: Etab[] = [];
 
   bilans: BilanLabo[] = [];
@@ -45,6 +47,7 @@ export class ArchiveComponent {
   }
   // Fonction exécutée au chargement
   async onPageLoad(): Promise<void> {
+    console.log('Laborantin:', this.laborantin);
     try {
       const response = await axios.get<data>(
         'http://localhost:8000/laboratoire/archive',
@@ -52,6 +55,7 @@ export class ArchiveComponent {
           params: { laborantin: this.laborantin },
         }
       );
+      console.log(response.data);
       for (const ord of response.data.bilans) {
         this.bilans.push({
           id: ord.id,
@@ -123,5 +127,8 @@ export class ArchiveComponent {
   onResetFilter() {
     this.filteredBilans = [...this.bilans];
     this.currentPage = 1; // Reset to first page
+  }
+  navigateBilan(id: number) {
+    this.router.navigate([`bilan-bio/${id}`]);
   }
 }

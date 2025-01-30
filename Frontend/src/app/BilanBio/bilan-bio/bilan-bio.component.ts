@@ -4,6 +4,7 @@ import { BilanDetailsComponent } from '../bilan-details/bilan-details.component'
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import axios from 'axios';
+import { ActivatedRoute } from '@angular/router';
 export interface bilan {
   id: number;
   ordre: number;
@@ -51,17 +52,24 @@ interface data {
   styleUrl: './bilan-bio.component.css',
 })
 export class BilanBioComponent {
-  role: string = 'laborantin'; //localstorage
-  laborantin = 1368; //localstorage
+  role: string = localStorage.getItem('role')?.toLowerCase() || 'laborantin'; //localstorage
+  laborantin = parseInt(localStorage.getItem('id') || '1'); //localstorage
   user = 'name'; //localstorage
   bilan_id = 673; //navigation
   activeItem: string;
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     if (this.role == 'laborantin') {
       this.activeItem = 'Bilans';
     } else {
       this.activeItem = 'DPI';
     }
+  }
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.bilan_id = parseInt(params['id']);
+      // Use the ID to fetch data or whatever you need
+    });
+    this.pageLoad();
   }
   bilan: bilan = {
     ordre: 1,
@@ -77,9 +85,6 @@ export class BilanBioComponent {
     id: 1,
   };
   params: Resultat[] = [];
-  ngOnInit() {
-    this.pageLoad();
-  }
   async pageLoad() {
     // Get the bilan details
     await axios
@@ -87,7 +92,7 @@ export class BilanBioComponent {
         params: { bilan_id: this.bilan_id },
       })
       .then((response) => {
-        if (response.data.est_resultat) {
+        if (this.role == 'laborantin' || response.data.est_resultat) {
           this.params = response.data.resultats;
         } else {
           if (

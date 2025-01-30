@@ -44,7 +44,7 @@ export const routes: Routes = [
   { path: 'laborantin/archive', component: LaborantinArchiveComponent },
   { path: 'radiologue', component: RadiologueComponent },
   { path: 'radiologue/archive', component: RadiologueArchiveComponent },
-  { path: 'bilan-bio', component: BilanBioComponent },
+  { path: 'bilan-bio/:id', component: BilanBioComponent },
   { path: 'authcode', component: RecoverpageComponent },
   { path: 'verificationcode', component: CodepageComponent },
   { path: 'resetpassword', component: ResetpasswordpageComponent },
