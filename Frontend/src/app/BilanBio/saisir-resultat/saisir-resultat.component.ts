@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Resultat } from '../bilan-bio/bilan-bio.component';
 import axios from 'axios';
+import { ChangeDetectorRef } from '@angular/core';
 interface data {
   message: string;
   id: number;
@@ -20,6 +21,7 @@ export class SaisirResultatComponent {
   @Input() param!: Resultat;
   @Input() bilan_id!: number;
   @Input() laborantin_id!: number;
+  @Input() closePopup!: () => void;
   @Output() closePanel = new EventEmitter<void>();
   @Output() saveChanges = new EventEmitter<Partial<Resultat>>();
   saisirForm: FormGroup;
@@ -33,7 +35,16 @@ export class SaisirResultatComponent {
   closesPanel() {
     this.closePanel.emit();
   }
-
+  close() {
+    console.log(' in close');
+    //this.isVisible = false;
+    if (this.closePopup) {
+      console.log('closePopup is defined');
+      this.closePopup(); // Call the function from parent
+    } else {
+      console.error('closePopup is undefined!');
+    }
+  }
   ngOnInit() {
     if (this.param) {
       if (this.param.valeur_mesure !== null) {

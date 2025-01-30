@@ -6,6 +6,7 @@ import { LaboHeaderComponent } from '../labo-header/labo-header.component';
 import { BilanBioCardComponent } from '../bilan-bio-card/bilan-bio-card.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export interface BilanLabo {
   id: number;
   date_debut: string;
@@ -34,7 +35,8 @@ interface data {
   styleUrl: './laborantin.component.css',
 })
 export class LaborantinComponent {
-  role = 'radiologue';
+  constructor(private router: Router) {}
+  role = 'laborantin';
   activeItem = 'Bilans';
   laborantin = localStorage.getItem('id') || '';
   getNameEtablissemnt(id: number): string {
@@ -129,5 +131,8 @@ export class LaborantinComponent {
   onResetFilter() {
     this.filteredBilans = [...this.bilans];
     this.currentPage = 1; // Reset to first page
+  }
+  navigateBilan(id: number) {
+    this.router.navigate([`bilan-bio/${id}`]);
   }
 }

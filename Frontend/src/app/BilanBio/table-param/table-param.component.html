@@ -48,7 +48,9 @@
         <button (click)="openPopup(param, i)">
           <img src="/assets/images/modifier.png" class="h-5 w-5" />
         </button>
-        <button><img src="/assets/images/supp.png" class="h-5 w-5" /></button>
+        <button (click)="suprimerRes(param.parametre, param.id)">
+          <img src="/assets/images/supp.png" class="h-5 w-5" />
+        </button>
       </div>
       <app-saisir-resultat
         *ngIf="isPopupVisible && currentIndex === i"
@@ -56,7 +58,7 @@
         [param]="param"
         [bilan_id]="bilan.id"
         [laborantin_id]="laborantin"
-        (closePopup)="closePopup()"
+        [closePopup]="closePopup"
         (saveChanges)="updateParam($event)"
       ></app-saisir-resultat>
     </div>

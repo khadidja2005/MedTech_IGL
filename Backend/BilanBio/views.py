@@ -320,16 +320,9 @@ def modifier_resultat_bio(request):
 
 
 @csrf_exempt
-def supprimer_resultat_bio(request):
+def supprimer_resultat_bio(request, id_resultat):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        bilan_id = data.get("bilan_id")
-        parametre = data.get("parametre")
-        laborantin_id = data.get("laborantin_id")
-        if not bilan_id:
-            return JsonResponse({"error": "Billan id is required"})
-        if not parametre:
-            return JsonResponse({"error": "Parametre is required"})
+        laborantin_id = request.GET.get("laborantin_id")
         if not laborantin_id:
             return JsonResponse({"error": "Laborantin id is required"})
         try:
@@ -337,13 +330,8 @@ def supprimer_resultat_bio(request):
         except PersonnelMedical.DoesNotExist:
             return JsonResponse({"error": "Laborantin not found"})
         try:
-            bilan = BilanBio.objects.get(id=bilan_id)
-        except BilanBio.DoesNotExist:
-            return JsonResponse({"error": "BilanBio not found"})
-        if parametre not in bilan.parametres.split(","):
-            return JsonResponse({"error": "Parametre not found in bilan"})
-        resultat = ResultatBio.objects.get(bilan_bio=bilan, parametre=parametre)
-        if not resultat:
+            resultat = ResultatBio.objects.get(id=id_resultat)
+        except ResultatBio.DoesNotExist:
             return JsonResponse({"error": "Resultat not found"})
         if resultat.laborantin != laborantin:
             return JsonResponse(
