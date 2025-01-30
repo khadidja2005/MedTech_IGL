@@ -35,6 +35,7 @@ from Ordonnance.urls import urlpatterns as ordonnance_urls
 from Parametres.urls import urlpatterns as parametres_urls
 from Landing.urls import urlpatterns as landing_urls
 from Auth.urls import urlpatterns as auth_login
+from ControlBDD.urls import urlpatterns as ControlBDD_urls
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(bdd_urls)),
@@ -51,8 +52,10 @@ urlpatterns = [
     path("radiologie/", include(radiologie_urls)),
     path("bilanradio/", include(bilan_radio_urls)),
     path("consultation/", include(consultation_urls)),
+
     path("ordonnance/", include(ordonnance_urls)),
     path("parametres/", include(parametres_urls)),
     path("contact-us/", include(landing_urls)),
-    path("auth/" , include(auth_login))
+    path("auth/" , include(auth_login)),
+    path('controlbdd/', include(ControlBDD_urls)),
 ]

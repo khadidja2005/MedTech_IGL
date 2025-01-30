@@ -38,12 +38,12 @@ export class OrdonnanceComponent implements OnInit {
   medicaments: any[] = [];
   isLoading = false;
   errorMessage: string | null = null;
-  activeItem: string = ''; // Ajoutez cette ligne
-  medecins: any[] = []; // Ajoutez cette ligne
-  patients: any[] = []; // Ajoutez cette ligne
+  activeItem: string = '';
+  medecins: any[] = [];
+  patients: any[] = [];
 
   ngOnInit(): void {
-    const ordonnanceId = 1; // Replace with dynamic ID
+    const ordonnanceId = 1;
     this.loadOrdonnance(ordonnanceId);
   }
 
@@ -56,11 +56,32 @@ export class OrdonnanceComponent implements OnInit {
       this.ordonnance = response.data;
       this.medicaments = response.data.medicaments;
     } catch (error) {
-      this.errorMessage = 'Erreur lors du chargement des données.';
+      this.errorMessage = 'Erreur lors du chargement des données. Affichage des données factices.';
       console.error(error);
+      this.loadFakeData();
     } finally {
       this.isLoading = false;
     }
+  }
+
+  loadFakeData(): void {
+    this.ordonnance = {
+      ordre: 999,
+      date: '2024-10-01',
+      estValide: false,
+      patient_id: 1,
+      medecin_id: 1,
+      termine: false,
+      etablissement: 101
+    };
+
+    this.medicaments = [
+      { nom: 'Paracétamol', dosage: '500mg', duree: '7 jours' },
+      { nom: 'Ibuprofène', dosage: '400mg', duree: '5 jours' },
+      { nom: 'Amoxicilline', dosage: '1g', duree: '10 jours' },
+      { nom: 'Vitamine C', dosage: '500mg', duree: '14 jours' },
+      { nom: 'Dafalgan', dosage: '1g', duree: '3 jours' }
+    ];
   }
 
   async addMedicament(nom: string, dosage: string, duree: string): Promise<void> {

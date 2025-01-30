@@ -380,3 +380,5 @@ def clear_database(request):
         return Response({"message": "Database cleared successfully", "status": 200})
     except Exception as e:
         return Response({"status": "error", "message": str(e)}, status=500)
+
+

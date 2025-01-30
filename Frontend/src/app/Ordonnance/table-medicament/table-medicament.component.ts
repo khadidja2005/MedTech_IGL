@@ -1,61 +1,70 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Ordonnance } from '../../../types/ordonance';
-import { Medicament } from '../../../types/medicament';
-import { ModifierMedicamentComponent } from "../modifier-medicament/modifier-medicament.component";
 import { MedicamentPageOrd } from '../ordonnance/ordonnance.component';
+import { ModifierMedicamentComponent } from "../modifier-medicament/modifier-medicament.component";
 
 @Component({
   selector: 'app-table-medicament',
-  standalone: true, // Added for Angular standalone components
+  standalone: true,
   imports: [CommonModule, ModifierMedicamentComponent],
   templateUrl: './table-medicament.component.html',
-  styleUrls: ['./table-medicament.component.css'] // Fixed typo: `styleUrl` -> `styleUrls`
+  styleUrls: ['./table-medicament.component.css']
 })
 export class TableMedicamentComponent {
-  @Input() medicaments!: MedicamentPageOrd[];
+  @Input() medicaments: MedicamentPageOrd[] = [];
   @Input() role!: string;
-  index=0;
-
   isPopupVisible = false;
-  currentMedicament: MedicamentPageOrd | null = null; // Stores the medicament being modified
-  currentIndex: number | null = null; // Stores the index of the medicament being modified
+  currentMedicament: MedicamentPageOrd | null = null;
+  currentIndex: number | null = null;
 
-
+  constructor() {
+    this.loadFakeData();
+  }
 
   /**
-   * Opens the popup for modifying a medicament.
-   * @param medicament The medicament to modify
-   * @param index The index of the medicament in the list
+   * Charge des données factices si aucun médicament n'est disponible.
    */
-  openPopup(medicament: MedicamentPageOrd, index: number) {
-    this.currentMedicament = { ...medicament }; // Clone the medicament to avoid direct mutation
+  private loadFakeData(): void {
+    if (this.medicaments.length === 0) {
+      console.warn("Aucune donnée chargée, utilisation des données factices.");
+      this.medicaments = [
+        { nom: "Paracétamol", dosage: "500mg", duree: "5 jours" },
+        { nom: "Ibuprofène", dosage: "400mg", duree: "7 jours" },
+        { nom: "Amoxicilline", dosage: "1g", duree: "10 jours" }
+      ];
+    }
+  }
+
+  /**
+   * Ouvre le popup pour modifier un médicament.
+   */
+  openPopup(medicament: MedicamentPageOrd, index: number): void {
+    this.currentMedicament = { ...medicament };
     this.currentIndex = index;
     this.isPopupVisible = true;
   }
 
   /**
-   * Closes the popup.
+   * Ferme le popup de modification.
    */
-  closePopup() {
+  closePopup(): void {
     this.isPopupVisible = false;
     this.currentMedicament = null;
     this.currentIndex = null;
   }
 
   /**
-   * Updates a medicament in the list.
-   * @param updatedMedicament The updated medicament data
+   * Met à jour un médicament dans la liste.
    */
-  updateMedicament(updatedMedicament: Partial<MedicamentPageOrd>) {
-    if(this.currentIndex !== null && this.currentMedicament) {
-    this.medicaments[this.currentIndex] = {
-      ...this.medicaments[this.currentIndex],
-      nom : updatedMedicament.nom || this.medicaments[this.currentIndex].nom,
-      dosage: updatedMedicament.dosage ? updatedMedicament.dosage : this.medicaments[this.currentIndex].dosage,
-      duree: updatedMedicament.duree ? updatedMedicament.duree : this.medicaments[this.currentIndex].duree,
-    };
-    this.isPopupVisible = false;  // Close the panel after saving the data
+  updateMedicament(updatedMedicament: Partial<MedicamentPageOrd>): void {
+    if (this.currentIndex !== null && this.currentMedicament) {
+      this.medicaments[this.currentIndex] = {
+        ...this.medicaments[this.currentIndex],
+        nom: updatedMedicament.nom || this.medicaments[this.currentIndex].nom,
+        dosage: updatedMedicament.dosage || this.medicaments[this.currentIndex].dosage,
+        duree: updatedMedicament.duree || this.medicaments[this.currentIndex].duree,
+      };
+      this.isPopupVisible = false;
+    }
   }
-}
 }
