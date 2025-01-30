@@ -19,8 +19,7 @@ export class SidebarComponent {
       this.notyf = new Notyf();
     }
   }
-  @Input() role: string =
-    localStorage.getItem('role')?.toLowerCase() || 'admin'; // Get role from localStorage
+  @Input() role: string = localStorage.getItem('role')?.toLowerCase() || ''; // Get role from localStorage
   @Input() activeItem: string = ''; // Default active item
   // Sidebar items configuration
   sidebarItems = [
@@ -53,7 +52,7 @@ export class SidebarComponent {
       label: 'DPI',
       icon: '/assets/images/DPI.png',
       roles: ['admin', 'patient', 'medecin', 'infermier'],
-      link: '#',
+      link: '/recherche',
     },
     {
       label: 'Bilans',

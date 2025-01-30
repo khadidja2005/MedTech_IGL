@@ -26,9 +26,9 @@ export interface DpiCards {
   styleUrl: './recherche.component.css',
 })
 export class RechercheComponent {
-  role = 'admin';
+  role = localStorage.getItem('role')?.toLowerCase() || '';
   activeItem = 'DPI';
-  id = 296; //local storage
+  id = localStorage.getItem('id') || '';
   dpis: DpiCards[] = [];
   etablissements: Etab[] = [];
   ngOnInit(): void {
