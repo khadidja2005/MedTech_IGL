@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
 export type TypeRadio = 'RADIO' | 'SCANNER' | 'IRM';
 
 export interface BilanRadio {
@@ -16,9 +15,8 @@ export interface BilanRadio {
   Consultation: string; // Foreign key to Consultation, nullable
   resultat_id: number | null;
   etablissement: number;
-  medecin:string;
-  patient:string;
-
+  medecin: string;
+  patient: string;
 }
 export interface ResultatRadio {
   id: number;
@@ -30,130 +28,120 @@ export interface ResultatRadio {
   radiologue: number | null; // Foreign key to PersonnelMedical
 }
 
-
-
 @Component({
- 
   selector: 'app-bilan-display',
   imports: [CommonModule, FormsModule],
   templateUrl: './bilan-display.component.html',
-  styleUrl: './bilan-display.component.css'
+  styleUrl: './bilan-display.component.css',
 })
 export class BilanDisplayComponent {
-
-   @Input() bilan!: BilanRadio ;
-   @Input() result!: ResultatRadio;
+  @Input() bilan!: BilanRadio;
+  @Input() medecin!: number;
 
   user1 = {
-    Admin: true,
-    name: "Mohamed Reda",
-    id: 'USER-051',
-    profession: 'medecin'
+    Admin: localStorage.getItem('role') == 'ADMIN',
+    name: localStorage.getItem('nom_complet'),
+    id: localStorage.getItem('id'),
+    profession: localStorage.getItem('role')?.toLowerCase(),
   };
 
+  showTypeModal = false;
+  showResumeModal = false;
+  showViewModal = false; // New variable for view-only modal
+  addTypeModalMode: 'add' | 'view' = 'add';
+  editedDescription: string = '';
+  viewOnlyDescription: string = ''; // New variable for view-only content
 
-showTypeModal = false;
-showResumeModal = false;
-showViewModal = false;  // New variable for view-only modal
-addTypeModalMode: 'add' | 'view' = 'add';
-editedDescription: string = '';
-viewOnlyDescription: string = '';  // New variable for view-only content
-
-// View-only modal functions
-openViewDescription() {
-  if (!this.caneditBilanMed()) {
-    this.viewOnlyDescription = this.bilan.description;
-    this.showViewModal = true;
+  // View-only modal functions
+  openViewDescription() {
+    if (!this.caneditBilanMed()) {
+      this.viewOnlyDescription = this.bilan.description;
+      this.showViewModal = true;
+    }
   }
-}
 
-closeViewModal() {
-  this.showViewModal = false;
-}
-
-// Original functions remain the same...
-deleteBilan() {
-  console.log("Bilan deleted");
-}
-
-modifyType() {
-  this.addTypeModalMode = 'add';
-  this.showTypeModal = true;
-}
-
-deleteType() {
-  this.bilan.type_radio = 'RADIO';
-}
-
-modifyDescription() {
-  if (this.caneditBilanMed()) {
-    this.editedDescription = this.bilan.description;
-    this.showResumeModal = true;
+  closeViewModal() {
+    this.showViewModal = false;
   }
-}
 
-deleteDescription() {
-  this.bilan.description = '';
-}
-
-toggleTypeModal() {
-  this.showTypeModal = !this.showTypeModal;
-}
-
-showDescriptionModal(mode: 'edit' | 'view'): boolean {
-  return mode === 'edit' ? this.showResumeModal : false;
-}
-
-saveDescription() {
-  this.bilan.description = this.editedDescription;
-  this.showResumeModal = false;
-}
-
-addType() {
-  if (this.bilan.type_radio) {
-    this.bilan.type_radio = this.bilan.type_radio;
-    this.showTypeModal = false;
+  // Original functions remain the same...
+  deleteBilan() {
+    console.log('Bilan deleted');
   }
-}
 
-saveBilan() {
-  console.log("Saving bilan...");
-}
-
-caneditBilanMed() {
-  return (this.user1.profession === 'medecin' && this.bilan.est_resultat);
-}
-
-canNOTeditBilanMed() {
-  return (this.user1.profession === 'medecin' && !this.bilan.est_resultat);
-}
-
-ngOnInit() {
-  if (!this.bilan || !this.result) {
-    this.bilan = {
-      id: 0,
-      description: "This is a comprehensive description...",
-      date_debut: '2024-12-01',
-      date_fin: '2024-12-10',
-      type_radio: 'RADIO',
-      est_complet: false,
-      est_resultat: false,
-      medecin: 'Sarah Bensaid',
-      Consultation: 'description',
-      resultat_id: 0,
-      etablissement: 2,
-      patient: 'Amina khelifi'
-    };
-
-    this.result = {
-      id: 0,
-      description: 'The radiology report...',
-      piece_jointe: '',
-      date: '2024-12-11',
-      compte_rendu: 'Further tests...',
-      radiologue_compte_rendu: 1,
-      radiologue: 2,
-    };
+  modifyType() {
+    this.addTypeModalMode = 'add';
+    this.showTypeModal = true;
   }
-}
+
+  deleteType() {
+    this.bilan.type_radio = 'RADIO';
+  }
+
+  modifyDescription() {
+    if (this.caneditBilanMed()) {
+      this.editedDescription = this.bilan.description;
+      this.showResumeModal = true;
+    }
+  }
+
+  deleteDescription() {
+    this.bilan.description = '';
+  }
+
+  toggleTypeModal() {
+    this.showTypeModal = !this.showTypeModal;
+  }
+
+  showDescriptionModal(mode: 'edit' | 'view'): boolean {
+    return mode === 'edit' ? this.showResumeModal : false;
+  }
+
+  saveDescription() {
+    this.bilan.description = this.editedDescription;
+    this.showResumeModal = false;
+  }
+
+  addType() {
+    if (this.bilan.type_radio) {
+      this.bilan.type_radio = this.bilan.type_radio;
+      this.showTypeModal = false;
+    }
+  }
+
+  saveBilan() {
+    console.log('Saving bilan...');
+  }
+
+  caneditBilanMed() {
+    return (
+      this.user1.profession === 'medecin' &&
+      !this.bilan.est_resultat &&
+      this.bilan.medecin === this.user1.name &&
+      this.medecin === parseInt(this.user1.id || '0')
+    );
+  }
+
+  canNOTeditBilanMed() {
+    return this.user1.profession === 'medecin' && this.bilan.est_resultat;
+  }
+
+  ngOnInit() {
+    if (!this.bilan) {
+      this.bilan = {
+        id: 0,
+        description: 'This is a comprehensive description...',
+        date_debut: '2024-12-01',
+        date_fin: '2024-12-10',
+        type_radio: 'RADIO',
+        est_complet: false,
+        est_resultat: false,
+        medecin: 'Sarah Bensaid',
+        Consultation: 'description',
+        resultat_id: 0,
+        etablissement: 2,
+        patient: 'Amina khelifi',
+      };
+    }
+  }
 }

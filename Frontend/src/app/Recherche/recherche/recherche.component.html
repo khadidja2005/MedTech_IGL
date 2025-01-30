@@ -25,6 +25,7 @@
           [dpi]="dpi"
           [i]="(currentPage - 1) * pageSize + i"
           [etablissements]="etablissements"
+          (click)="navigateDPI(dpi.id)"
         >
         </app-patient-card>
       </div>

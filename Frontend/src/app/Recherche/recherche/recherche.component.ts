@@ -6,6 +6,7 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { PatientCardComponent } from '../patient-card/patient-card.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export interface DpiCards {
   id: number;
   nom_complet: string;
@@ -31,6 +32,7 @@ export class RechercheComponent {
   id = localStorage.getItem('id') || '';
   dpis: DpiCards[] = [];
   etablissements: Etab[] = [];
+  constructor(private router: Router) {}
   ngOnInit(): void {
     this.onPageLoad();
   }
@@ -79,5 +81,8 @@ export class RechercheComponent {
   onDpisChange(updatedDpis: DpiCards[]) {
     // Update the parent's version of the array
     this.dpis = updatedDpis;
+  }
+  navigateDPI(id: number) {
+    this.router.navigate([`dpi/${id}`]);
   }
 }
