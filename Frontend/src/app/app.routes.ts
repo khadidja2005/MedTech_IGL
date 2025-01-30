@@ -24,7 +24,7 @@ import { DpiComponent } from './PDI/dpi/dpi.component';
 import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
-  { path: 'consultation', component: ConsultationPageComponent },
+  { path: 'consultation/:id', component: ConsultationPageComponent },
   { path: 'login', component: LoginpageComponent },
   { path: 'ordannace/:id', component: OrdonnanceComponent },
   { path: 'authcode', component: RecoverpageComponent },
@@ -37,7 +37,7 @@ export const routes: Routes = [
   { path: 'dashboard/employee', component: PageEmployesComponent },
   { path: 'dashboard/Controlbdd', component: BddComponent },
   { path: 'recherche', component: RechercheComponent },
-  { path: 'hospitalisation', component: HospitalisationComponent },
+  { path: 'hospitalisation/:id', component: HospitalisationComponent },
   { path: 'pharmacie', component: PharmacieComponent },
   { path: 'pharmacie/archive', component: ArchiveComponent },
   { path: 'laborantin', component: LaborantinComponent },

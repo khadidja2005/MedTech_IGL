@@ -41,7 +41,7 @@ export class AjouterDPIComponent {
       etablissement: ['', Validators.required],
     });
   }
-  id = 296; //local storage
+  id = localStorage.getItem('id') || '';
   onSubmit() {
     if (this.ajoutForm.valid) {
       const formValue = this.ajoutForm.value;

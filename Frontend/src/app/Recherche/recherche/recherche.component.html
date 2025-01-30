@@ -11,7 +11,7 @@
     ></app-sidebar>
 
     <!--real main-->
-    <div class="content">
+    <div class="content" *ngIf="!load">
       <app-rech-header
         [dpis]="dpis"
         [role]="role"
@@ -25,6 +25,7 @@
           [dpi]="dpi"
           [i]="(currentPage - 1) * pageSize + i"
           [etablissements]="etablissements"
+          (click)="navigateDPI(dpi.id)"
         >
         </app-patient-card>
       </div>

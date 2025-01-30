@@ -6,6 +6,7 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { PatientCardComponent } from '../patient-card/patient-card.component';
 import axios from 'axios';
+import { Router } from '@angular/router';
 export interface DpiCards {
   id: number;
   nom_complet: string;
@@ -26,16 +27,19 @@ export interface DpiCards {
   styleUrl: './recherche.component.css',
 })
 export class RechercheComponent {
-  role = 'admin';
+  role = localStorage.getItem('role')?.toLowerCase() || '';
   activeItem = 'DPI';
-  id = 296; //local storage
+  id = localStorage.getItem('id') || '';
   dpis: DpiCards[] = [];
   etablissements: Etab[] = [];
+  constructor(private router: Router) {}
+  load = false;
   ngOnInit(): void {
     this.onPageLoad();
   }
   // Fonction exécutée au chargement
   async onPageLoad(): Promise<void> {
+    this.load = true;
     console.log('Fetching DPIs for personnel ID:', this.id);
     try {
       const response = await axios.get<{ all_dpis: DpiCards[] }>(
@@ -59,6 +63,7 @@ export class RechercheComponent {
     } catch (error) {
       console.error('Error:', error);
     }
+    this.load = false;
   }
 
   pageSize = 6; // Items per page
@@ -79,5 +84,8 @@ export class RechercheComponent {
   onDpisChange(updatedDpis: DpiCards[]) {
     // Update the parent's version of the array
     this.dpis = updatedDpis;
+  }
+  navigateDPI(id: number) {
+    this.router.navigate([`dpi/${id}`]);
   }
 }

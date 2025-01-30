@@ -176,9 +176,7 @@ def modifier(request):
             hospitalisation.medecin_responsable = medecin
 
         if date_debut:
-            hospitalisation.date_debut = datetime.strptime(
-                date_debut, "%d/%m/%Y"
-            ).strftime("%Y-%m-%d")
+            hospitalisation.date_debut = date_debut
         if date_fin:
             hospitalisation.date_fin = datetime.strptime(date_fin, "%d/%m/%Y").strftime(
                 "%Y-%m-%d"

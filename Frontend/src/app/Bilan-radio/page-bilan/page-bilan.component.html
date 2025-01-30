@@ -23,8 +23,9 @@
       </app-bilan-display-med-valid>
 
       <app-bilan-display
-        *ngIf="isMedecin() && !bilan.est_resultat"
+        *ngIf="isMedecin() && !bilan.est_resultat && !loading"
         [bilan]="bilan"
+        [medecin]="medecin"
       >
       </app-bilan-display>
     </ng-container>

@@ -2,13 +2,14 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-consultation-info',
   standalone: true,
   templateUrl: './consultation-info.component.html',
   imports: [CommonModule, FormsModule],
-  styleUrls: ['./consultation-info.component.css']
+  styleUrls: ['./consultation-info.component.css'],
 })
 export class ConsultationInfoComponent implements OnInit {
   consultation: any = {};
@@ -31,24 +32,32 @@ export class ConsultationInfoComponent implements OnInit {
   editedResume = '';
   newOrdonnance: any = {};
   newBilan: any = {};
-
+  consultationId!: number;
   // Validation errors
   BilanValidationErrors: Record<string, string> = {};
   OrdonnanceValidationErrors: Record<string, string> = {};
   addOrdonnanceModalMode: 'add' | 'view' = 'add';
   addBilanModalMode: 'add' | 'view' = 'add';
-
+  constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
-    const consultationId = 1; // Replace with dynamic ID if necessary
-    this.loadConsultation(consultationId);
+    this.route.params.subscribe((params) => {
+      this.consultationId = parseInt(params['id']);
+      // Use the ID to fetch data or whatever you need
+    });
+    this.loadConsultation(this.consultationId);
   }
 
   async loadConsultation(id: number): Promise<void> {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/consultation/${id}`);
+      const response = await axios.get(
+        `http://127.0.0.1:8000/consultation/${id}`
+      );
       this.consultation = response.data;
       this.Ordonnances = response.data.ordonnances || [];
-      this.combinedBilans = [...response.data.bilans_bio, ...response.data.bilans_radio];
+      this.combinedBilans = [
+        ...response.data.bilans_bio,
+        ...response.data.bilans_radio,
+      ];
     } catch (error) {
       console.error('Error loading consultation:', error);
     }
@@ -61,7 +70,10 @@ export class ConsultationInfoComponent implements OnInit {
         date: this.selectedDate,
         medecin_id: this.selectedMedecin,
       };
-      await axios.post(`http://127.0.0.1:8000/api/consultation/modifier/`, data);
+      await axios.post(
+        `http://127.0.0.1:8000/api/consultation/modifier/`,
+        data
+      );
       alert('Consultation modifiée avec succès');
       this.showModifyModal = false;
       this.loadConsultation(this.consultation.id);
@@ -72,8 +84,14 @@ export class ConsultationInfoComponent implements OnInit {
 
   async saveResume(): Promise<void> {
     try {
-      const data = { consultation_id: this.consultation.id, resume: this.editedResume };
-      await axios.post(`http://127.0.0.1:8000/api/consultation/modifier/resume/`, data);
+      const data = {
+        consultation_id: this.consultation.id,
+        resume: this.editedResume,
+      };
+      await axios.post(
+        `http://127.0.0.1:8000/api/consultation/modifier/resume/`,
+        data
+      );
       alert('Résumé modifié avec succès');
       this.showResumeModal = false;
       this.consultation.resume = this.editedResume;
@@ -88,7 +106,10 @@ export class ConsultationInfoComponent implements OnInit {
         consultation_id: this.consultation.id,
         ...this.newOrdonnance,
       };
-      const response = await axios.post(`http://127.0.0.1:8000/api/consultation/ajouter/ordonnance/`, data);
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/consultation/ajouter/ordonnance/`,
+        data
+      );
       this.Ordonnances.push(response.data);
       alert('Ordonnance ajoutée avec succès');
       this.showOrdonnanceModal = false;
@@ -103,7 +124,10 @@ export class ConsultationInfoComponent implements OnInit {
         consultation_id: this.consultation.id,
         ...this.newBilan,
       };
-      const response = await axios.post(`http://127.0.0.1:8000/api/consultation/ajouter/bilan/`, data);
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/consultation/ajouter/bilan/`,
+        data
+      );
       this.combinedBilans.push(response.data);
       alert('Bilan ajouté avec succès');
       this.showBilanModal = false;
@@ -113,8 +137,11 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   // Utility methods
-  getBilanTypeStyle(type: 'radio' | 'bio'): { color: string; backgroundColor: string } {
-    return type === 'bio' 
+  getBilanTypeStyle(type: 'radio' | 'bio'): {
+    color: string;
+    backgroundColor: string;
+  } {
+    return type === 'bio'
       ? { color: '#FF34A0', backgroundColor: '#FF34A033' }
       : { color: '#0CF045', backgroundColor: '#0CF04533' };
   }

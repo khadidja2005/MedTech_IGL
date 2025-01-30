@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./hospitalisation-details.component.css'],
 })
 export class HospitalisationDetailsComponent {
-  @Input() role: string = 'medecinResponsable';
+  role: string = '';
   selectedTab: string = 'consultations';
   isAddPanelVisible = false; // Flag to control the visibility of the "Add Consultation" panel
   isPopupVisible = false;
@@ -43,6 +43,14 @@ export class HospitalisationDetailsComponent {
 
   constructor(private router: Router) {}
   // Method to open the "Add Consultation" panel
+  ngOnInit() {
+    console.log(this.hospitalisation.medecin);
+    if (this.hospitalisation.medecin == localStorage.getItem('nom_complet')) {
+      this.role = 'medecinResponsable';
+    } else {
+      this.role = '';
+    }
+  }
   openAddPanel() {
     this.isAddPanelVisible = true;
   }
@@ -66,7 +74,7 @@ export class HospitalisationDetailsComponent {
     }
     return 'fini';
   }
-  nom = 'infermier'; //localStorage
+  nom = localStorage.getItem('role')?.toLowerCase; //localStorage
   // Method to add a consultation (called when the new consultation is emitted from the form)
   addConsultation(newConsultation: ConsultationPageHospitalisation) {
     this.consultations.push(newConsultation); // Add the new consultation to the list

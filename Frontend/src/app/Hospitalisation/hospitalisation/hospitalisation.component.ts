@@ -4,7 +4,8 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HospitalisationDetailsComponent } from '../hospitalisation-details/hospitalisation-details.component';
 import { TypeSoins } from '../../../types/soins';
 import axios from 'axios';
-
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 export interface SoinPageHospitalisation {
   id: number;
   type_soins: TypeSoins;
@@ -34,14 +35,23 @@ export interface medecin {
     HeaderPDIComponent,
     SidebarComponent,
     HospitalisationDetailsComponent,
+    CommonModule,
   ],
   templateUrl: './hospitalisation.component.html',
   styleUrl: './hospitalisation.component.css',
 })
 export class HospitalisationComponent {
-  hospitalisation_id = 2880; //use navigation to get this value
+  hospitalisation_id = 0;
+  constructor(private route: ActivatedRoute) {}
+  load = false;
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.hospitalisation_id = parseInt(params['id']);
+    });
+    this.onPageLoad();
+  }
   hospitalisation: HospitalisationPage = {
-    ordre: 1, //use navigation
+    ordre: this.hospitalisation_id,
     date_debut: ' ',
     medecin: ' ',
     date_fin: null,
@@ -49,10 +59,8 @@ export class HospitalisationComponent {
   medecins: medecin[] = [];
   consultations: ConsultationPageHospitalisation[] = [];
   soins: SoinPageHospitalisation[] = [];
-  ngOnInit() {
-    this.onPageLoad();
-  }
   async onPageLoad(): Promise<void> {
+    this.load = true;
     console.log(
       'Fetching hospitalisation details for ID:',
       this.hospitalisation_id
@@ -108,5 +116,6 @@ export class HospitalisationComponent {
       .catch((error) => {
         console.log(error);
       });
+    this.load = false;
   }
 }
