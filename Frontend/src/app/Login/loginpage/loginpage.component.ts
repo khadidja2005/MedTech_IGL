@@ -50,7 +50,7 @@ export class LoginpageComponent {
       );
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('id', /*response.data.id*/ '1864');
+      localStorage.setItem('id', response.data.id);
       localStorage.setItem('email', response.data.email);
       role = response.data.role;
       localStorage.setItem('role', response.data.role);
@@ -65,12 +65,9 @@ export class LoginpageComponent {
         if (role === 'ADMIN') {
           this.router.navigate(['/dashboard/etablissement']);
         }
-        if (role === 'MEDECIN') {
+        if (role === 'MEDECIN' || 'INFIRMIER') {
           this.router.navigate(['/recherche']);
         }
-        // if (role === 'infermier') {
-        //   this.router.navigate(['/hospitalisation']);
-        // }
         if (role === 'RADIOLOGUE') {
           this.router.navigate(['/radiologue']);
         }
