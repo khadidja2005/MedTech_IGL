@@ -8,13 +8,16 @@
 
       <!-- Action Buttons -->
       <div
+        class="actions mb-4"
         *ngIf="
           (role === 'admin' || (role === 'medecin' && peutModifier)) &&
           !ordonnance.estValide
         "
-        class="actions mb-4"
       >
-        <button class="delete-button flex items-center gap-1">
+        <button
+          class="delete-button flex items-center gap-1"
+          (click)="supOrd()"
+        >
           <img src="/assets/images/delete.png" class="h-5 w-5" />
           Supprimer
         </button>
@@ -62,8 +65,8 @@
   <!-- Footer Section -->
   <div class="footer">
     <div
-      *ngIf="role == 'medecin' && !ordonnance.termine && peutModifier"
       class="buttons-container"
+      *ngIf="role == 'medecin' && !ordonnance.termine && peutModifier"
     >
       <button class="add-button" (click)="openAddPanel()">
         <img src="/assets/images/ajouter.png" class="h-5 w-5 items-center" />
@@ -72,10 +75,19 @@
       <app-ajouter-medicament
         [isVisible]="isAddPanelVisible"
         (closePanel)="closeAddPanel()"
+        [closePan]="closeAddPanel.bind(this)"
         (saveMedicament)="addMedicament($event)"
+        [ordonnanceId]="ordonnance.ordre"
       >
       </app-ajouter-medicament>
-      <button class="terminer-button" (click)="terminate()">terminer</button>
+      <button
+        [ngClass]="
+          peutTerminer ? 'terminer-button' : 'terminer-button-disabled'
+        "
+        (click)="terminate()"
+      >
+        terminer
+      </button>
     </div>
     <div
       *ngIf="role == 'pharmacien' && !ordonnance.estValide"

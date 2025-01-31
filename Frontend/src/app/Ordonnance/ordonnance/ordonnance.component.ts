@@ -60,6 +60,7 @@ export class OrdonnanceComponent implements OnInit {
   activeItem: string = ''; // Ajoutez cette ligne
   peutValider = true;
   peutModifier = false;
+  peutTerminer = true;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -102,6 +103,7 @@ export class OrdonnanceComponent implements OnInit {
       this.peutModifier =
         this.role === 'medecin' &&
         localStorage.getItem('id') === this.ordonnance.medecin_id.toString();
+      this.peutTerminer = this.medicaments.length > 0;
     } catch (error) {
       this.errorMessage = 'Erreur lors du chargement des données.';
       console.error(error);

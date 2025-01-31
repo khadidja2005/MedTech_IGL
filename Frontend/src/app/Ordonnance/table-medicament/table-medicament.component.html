@@ -51,6 +51,7 @@
         *ngIf="isPopupVisible && currentIndex === i"
         [isVisible]="isPopupVisible"
         [medicament]="medicament"
+        [closePan]="closePopup.bind(this)"
         (closePopup)="closePopup()"
         (saveChanges)="updateMedicament($event)"
       ></app-modifier-medicament>

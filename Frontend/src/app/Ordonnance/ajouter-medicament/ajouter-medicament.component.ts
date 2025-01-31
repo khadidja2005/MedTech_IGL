@@ -7,7 +7,11 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MedicamentPageOrd } from '../ordonnance/ordonnance.component';
+import axios from 'axios';
 
+interface resMed {
+  medicament_id: number;
+}
 @Component({
   selector: 'app-ajouter-medicament',
   imports: [CommonModule, ReactiveFormsModule],
@@ -17,7 +21,9 @@ import { MedicamentPageOrd } from '../ordonnance/ordonnance.component';
 export class AjouterMedicamentComponent {
   @Input() isVisible: boolean = false;
   @Output() closePanel = new EventEmitter<void>();
+  @Input() closePan!: () => void;
   @Output() saveMedicament = new EventEmitter<MedicamentPageOrd>(); // Emit the added consultation
+  @Input() ordonnanceId!: number;
 
   ajoutForm: FormGroup;
 
@@ -29,7 +35,7 @@ export class AjouterMedicamentComponent {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.ajoutForm.valid) {
       const formValue = this.ajoutForm.value;
 
@@ -41,6 +47,25 @@ export class AjouterMedicamentComponent {
         duree: formValue.duree,
       };
 
+      try {
+        await axios
+          .post<resMed>(`http://localhost:8000/ordonnance/ajouter/medicament`, {
+            ordonnance_id: this.ordonnanceId,
+            nom: newMedicament.nom,
+            dosage: newMedicament.dosage,
+            duree: newMedicament.duree,
+          })
+          .then((response) => {
+            newMedicament.id = response.data.medicament_id;
+            console.log(newMedicament);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+
       // Emit the new consultation to the parent
       this.saveMedicament.emit(newMedicament);
       this.closePanel.emit(); // Close the panel after adding the consultation
@@ -49,5 +74,11 @@ export class AjouterMedicamentComponent {
   }
   closesPanel(): void {
     this.closePanel.emit();
+  }
+
+  close() {
+    if (this.closePan) {
+      this.closePan();
+    }
   }
 }

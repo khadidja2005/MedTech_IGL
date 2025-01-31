@@ -44,8 +44,7 @@ def get_infos(request):
 @csrf_exempt
 def supprimer_ordonnance(request):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        ordonnance_id = data.get("ordonnance_id")
+        ordonnance_id = request.GET.get("ordonnance_id")
         if not ordonnance_id:
             return JsonResponse({"error": "A 'ordonnance_id' is required."}, status=400)
         try:
