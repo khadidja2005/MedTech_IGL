@@ -19,7 +19,15 @@ export class SidebarComponent {
       this.notyf = new Notyf();
     }
   }
-  @Input() role: string = localStorage.getItem('role')?.toLowerCase() || ''; // Get role from localStorage
+
+  //@Input() role: string = localStorage.getItem('role')?.toLowerCase() || ''; // Get role from localStorage
+  @Input() role: string = '';
+
+ngOnInit() {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    this.role = localStorage.getItem('role')?.toLowerCase() || '';
+  }
+}
   @Input() activeItem: string = ''; // Default active item
   // Sidebar items configuration
   sidebarItems = [

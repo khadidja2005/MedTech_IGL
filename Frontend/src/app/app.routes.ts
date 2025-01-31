@@ -62,3 +62,5 @@ export const routes: Routes = [
   { path: 'dpi/:id', component: DpiComponent },
   { path: 'bilan-radio/:id', component: PageBilanComponent },
 ];
+
+
