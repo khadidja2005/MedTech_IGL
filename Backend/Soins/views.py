@@ -210,3 +210,30 @@ def delete_dpi(request , dpi_id):
         return Response(status = status.HTTP_200_OK)
     except :
         return Response(status = status.HTTP_404_NOT_FOUND)  
+
+@api_view(['GET'])
+def get_etablissement_dpis(request, etablissement_id):
+    try:
+        # Get DPIs for the establishment with optimized queries
+        dpis = DPI.objects.filter(
+            etablissement_id=etablissement_id
+        ).select_related(
+            'patient', 
+            'medecin_id'
+        ).order_by('-date_creation')
+        
+        if not dpis.exists():
+            return Response(
+                {"message": "No DPIs found for this establishment"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Serialize the data
+        serializer = DPI_Serializer(dpis, many=True)
+        return Response(serializer.data)
+        
+    except Exception as e:
+        return Response(
+            {"message": str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

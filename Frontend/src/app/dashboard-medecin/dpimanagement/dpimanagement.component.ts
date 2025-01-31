@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Patient } from '../../../types/patient';
 import { Mutuelle } from '../../../types/mutuelle';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Etablissement } from '../../../types/etablissement';
 import { DPI } from '../../../types/dpi';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.component';
+import { Notyf } from 'notyf';
+import { ActivatedRoute, Router } from '@angular/router';
+import axios from 'axios';
+
 
 @Component({
   selector: 'app-dpi-management',
@@ -15,6 +19,9 @@ import { HeaderPDIComponent } from '../../components/header-pdi/header-pdi.compo
   styleUrl: './dpimanagement.component.css',
 })
 export class DPIManagementComponent {
+  notyf: Notyf | undefined;
+  id: number | undefined;
+
   Etablissement: Etablissement = {
     id: 1,
     nom_etablissement: '',
@@ -45,29 +52,72 @@ export class DPIManagementComponent {
 
   // DPI list
   DPIList: DPI[] = [
-    {
-      id: 1,
-      date_creation: '2024-01-01T08:30:00.000Z',
-      patient: 'P001',
-      etablissement_id: 1,
-      createur_id: 1,
-    },
-    {
-      id: 2,
-      date_creation: '2024-01-10T09:45:00.000Z',
-      patient: 'P002',
-      etablissement_id: 1,
-      createur_id: 2,
-    },
-    {
-      id: 3,
-      date_creation: '2024-02-15T14:20:00.000Z',
-      patient: 'P003',
-      etablissement_id: 1,
-      createur_id: 3,
-    },
+    // {
+    //   id: 1,
+    //   date_creation: '2024-01-01T08:30:00.000Z',
+    //   patient: 1,
+    //   etablissement_id: 1,
+    //   createur_id: 1,
+    // },
+    // {
+    //   id: 2,
+    //   date_creation: '2024-01-10T09:45:00.000Z',
+    //   patient: 2,
+    //   etablissement_id: 1,
+    //   createur_id: 2,
+    // },
+    // {
+    //   id: 3,
+    //   date_creation: '2024-02-15T14:20:00.000Z',
+    //   patient: 3,
+    //   etablissement_id: 1,
+    //   createur_id: 3,
+    // },
   ];
 
+    constructor(
+      @Inject(PLATFORM_ID) private platformId: Object,
+      private router: Router,
+      private route: ActivatedRoute
+    ) {
+      if (isPlatformBrowser(this.platformId)) {
+        this.notyf = new Notyf();
+      }
+    }
+    async ngOnInit() {
+      // Get the ID once
+      this.route.params.subscribe((params) => {
+      this.id = params['id'];
+        // Use the ID to fetch data or whatever you need
+      })
+      try {
+       const response = await axios.get(`http://localhost:8000/soins/etablissements/${this.id}/dpis`)
+       //console.log( response.data)
+       this.DPIList = (response.data as any[]).map((dpi: any) => {
+        //console.log('Processing DPI:', dpi); // Debug log
+        return {
+          date_creation : dpi.date_creation,
+          id : dpi.id ,
+          etablissement_id : dpi.etablissement?.id || 0,
+          createur_id : dpi.createur ? dpi.createur?.id : dpi.medecin?.id ,
+          patient : dpi.patient_id?.id ,
+        };
+      });
+        //console.log(this.DPIList)
+       if(this.notyf){
+       this.notyf.success(" chargement du dpis avec success") 
+       }
+       
+      }catch(e){
+        console.log("error" , e)
+        if(this.notyf){
+         this.notyf.error("erreur durant le chargement du dpis") 
+        }
+        
+
+      }
+      
+    }
   // Patient model for new DPI
   patient: Patient = {
     id: 0,
@@ -88,7 +138,7 @@ export class DPIManagementComponent {
   newDPI: DPI = {
     id: 0,
     date_creation: new Date().toISOString(),
-    patient: '',
+    patient: 0,
     etablissement_id: 1, // Set to current establishment
     createur_id: this.user1.id,
   };
@@ -130,10 +180,6 @@ export class DPIManagementComponent {
     numero_adherent: 0,
   };
 
-  // Get DPIs created by current user
-  getUserDPIs(): DPI[] {
-    return this.DPIList.filter((dpi) => dpi.createur_id === this.user1.id);
-  }
 
   // Reset form
   resetDPIForm() {
@@ -155,7 +201,7 @@ export class DPIManagementComponent {
     this.newDPI = {
       id: 0,
       date_creation: new Date().toISOString(),
-      patient: '',
+      patient: 0,
       etablissement_id: 1,
       createur_id: this.user1.id,
     };
@@ -276,5 +322,8 @@ export class DPIManagementComponent {
     this.submitNewDPI();
     this.showMutuelleStep = false;
     this.showDPIModal = false;
+  }
+  navigateToDPI(id: number) {
+    this.router.navigate([`dpi/${id}`]);
   }
 }

@@ -43,7 +43,7 @@
         *ngFor="let establishment of currentEstablishments"
         class="p-4 border-2 border-[#3A8EF6] h-fit rounded-2xl hover:border-blue-400 bg-white transition-colors"
       >
-        <div class="flex justify-between items-start mb-2">
+        <div class="flex justify-between items-start mb-2"  (click) = "navigateToDPIs(establishment.id)" >
           <h3 class="text-3xl font-semibold font-poppins mr-3 m-2">
             {{ establishment.nom_etablissement }}
           </h3>

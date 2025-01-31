@@ -14,4 +14,8 @@ urlpatterns = [
     path('dpipage/mutuelles/<str:dpi_id>/', views.get_mutuelles_by_dpi),
     path('dpipage/<str:dpi_id>/mutuelles/add/', views.add_mutuelle),
     path("dpipage/dpi/<str:dpi_id>/delete/" , views.delete_dpi),
+    path('etablissements/<int:etablissement_id>/dpis/', 
+         views.get_etablissement_dpis, 
+         name='etablissement-dpi-list'),
+
 ]

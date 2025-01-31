@@ -22,6 +22,7 @@ import { PageAffichageEtablissementComponent } from './etab-personnals-medicaux/
 import { SoinComponent } from './Soin/soin/soin.component';
 import { DpiComponent } from './PDI/dpi/dpi.component';
 import { PageBilanComponent } from './Bilan-radio/page-bilan/page-bilan.component';
+import { DPIManagementComponent } from './dashboard-medecin/dpimanagement/dpimanagement.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'consultation/:id', component: ConsultationPageComponent },
@@ -61,6 +62,7 @@ export const routes: Routes = [
   { path: 'soin/:id', component: SoinComponent },
   { path: 'dpi/:id', component: DpiComponent },
   { path: 'bilan-radio/:id', component: PageBilanComponent },
+  {path : "etablissement/:id" , component : DPIManagementComponent}
 ];
 
 

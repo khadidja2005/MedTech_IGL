@@ -73,6 +73,7 @@ export class EstablishmentsComponent implements OnInit {
         'http://localhost:8000/dashboard/etablissements',
         {
           params: { id: localStorage.getItem('id') },
+
         }
       );
       //console.log(response.data);
@@ -219,4 +220,11 @@ export class EstablishmentsComponent implements OnInit {
   getPageArray(): number[] {
     return Array.from({ length: this.pageCount }, (_, i) => i + 1);
   }
+  
+
+  navigateToDPIs(id: number) {
+    this.router.navigate([`etablissement/${id}`]);
+  }
+
+
 }
