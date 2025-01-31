@@ -12,6 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import axios from 'axios';
+import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 interface dpi {
   dpi_id: number;
   etablissement: number;
@@ -23,6 +24,7 @@ interface Data {
 @Component({
   selector: 'app-rech-header',
   imports: [
+    NgxScannerQrcodeModule,
     CommonModule,
     AjouterDPIComponent,
     ScannerComponent,
@@ -104,6 +106,7 @@ export class RechHeaderComponent {
         })
         .catch((error) => {
           console.error('Error:', error);
+          alert('Error: NSS not found');
         });
     } else {
       console.error('Invalid input: Please enter a valid number');

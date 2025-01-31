@@ -139,7 +139,7 @@ export class DpiInfoComponent implements OnInit {
       this.id = params['id'];
       // Use the ID to fetch data or whatever you need
     });
-    await this.generateQRCode();
+    //await this.generateQRCode();
 
     //console.log(response.data)
     try {
@@ -153,7 +153,9 @@ export class DpiInfoComponent implements OnInit {
         ? response.data.createur.id
         : response.data.medecin.id;
       this.dpi.patient = response.data.patient_id.id;
+
       this.patient1 = response.data.patient_id;
+      await this.generateQRCode(response.data.patient_id.nss);
       this.medecins = response.data.medecin
         ? response.data.medecin.nom_complet
         : 'unknown';
@@ -222,12 +224,9 @@ export class DpiInfoComponent implements OnInit {
     }
   }
 
-  async generateQRCode() {
+  async generateQRCode(nss : string) {
     const qrData = JSON.stringify({
-      dpiId: this.dpi.id,
-      createdBy: this.dpi.createur_id,
-      establishment: this.dpi.etablissement_id,
-      timestamp: new Date().toISOString(),
+      nss : nss,
     });
 
     try {
