@@ -4,49 +4,61 @@
   <!-- Main Content -->
   <div class="main-section">
     <!-- Sidebar -->
-    <app-sidebar class="sidebar" [activeItem]="activeItem" [role]="role"></app-sidebar>
+    <app-sidebar
+      class="sidebar"
+      [activeItem]="activeItem"
+      [role]="role"
+    ></app-sidebar>
 
     <!--real main-->
     <div class="content">
       <app-labo-header
-      [bilans]="bilans"
-      (applyFilter)="onFilterApply($event)"
-      (resetFilter)="onResetFilter()">
-    </app-labo-header>
+        [bilans]="bilans"
+        (applyFilter)="onFilterApply($event)"
+        (resetFilter)="onResetFilter()"
+      >
+      </app-labo-header>
       <div class="cards">
         <app-bilan-bio-card
-          *ngFor="let bilan of paginatedBilans let i=index"
-          [bilan]="bilan" [i]="i" [etablissements]="etablissements">
+          *ngFor="let bilan of paginatedBilans; let i = index"
+          [bilan]="bilan"
+          [i]="i"
+          [etablissements]="etablissements"
+          (click)="navigateBilan(bilan.id)"
+        >
         </app-bilan-bio-card>
       </div>
 
       <!-- Pagination Controls -->
       <div class="pagination">
-      <!-- Previous Arrow -->
-      <button
-      class="page-button"
-      [disabled]="currentPage === 1"
-      (click)="changePage(currentPage - 1)">
-      &lt;
-      </button>
+        <!-- Previous Arrow -->
+        <button
+          class="page-button"
+          [disabled]="currentPage === 1"
+          (click)="changePage(currentPage - 1)"
+        >
+          &lt;
+        </button>
 
-      <!-- Page Numbers -->
-      <button
-      *ngFor="let page of [].constructor(totalPages); let i = index"
-      class="page-button"
-      [class.active]="i + 1 === currentPage"
-      (click)="changePage(i + 1)">
-      {{ i + 1 }}
-      </button>
+        <!-- Page Numbers -->
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          class="page-button"
+          [class.active]="i + 1 === currentPage"
+          (click)="changePage(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
 
-      <!-- Next Arrow -->
-      <button
-      class="page-button"
-      [disabled]="currentPage === totalPages"
-      (click)="changePage(currentPage + 1)">
-      &gt;
-      </button>
-    </div>
+        <!-- Next Arrow -->
+        <button
+          class="page-button"
+          [disabled]="currentPage === totalPages"
+          (click)="changePage(currentPage + 1)"
+        >
+          &gt;
+        </button>
+      </div>
     </div>
   </div>
 </div>

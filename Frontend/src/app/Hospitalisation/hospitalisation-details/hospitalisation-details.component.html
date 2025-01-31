@@ -2,23 +2,35 @@
   <!-- Hospitalisation Title -->
   <div class="flex items-center justify-between">
     <div>
-      <h2 class="hospitalization-title">Hospitalisation n° {{ hospitalisation.ordre }}</h2>
+      <h2 class="hospitalization-title">
+        Hospitalisation n° {{ hospitalisation.ordre }}
+      </h2>
 
       <!-- Action Buttons -->
-      <div *ngIf="role === 'admin' || role === 'medecinResponsable'" class="actions">
-        <button (click)="openPopup()" class="modify-button flex items-center gap-1">
-          <img src="/assets/images/edit.png" class="h-3 w-3">
+      <div
+        *ngIf="role === 'admin' || role === 'medecinResponsable'"
+        class="actions"
+      >
+        <button
+          (click)="openPopup()"
+          class="modify-button flex items-center gap-1"
+        >
+          <img src="/assets/images/edit.png" class="h-3 w-3" />
           Modifier
         </button>
         <app-modifier
-        [isVisible]="isPopupVisible"
-        [hospitalisation]="hospitalisation"
-        [medecins]="medecins"
-        (closePopup)="closePopup()"
-        (saveChanges)="updateHospitalisation($event)"
-  ></app-modifier>
-        <button class="delete-button flex items-center gap-1">
-          <img src="/assets/images/delete.png" class="h-5 w-5">
+          [isVisible]="isPopupVisible"
+          [hospitalisation]="hospitalisation"
+          [medecins]="medecins"
+          [hospitalisation_id]="hospitalisation_id"
+          (closePopup)="closePopup()"
+          (saveChanges)="updateHospitalisation($event)"
+        ></app-modifier>
+        <button
+          class="delete-button flex items-center gap-1"
+          (click)="deleteHospitalisation()"
+        >
+          <img src="/assets/images/delete.png" class="h-5 w-5" />
           Supprimer
         </button>
       </div>
@@ -27,71 +39,91 @@
     <div class="details">
       <div>
         <span class="label">Médecin Responsable :</span>
-        <span class="value">{{hospitalisation.medecin}}</span>
+        <span class="value">{{ hospitalisation.medecin }}</span>
       </div>
       <div>
         <span class="label">Date début :</span>
         <span class="value">{{ hospitalisation.date_debut }}</span>
-        <span *ngIf="hospitalisation.date_fin!=null"class="label">Date fin : </span>
-        <span *ngIf="hospitalisation.date_fin!=null"class="value">{{ hospitalisation.date_fin }}</span>
-        <span *ngIf="hospitalisation.date_fin==null"class="status">{{getStatus()}}</span>
+        <span *ngIf="hospitalisation.date_fin != null" class="label"
+          >Date fin :
+        </span>
+        <span *ngIf="hospitalisation.date_fin != null" class="value">{{
+          hospitalisation.date_fin
+        }}</span>
+        <span *ngIf="hospitalisation.date_fin == null" class="status">{{
+          getStatus()
+        }}</span>
       </div>
     </div>
   </div>
 
   <!-- Footer Section -->
   <div class="footer">
-  <div class="tabs">
-    <button
-      class="tab"
-      [ngClass]="{ 'active-tab': selectedTab === 'consultations' }"
-      (click)="selectedTab = 'consultations'">
-      Consultations
-    </button>
-    <button
-      class="tab"
-      [ngClass]="{ 'active-tab': selectedTab === 'soins' }"
-      (click)="selectedTab = 'soins'">
-      Soins
-    </button>
-  </div>
+    <div class="tabs">
+      <button
+        class="tab"
+        [ngClass]="{ 'active-tab': selectedTab === 'consultations' }"
+        (click)="selectedTab = 'consultations'"
+      >
+        Consultations
+      </button>
+      <button
+        class="tab"
+        [ngClass]="{ 'active-tab': selectedTab === 'soins' }"
+        (click)="selectedTab = 'soins'"
+      >
+        Soins
+      </button>
+    </div>
 
-  <!-- "Ajouter" button to open the panel, only for the consultations tab -->
-  <button
-    *ngIf="(role === 'admin' || role === 'medecinResponsable' || role === 'medecin') && (selectedTab === 'consultations' || selectedTab === 'soins')"
-    class="add-button"
-    (click)="openAddPanel()">
-    Ajouter {{ selectedTab }}
-  </button>
+    <!-- "Ajouter" button to open the panel, only for the consultations tab -->
+    <button
+      *ngIf="
+        (role === 'admin' ||
+          role === 'medecinResponsable' ||
+          role === 'medecin') &&
+        (selectedTab === 'consultations' || selectedTab === 'soins') &&
+        hospitalisation.date_fin == null
+      "
+      class="add-button"
+      (click)="openAddPanel()"
+    >
+      Ajouter {{ selectedTab }}
+    </button>
   </div>
 
   <!-- Add Consultation Panel (Popup) -->
   <app-ajouter-consultation
-  *ngIf="selectedTab === 'consultations'"
-  [isVisible]="isAddPanelVisible"
-  [medecins]="medecins"
-  (closePanel)="closeAddPanel()"
-  (saveConsultation)="addConsultation($event)">
+    *ngIf="selectedTab === 'consultations'"
+    [isVisible]="isAddPanelVisible"
+    [medecins]="medecins"
+    [hospitalisation_id]="hospitalisation_id"
+    (closePanel)="closeAddPanel()"
+    (saveConsultation)="addConsultation($event)"
+  >
   </app-ajouter-consultation>
 
   <app-ajouter-soin
-  *ngIf="selectedTab === 'soins'"
-  [isVisible]="isAddPanelVisible"
-  [infermiers]="infermiers"
-  (closePanel)="closeAddPanel()"
-  (saveSoin)="addSoin($event)">
+    *ngIf="selectedTab === 'soins'"
+    [isVisible]="isAddPanelVisible"
+    [hospitalisation_id]="hospitalisation_id"
+    (closePanel)="closeAddPanel()"
+    (saveSoin)="addSoin($event)"
+  >
   </app-ajouter-soin>
-
 
   <!-- Conditional Rendering of Tables -->
   <div class="table-container">
     <ng-container *ngIf="selectedTab === 'consultations'">
       <!-- Include your Consultations Table Component -->
-      <app-consultaions-table [consultations]="consultations" [medecins]="medecins"></app-consultaions-table>
+      <app-consultaions-table
+        [consultations]="consultations"
+        [medecins]="medecins"
+      ></app-consultaions-table>
     </ng-container>
     <ng-container *ngIf="selectedTab === 'soins'">
       <!-- Include your Soins Table Component -->
-      <app-soins-table [soins]="soins" [infermiers]="infermiers"></app-soins-table>
+      <app-soins-table [soins]="soins"></app-soins-table>
     </ng-container>
   </div>
 </div>

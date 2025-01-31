@@ -10,8 +10,6 @@ from BDD.models import (
 
 
 @csrf_exempt
-@require_http_methods(["GET"])  # Handle GET requests
-@csrf_exempt
 @require_http_methods(["GET"])
 def get_infos(request):
     ordonnance_id = request.GET.get("ordonnance_id")
@@ -20,25 +18,33 @@ def get_infos(request):
     try:
         ordonnance = Ordonnance.objects.get(id=ordonnance_id)
         meds = Medicament.objects.filter(ordonnance=ordonnance)
-        return JsonResponse({
-            "date": ordonnance.consultation.date,
-            "medecin": ordonnance.consultation.Medecin.nom_complet,
-            "patient": ordonnance.consultation.Hospitalisation.DPI.patient.nom_complet,
-            "estValide": ordonnance.estValide,
-            "estTerminer": ordonnance.estTerminer,
-            "medicaments": [
-                {"medicament_id": med.id, "nom": med.nom, "dosage": med.dosage, "duree": med.duree}
-                for med in meds
-            ],
-        })
+        return JsonResponse(
+            {
+                "date": ordonnance.consultation.date,
+                "medecin": ordonnance.consultation.Medecin.nom_complet,
+                "medecin_id": ordonnance.consultation.Medecin.id,
+                "patient": ordonnance.consultation.Hospitalisation.DPI.patient.nom_complet,
+                "estValide": ordonnance.estValide,
+                "estTerminer": ordonnance.estTerminer,
+                "medicaments": [
+                    {
+                        "medicament_id": med.id,
+                        "nom": med.nom,
+                        "dosage": med.dosage,
+                        "duree": med.duree,
+                    }
+                    for med in meds
+                ],
+            }
+        )
     except Ordonnance.DoesNotExist:
         return JsonResponse({"error": "Ordonnance not found."}, status=404)
+
 
 @csrf_exempt
 def supprimer_ordonnance(request):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        ordonnance_id = data.get("ordonnance_id")
+        ordonnance_id = request.GET.get("ordonnance_id")
         if not ordonnance_id:
             return JsonResponse({"error": "A 'ordonnance_id' is required."}, status=400)
         try:
@@ -132,6 +138,7 @@ def supprimer_medicament(request):
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
 
+
 @csrf_exempt
 def peut_modifier_ordonnance(request):
     if request.method == "GET":
@@ -158,9 +165,14 @@ def valider_ordonnance(request):
             ordonnance = Ordonnance.objects.get(id=ordonnance_id)
             pharmacien = PersonnelMedical.objects.get(id=pharmacien_id)
             if ordonnance.estValide:
-                return JsonResponse({"message": "Ordonnance already validated."}, status=400)
+                return JsonResponse(
+                    {"message": "Ordonnance already validated."}, status=400
+                )
             if not ordonnance.estTerminer:
-                return JsonResponse({"message": "Ordonnance must be completed before validation."}, status=400)
+                return JsonResponse(
+                    {"message": "Ordonnance must be completed before validation."},
+                    status=400,
+                )
             ordonnance.estValide = True
             ordonnance.pharmacien_id = pharmacien
             ordonnance.save()

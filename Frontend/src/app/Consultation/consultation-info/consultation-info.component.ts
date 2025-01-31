@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import axios from 'axios';
+<<<<<<< HEAD
 
 // Fake data pour le fallback
 const FAKE_CONSULTATION = {
@@ -45,22 +46,57 @@ const FAKE_PHARMACIENS = [
 
 const API_URL = 'http://127.0.0.1:8000/api';
 
+=======
+import { ActivatedRoute, Router } from '@angular/router';
+interface response {
+  medecin: string;
+  resume: string;
+  date: string;
+  ordonnances: any[];
+  bilans_bio: any[];
+  bilans_radio: any[];
+}
+interface medecin {
+  id: number;
+  nom_complet: string;
+}
+interface medecinres {
+  medecins: medecin[];
+}
+interface ordres {
+  message: string;
+  ordonnance: any;
+}
+interface resBilan {
+  message: string;
+  bilan: any;
+}
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
 @Component({
   selector: 'app-consultation-info',
   standalone: true,
   templateUrl: './consultation-info.component.html',
+<<<<<<< HEAD
   imports: [CommonModule, FormsModule]
+=======
+  imports: [CommonModule, FormsModule],
+  styleUrls: ['./consultation-info.component.css'],
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
 })
 export class ConsultationInfoComponent implements OnInit {
   consultation: any = {};
   Ordonnances: any[] = [];
   combinedBilans: any[] = [];
+<<<<<<< HEAD
   medecins: string[] = [];
   pharmaciens: any[] = [];
   selectedPharmacien: number | null = null;
   showPharmacienDropdown = false;
   isUsingFakeData = false;
 
+=======
+  medecins: medecin[] = [];
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
   // States
   showModifyModal = false;
   showResumeModal = false;
@@ -70,19 +106,20 @@ export class ConsultationInfoComponent implements OnInit {
   showMedecinDropdown = false;
 
   // Fields for modals
-  selectedMedecin: string | null = null;
+  selectedMedecin: medecin | null = null;
   selectedDate: string | undefined;
   editedResume = '';
   newOrdonnance: any = {};
   newBilan: any = {};
-
+  consultationId!: number;
   // Validation errors
   BilanValidationErrors: Record<string, string> = {};
   OrdonnanceValidationErrors: Record<string, string> = {};
   addOrdonnanceModalMode: 'add' | 'view' = 'add';
   addBilanModalMode: 'add' | 'view' = 'add';
-
+  constructor(private route: ActivatedRoute, private routenon: Router) {}
   ngOnInit(): void {
+<<<<<<< HEAD
     this.loadData();
   }
 
@@ -95,18 +132,57 @@ export class ConsultationInfoComponent implements OnInit {
       console.warn('Erreur lors du chargement des données API, utilisation des données fictives', error);
       this.loadFakeData();
     }
+=======
+    this.route.params.subscribe((params) => {
+      this.consultationId = parseInt(params['id']);
+      // Use the ID to fetch data or whatever you need
+    });
+    this.loadConsultation(this.consultationId);
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
   }
 
   async loadConsultation(id: number): Promise<void> {
     try {
+<<<<<<< HEAD
       const response = await axios.get(`${API_URL}/consultation/${id}/`);
       this.consultation = response.data;
       this.Ordonnances = response.data.ordonnances || [];
       this.combinedBilans = [...response.data.bilans_bio, ...response.data.bilans_radio];
+=======
+      await axios
+        .get<response>(`http://localhost:8000/consultation/`, {
+          params: {
+            consultation_id: id,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.consultation.medecin = response.data.medecin;
+          this.consultation.resume = response.data.resume;
+          this.consultation.date = response.data.date;
+          this.consultation.id = id;
+          this.Ordonnances = response.data.ordonnances;
+          this.combinedBilans = response.data.bilans_bio;
+          this.combinedBilans.push(...response.data.bilans_radio);
+        });
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
     } catch (error) {
       if (!this.isUsingFakeData) {
         throw error;
       }
+    }
+    try {
+      await axios
+        .get<medecinres>(`http://localhost:8000/consultation/medecins/`, {
+          params: {
+            consultation_id: id,
+          },
+        })
+        .then((response) => {
+          this.medecins = response.data.medecins;
+        });
+    } catch (error) {
+      console.error('Error loading medecins:', error);
     }
   }
 
@@ -145,6 +221,7 @@ export class ConsultationInfoComponent implements OnInit {
 
   async saveModifications(): Promise<void> {
     try {
+<<<<<<< HEAD
       if (!this.isUsingFakeData) {
         const data = {
           consultation_id: this.consultation.id,
@@ -157,6 +234,16 @@ export class ConsultationInfoComponent implements OnInit {
         this.consultation.date = this.selectedDate;
         this.consultation.Medecin = this.selectedMedecin;
       }
+=======
+      const data = {
+        consultation_id: this.consultation.id,
+        date: this.selectedDate
+          ? new Date(this.selectedDate).toISOString().split('T')[0]
+          : '',
+        medecin_id: this.selectedMedecin?.id,
+      };
+      await axios.post(`http://127.0.0.1:8000/consultation/modifier/`, data);
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
       alert('Consultation modifiée avec succès');
       this.showModifyModal = false;
     } catch (error) {
@@ -168,7 +255,9 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   async saveResume(): Promise<void> {
+    let data: any;
     try {
+<<<<<<< HEAD
       if (!this.isUsingFakeData) {
         const data = {
           consultation_id: this.consultation.id,
@@ -179,6 +268,23 @@ export class ConsultationInfoComponent implements OnInit {
       } else {
         this.consultation.resume = this.editedResume;
       }
+=======
+      if (!this.editedResume) {
+        data = {
+          consultation_id: this.consultation.id,
+          resume: 'vide',
+        };
+      } else {
+        data = {
+          consultation_id: this.consultation.id,
+          resume: this.editedResume,
+        };
+      }
+      await axios.post(
+        `http://127.0.0.1:8000/consultation/modifier/resume/`,
+        data
+      );
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
       alert('Résumé modifié avec succès');
       this.showResumeModal = false;
     } catch (error) {
@@ -196,6 +302,7 @@ export class ConsultationInfoComponent implements OnInit {
     }
 
     try {
+<<<<<<< HEAD
       if (!this.isUsingFakeData) {
         const data = {
           consultation_id: this.consultation.id,
@@ -214,6 +321,20 @@ export class ConsultationInfoComponent implements OnInit {
       alert('Ordonnance ajoutée avec succès');
       this.showOrdonnanceModal = false;
       this.selectedPharmacien = null;
+=======
+      await axios
+        .post<ordres>(
+          `http://127.0.0.1:8000/consultation/ajouter/ordonnance/`,
+          {
+            consultation_id: this.consultation.id,
+          }
+        )
+        .then((response) => {
+          this.Ordonnances.push(response.data.ordonnance);
+          console.log(this.Ordonnances);
+          alert('Ordonnance ajoutée avec succès');
+        });
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
     } catch (error) {
       console.error('Erreur lors de l\'ajout de l\'ordonnance:', error);
       if (!this.isUsingFakeData) {
@@ -224,6 +345,7 @@ export class ConsultationInfoComponent implements OnInit {
 
   async addBilan(): Promise<void> {
     try {
+<<<<<<< HEAD
       if (!this.isUsingFakeData) {
         const data = {
           consultation_id: this.consultation.id,
@@ -240,6 +362,27 @@ export class ConsultationInfoComponent implements OnInit {
         };
         this.combinedBilans.push(newBilan);
       }
+=======
+      const data = {
+        consultation_id: this.consultation.id,
+        ...this.newBilan,
+      };
+      await axios
+        .post<resBilan>(
+          `http://127.0.0.1:8000/consultation/ajouter/bilan/`,
+          data
+        )
+        .then((response) => {
+          console.log(response.data);
+          const bilan = {
+            id: response.data.bilan,
+            type: this.newBilan.type,
+            etat: 'non finis',
+          };
+          this.combinedBilans.push(bilan);
+          console.log(this.combinedBilans);
+        });
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
       alert('Bilan ajouté avec succès');
       this.showBilanModal = false;
     } catch (error) {
@@ -250,21 +393,31 @@ export class ConsultationInfoComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
   // Méthodes utilitaires qui restent inchangées
   getBilanTypeStyle(type: 'radio' | 'bio'): { color: string; backgroundColor: string } {
     return type === 'bio' 
+=======
+  // Utility methods
+  getBilanTypeStyle(type: 'radio' | 'bio'): {
+    color: string;
+    backgroundColor: string;
+  } {
+    return type === 'bio'
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
       ? { color: '#FF34A0', backgroundColor: '#FF34A033' }
       : { color: '#0CF045', backgroundColor: '#0CF04533' };
   }
 
   getBilanDisplayType(bilan: any): string {
-    return bilan.type === 'bio' ? 'Biologique' : 'Radiologique';
+    return bilan.type === 'bio' ? 'bio' : 'radio';
   }
 
   selectMenu(menuNumber: number): void {
     this.selectedMenu = menuNumber;
   }
 
+<<<<<<< HEAD
   toggleOrdonnanceModal(mode: 'add' | 'view' = 'add', ordonnance?: any): void {
     this.addOrdonnanceModalMode = mode;
     this.OrdonnanceValidationErrors = {};
@@ -276,6 +429,8 @@ export class ConsultationInfoComponent implements OnInit {
     this.showOrdonnanceModal = !this.showOrdonnanceModal;
   }
 
+=======
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
   toggleBilanModal(mode: 'add' | 'view' = 'add', bilan?: any): void {
     this.addBilanModalMode = mode;
     this.BilanValidationErrors = {};
@@ -288,11 +443,18 @@ export class ConsultationInfoComponent implements OnInit {
   }
 
   canEditConsultation(): boolean {
+<<<<<<< HEAD
     return true;
   }
 
   canEditOrdonnance(): boolean {
     return true;
+=======
+    return (
+      this.consultation.medecin_id ==
+      parseInt(localStorage.getItem('id') || '0')
+    );
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
   }
 
   modifyConsultation(): void {
@@ -302,6 +464,7 @@ export class ConsultationInfoComponent implements OnInit {
 
   async deleteConsultation(): Promise<void> {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette Consultation ?')) {
+<<<<<<< HEAD
       try {
         if (!this.isUsingFakeData) {
           await axios.delete(`${API_URL}/consultation/supprimer/`, {
@@ -315,6 +478,17 @@ export class ConsultationInfoComponent implements OnInit {
           this.loadFakeData();
         }
       }
+=======
+      axios
+        .delete('http://localhost:8000/consultation/supprimer/', {
+          params: { consultation_id: this.consultation.id },
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
+      alert('Consultation supprimée avec succès');
+      this.routenon.navigate(['/recherche']);
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
     }
   }
 
@@ -330,7 +504,7 @@ export class ConsultationInfoComponent implements OnInit {
     this.showMedecinDropdown = !this.showMedecinDropdown;
   }
 
-  selectMedecin(medecin: string): void {
+  selectMedecin(medecin: medecin): void {
     this.selectedMedecin = medecin;
     this.showMedecinDropdown = false;
   }
@@ -360,5 +534,15 @@ export class ConsultationInfoComponent implements OnInit {
     if (pharmacienDropdown && !pharmacienDropdown.contains(target)) {
       this.showPharmacienDropdown = false;
     }
+  }
+  consulterBilan(bilan: any): void {
+    if (bilan.type === 'bio') {
+      this.routenon.navigate([`bilan-bio/${bilan.id}`]);
+    } else {
+      this.routenon.navigate([`bilan-radio/${bilan.id}`]);
+    }
+  }
+  consulterOrdonnance(ordonnance: any): void {
+    this.routenon.navigate([`ordannace/${ordonnance.ordonnance_id}`]);
   }
 }

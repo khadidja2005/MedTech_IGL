@@ -11,9 +11,9 @@ import base64
 from .serializer import PatientSerializer, EtablissementSerializer, DPI_Serializer , AntecedantSerializer , PersonnelMedicalSerializer , ConsultationSerializer , HospitalisationSerializer , BilanBioSerializer , BilanRadioSerializer , MutuelleSerializer , ContactSerializer
 
 @api_view(["GET"])
-def get_dpi (request):
+def get_dpi (request , dpi_id):
     try :
-      dpi = get_object_or_404(DPI , id = request.data.get('id'))
+      dpi = get_object_or_404(DPI , id = dpi_id)
       serializer = DPI_Serializer(dpi)
       return Response(serializer.data)
     except :
@@ -207,9 +207,9 @@ def get_mutuelles(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-def add_mutuelle(request):
+def add_mutuelle(request , dpi_id):
     """Add new mutuelle for patient"""
-    dpi = get_object_or_404(DPI, id=request.data.get('dpi_id'))
+    dpi = get_object_or_404(DPI, id=dpi_id)
     data = request.data.copy()
     data['patient_id'] = dpi.patient.id
     

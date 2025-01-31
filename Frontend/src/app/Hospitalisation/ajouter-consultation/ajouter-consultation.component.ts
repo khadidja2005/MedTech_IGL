@@ -1,22 +1,36 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ConsultationPageHospitalisation, medecin } from '../hospitalisation/hospitalisation.component';
-
+import {
+  ConsultationPageHospitalisation,
+  medecin,
+} from '../hospitalisation/hospitalisation.component';
+import axios from 'axios';
+interface data {
+  message: string;
+  id: number;
+}
 @Component({
   selector: 'app-ajouter-consultation',
   templateUrl: './ajouter-consultation.component.html',
-  imports: [CommonModule,ReactiveFormsModule],
-  styleUrls: ['./ajouter-consultation.component.css']
+  imports: [CommonModule, ReactiveFormsModule],
+  styleUrls: ['./ajouter-consultation.component.css'],
 })
 export class AjouterConsultationComponent {
   @Input() isVisible: boolean = false;
   @Input() medecins: medecin[] = [];
+  @Input() hospitalisation_id!: number;
   @Output() closePanel = new EventEmitter<void>();
-  @Output() saveConsultation = new EventEmitter<ConsultationPageHospitalisation>();  // Emit the added consultation
+  @Output() saveConsultation =
+    new EventEmitter<ConsultationPageHospitalisation>(); // Emit the added consultation
 
   consultationForm: FormGroup;
-
+  //hospitalisation_id = 2878; //use navigation to get this value
   constructor(private fb: FormBuilder) {
     this.consultationForm = this.fb.group({
       medecin: ['', Validators.required],
@@ -31,25 +45,48 @@ export class AjouterConsultationComponent {
     return `${day}/${month}/${year}`;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.consultationForm.valid) {
       const formValue = this.consultationForm.value;
-
+      let medecin = ' ';
+      for (const med of this.medecins) {
+        if (med.id == formValue.medecin) {
+          medecin = med.nom;
+          break;
+        }
+      }
       // Create the new consultation object
       const newConsultation: ConsultationPageHospitalisation = {
-        medecin: formValue.medecin,
+        id: 0, // Temporary ID
+        medecin: medecin,
         date: this.convertDateToDisplayFormat(formValue.date),
       };
-
-      // Emit the new consultation to the parent
-      this.saveConsultation.emit(newConsultation);
-      this.closePanel.emit();  // Close the panel after adding the consultation
-      this.consultationForm.reset();  // Reset the form
+      let bool = false;
+      await axios
+        .post<data>(
+          'http://localhost:8000/hospitalisation/ajouter/consultation',
+          {
+            hospitalisation_id: this.hospitalisation_id,
+            medecin_id: formValue.medecin,
+            date: newConsultation.date,
+          }
+        )
+        .then((response) => {
+          newConsultation.id = response.data.id; // Set the ID of the new consultations
+          bool = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (bool) {
+        // Emit the new consultation to the parent
+        this.saveConsultation.emit(newConsultation);
+        this.closePanel.emit(); // Close the panel after adding the consultation
+        this.consultationForm.reset(); // Reset the form
+      }
     }
   }
   closesPanel(): void {
-
     this.closePanel.emit();
-
   }
 }

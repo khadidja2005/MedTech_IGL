@@ -12,32 +12,72 @@ from BDD.models import (
     etablissement_personnel_medical,
 )
 
+
 @csrf_exempt
 @require_http_methods(["GET"])
-def get_infos(request, id=None):
-    consultation_id = id or request.GET.get("consultation_id")
-    if not consultation_id:
-        return JsonResponse({"error": "A 'consultation_id' is required."}, status=400)
-    try:
-        consultation = Consultation.objects.get(id=consultation_id)
+def get_infos(request):
+    if request.method == "GET":
+        consultation_id = request.GET.get("consultation_id")
+        if not consultation_id:
+            return JsonResponse(
+                {"error": "A 'consultation_id' is required."}, status=400
+            )
+        try:
+            consultation = Consultation.objects.get(id=consultation_id)
+        except Consultation.DoesNotExist:
+            return JsonResponse(
+                {"error": "Consultation with the provided id not found."}, status=404
+            )
         ordonnances = Ordonnance.objects.filter(consultation=consultation)
-        bilans_bio = BilanBio.objects.filter(consultation=consultation)
-        bilans_radio = BilanRadio.objects.filter(consultation=consultation)
-        data = {
-            "date": consultation.date,
-            "resume": consultation.resume,
-            "ordonnances": [{"id": o.id, "estValide": o.estValide} for o in ordonnances],
-            "bilans_bio": [{"id": b.id, "etat": "fini" if b.est_resultat else "non finis"} for b in bilans_bio],
-            "bilans_radio": [{"id": b.id, "etat": "fini" if b.est_resultat else "non finis"} for b in bilans_radio],
-        }
-        return JsonResponse(data)
-    except Consultation.DoesNotExist:
-        return JsonResponse({"error": "Consultation not found."}, status=404)
+        bilans_bio = BilanBio.objects.filter(Consultation=consultation)
+        bilans_radio = BilanRadio.objects.filter(Consultation=consultation)
+        return JsonResponse(
+            {
+                "medecin": consultation.Medecin.nom_complet,
+                "date": consultation.date,
+                "resume": consultation.resume,
+                "ordonnances": [
+                    {
+                        "ordonnance_id": ordonnance.id,
+                        "estValide": ordonnance.estValide,
+                        "pharmacien_id": (
+                            ordonnance.pharmacien_id.id
+                            if ordonnance.pharmacien_id
+                            else None
+                        ),
+                        "pharmacien_nom": (
+                            ordonnance.pharmacien_id.nom_complet
+                            if ordonnance.pharmacien_id
+                            else None
+                        ),
+                    }
+                    for ordonnance in ordonnances
+                ],
+                "bilans_bio": [
+                    {
+                        "id": bilan_bio.id,
+                        "etat": "fini" if bilan_bio.est_resultat else "non finis",
+                        "type": "bio",
+                    }
+                    for bilan_bio in bilans_bio
+                ],
+                "bilans_radio": [
+                    {
+                        "id": bilan_radio.id,
+                        "etat": "fini" if bilan_radio.est_resultat else "non finis",
+                        "type": "radio",
+                    }
+                    for bilan_radio in bilans_radio
+                ],
+            }
+        )
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
 
 def get_medecins(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        consultation_id = data.get("consultation_id")
+        consultation_id = request.GET.get("consultation_id")
         if not consultation_id:
             return JsonResponse(
                 {"error": "A 'consultation_id' is required."}, status=400
@@ -80,18 +120,26 @@ def modifier_consultation(request):
         date = data.get("date")
         medecin_id = data.get("medecin_id")
 
-        if not consultation_id or not date or not medecin_id:
+        if (not consultation_id) or (not date and not medecin_id):
             return JsonResponse({"error": "Missing required fields."}, status=400)
+        try:
+            consultation = Consultation.objects.get(id=consultation_id)
+        except Consultation.DoesNotExist:
+            return JsonResponse(
+                {"error": "Consultation with the provided id not found."}, status=404
+            )
+        if medecin_id:
+            medecin = PersonnelMedical.objects.get(id=medecin_id)
+            consultation.Medecin = medecin
 
-        consultation = Consultation.objects.get(id=consultation_id)
-        medecin = PersonnelMedical.objects.get(id=medecin_id)
         consultation.date = datetime.strptime(date, "%Y-%m-%d")
-        consultation.medecin = medecin
+
         consultation.save()
 
         return JsonResponse({"success": "Consultation updated successfully."})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
 
 @csrf_exempt
 def modifier_resume(request):
@@ -111,6 +159,8 @@ def modifier_resume(request):
             return JsonResponse(
                 {"error": "Consultation with the provided id not found."}, status=404
             )
+        if resume == "vide":
+            resume = ""
         consultation.resume = resume
         consultation.save()
         return JsonResponse({"success": "Consultation updated successfully."})
@@ -121,8 +171,7 @@ def modifier_resume(request):
 @csrf_exempt
 def supprimer_consultation(request):
     if request.method == "DELETE":
-        data = json.loads(request.body)
-        consultation_id = data.get("consultation_id")
+        consultation_id = request.GET.get("consultation_id")
         if not consultation_id:
             return JsonResponse(
                 {"error": "A 'consultation_id' is required."}, status=400
@@ -163,12 +212,25 @@ def ajouter_ordonnance(request):
         ordonnance.save()
         return JsonResponse(
             {
-                "success": "Ordonnance added successfully.",
-                "ordonnance_id": ordonnance.id,
+                "message": "Ordonnance added successfully.",
+                "ordonnance": {
+                    "ordonnance_id": ordonnance.id,
+                    "estValide": ordonnance.estValide,
+                    "pharmacien_id": (
+                        ordonnance.pharmacien_id.id
+                        if ordonnance.pharmacien_id
+                        else None
+                    ),
+                    "pharmacien_nom": (
+                        ordonnance.pharmacien_id.nom_complet
+                        if ordonnance.pharmacien_id
+                        else None
+                    ),
+                },
             }
         )
     else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+        return JsonResponse({"message": "Invalid request method"}, status=405)
 
 
 @csrf_exempt
@@ -189,7 +251,7 @@ def ajouter_bilan(request):
             return JsonResponse(
                 {"error": "Consultation with the provided id not found."}, status=404
             )
-        if type == "Biologique":
+        if type == "bio":
             bilan = BilanBio(
                 Consultation=consultation,
                 est_resultat=False,
@@ -198,7 +260,7 @@ def ajouter_bilan(request):
                 parametres="",
                 date_fin=None,
             )
-        elif type == "Radiologique":
+        elif type == "radio":
             bilan = BilanRadio(
                 Consultation=consultation,
                 est_resultat=False,
@@ -213,9 +275,9 @@ def ajouter_bilan(request):
         bilan.save()
         return JsonResponse(
             {
-                "success": "Bilan added successfully.",
-                "bilan_id": bilan.id,
+                "message": "Bilan added successfully.",
+                "bilan": bilan.id,
             }
         )
     else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+        return JsonResponse({"message": "Invalid request method"}, status=405)

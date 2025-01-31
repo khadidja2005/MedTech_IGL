@@ -17,7 +17,7 @@
         (closePopup)="closePopup()"
         (saveChanges)="updateSoin($event)"
         ></app-modifier-soin>
-        <button class="delete-button flex items-center gap-1">
+        <button class="delete-button flex items-center gap-1" (click)="deleteSoin()">
           <img src="/assets/images/delete.png" class="h-5 w-5">
           Supprimer
         </button>
@@ -28,6 +28,7 @@
   id="type-select"
   [(ngModel)]="soin.type_soins"
   class="bg-white rounded-lg"
+  (ngModelChange)="onTypeChange($event)"
   [ngClass]="{
     'text-infermier': soin.type_soins === 'INFIRMIER',
     'text-etat': soin.type_soins === 'OBSERVATION D\'ETAT',

@@ -64,9 +64,24 @@ def get_all_DPIS(request):
                         }
                     )
             except Admin.DoesNotExist:
-                return JsonResponse(
-                    {"error": "Personnel with the provided ID not found."}, status=404
-                )
+                try:
+                    personnel = Patient.objects.get(id=personnel_id)
+                    dpis = DPI.objects.filter(patient=personnel_id)
+                    respose_data = []
+                    for dpi in dpis:
+                        respose_data.append(
+                            {
+                                "id": dpi.id,
+                                "nom_complet": dpi.patient.nom_complet,
+                                "nss": dpi.patient.nss,
+                                "etablissement": dpi.etablissement_id.id,
+                            }
+                        )
+                except Patient.DoesNotExist:
+                    return JsonResponse(
+                        {"error": "Patient with the provided ID not found."}, status=404
+                    )
+
         # Return the DPIs as a JSON response
         return JsonResponse({"all_dpis": respose_data})
     else:
@@ -139,7 +154,7 @@ def get_DPIS_patient(request):
             dpi_data.append(
                 {
                     "dpi_id": dpi.id,
-                    "etablissement_nom": dpi.etablissement_id.nom_etablissement,
+                    "etablissement": dpi.etablissement_id.id,
                 }
             )
         # Prepare the response data
@@ -271,9 +286,25 @@ def get_etablissements(request):
                         }
                     )
             except Admin.DoesNotExist:
-                return JsonResponse(
-                    {"error": "Personnel with the provided ID not found."}, status=404
-                )
+                try:
+                    personnel = Patient.objects.get(id=personnel_id)
+                    dpis = DPI.objects.filter(patient=personnel_id)
+                    etabs = []
+                    respose_data = []
+                    for dpi in dpis:
+                        etabs.append(dpi.etablissement_id)
+                    for etab in etabs:
+                        respose_data.append(
+                            {
+                                "id": etab.id,
+                                "nom": etab.nom_etablissement,
+                            }
+                        )
+                except Patient.DoesNotExist:
+                    return JsonResponse(
+                        {"error": "Personnel with the provided ID not found."},
+                        status=404,
+                    )
         # Return the etablissements as a JSON response
         return JsonResponse({"all_etablissements": respose_data})
     else:

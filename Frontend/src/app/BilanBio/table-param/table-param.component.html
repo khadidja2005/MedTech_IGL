@@ -1,47 +1,66 @@
-<div class="bg-transparent text-main_color font-poppins w-full max-w-screen-lg mx-auto">
+<div
+  class="bg-transparent text-main_color font-poppins w-full max-w-screen-lg mx-auto"
+>
   <div class="grid gap-3">
     <!-- Headers -->
-    <div class="bg-white grid grid-cols-5 px-6 py-3 uppercase text-main_color font-medium rounded-lg">
+    <div
+      class="bg-white grid grid-cols-5 px-6 py-3 uppercase text-main_color font-medium rounded-lg"
+    >
       <div class="text-left">Parametre</div>
       <div class="text-center">resultat</div>
       <div class="text-center">norme</div>
       <div class="text-center">mesuree par</div>
+    </div>
+
+    <!-- Medicament Rows -->
+    <div
+      *ngFor="let param of params; let i = index"
+      class="grid grid-cols-5 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+    >
+      <!-- param -->
+      <div class="flex items-center gap-4 text-left">
+        <span class="text-main_color"> {{ param.parametre }}</span>
       </div>
 
-      <!-- Medicament Rows -->
-      <div *ngFor="let param of params; let i = index" class="grid grid-cols-5 items-center px-6 py-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-        <!-- param -->
-        <div class="flex items-center gap-4 text-left">
-        <span class=" text-main_color"> {{ param.parametre  }}</span>
-        </div>
-
-        <!-- resultat -->
-        <div class="text-main_color text-center">
+      <!-- resultat -->
+      <div class="text-main_color text-center">
         {{ param.valeur_mesure }}
-        </div>
+      </div>
 
-        <!-- norme -->
-        <div class=" text-main_color text-center">
+      <!-- norme -->
+      <div class="text-main_color text-center">
         {{ param.norme }}
-        </div>
+      </div>
 
-        <!-- norme -->
-        <div class=" text-main_color text-center">
-          {{ getLaboName(param.laborantin) }}
-        </div>
+      <!-- norme -->
+      <div class="text-main_color text-center">
+        {{ param.laborantin }}
+      </div>
 
-        <!-- Buttons -->
-        <div class="flex justify-end gap-4" *ngIf="role === 'laborantin'">
-          <button (click)="openPopup(param,i)"><img src="/assets/images/modifier.png" class="h-5 w-5"/></button>
-          <button><img src="/assets/images/supp.png" class="h-5 w-5"/></button>
-        </div>
-        <app-saisir-resultat
+      <!-- Buttons -->
+      <div
+        class="flex justify-end gap-4"
+        *ngIf="
+          (role === 'laborantin' && !bilan.est_resultat) ||
+          (role === 'medecin' && !bilan.est_complet)
+        "
+      >
+        <button (click)="openPopup(param, i)">
+          <img src="/assets/images/modifier.png" class="h-5 w-5" />
+        </button>
+        <button (click)="suprimerRes(param.parametre, param.id)">
+          <img src="/assets/images/supp.png" class="h-5 w-5" />
+        </button>
+      </div>
+      <app-saisir-resultat
         *ngIf="isPopupVisible && currentIndex === i"
         [isVisible]="isPopupVisible"
         [param]="param"
-        (closePopup)="closePopup()"
+        [bilan_id]="bilan.id"
+        [laborantin_id]="laborantin"
+        [closePopup]="closePopup"
         (saveChanges)="updateParam($event)"
-    ></app-saisir-resultat>
+      ></app-saisir-resultat>
     </div>
   </div>
 </div>

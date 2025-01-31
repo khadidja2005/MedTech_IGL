@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "ControlBDD",
     "Auth",
-    "DPI",
     "Soins",
     "Cloudinary",
     "Recherche",
@@ -61,6 +60,7 @@ INSTALLED_APPS = [
     "Laboratoire",
     "Radiologie",
     "corsheaders",
+    "DPI",
 ]
 
 MIDDLEWARE = [

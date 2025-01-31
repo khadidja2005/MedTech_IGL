@@ -1,21 +1,25 @@
-<div *ngIf="isVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <!-- Modal Container -->
-  <div class="bg-white rounded-lg shadow-lg w-[500px] h-[500px] mx-2 flex flex-col">
-    <!-- Header -->
-    <div class="panel-header">
-      <span class="panel-title">Scan QR Code</span>
-    </div>
+<div class="container">
 
-    <!-- Content -->
-    <div class="flex-grow flex items-center justify-center">
-      <!-- QR Scanner Frame -->
-      <div class="relative w-full h-full max-w-[400px] max-h-[400px] aspect-square rounded-lg flex items-center justify-center">
-        <!-- Corner Markers -->
-        <div class="absolute top-0 left-0 w-12 h-12 border-l-4 border-t-4 border-main_color"></div>
-        <div class="absolute top-0 right-0 w-12 h-12 border-r-4 border-t-4 border-main_color"></div>
-        <div class="absolute bottom-0 left-0 w-12 h-12 border-l-4 border-b-4 border-main_color"></div>
-        <div class="absolute bottom-0 right-0 w-12 h-12 border-r-4 border-b-4 border-main_color"></div>
-      </div>
+  <!-- Select Device -->
+  <div class="row">
+    <div class="col-md-6 my-1">
+      <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-sm">
+        <option [value]="null" selected>Select device</option>
+        <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId" [selected]="i == action.deviceIndexActive">
+          {{ c.label }}
+        </option>
+      </select>
     </div>
   </div>
+
+  <!-- QR Code Scanner -->
+  <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event, action)"></ngx-scanner-qrcode>
+
+  <!-- Scanned Data -->
+  <p *ngIf="action.isLoading">⌛ Loading...</p>
+
+  <!-- Start/Stop Button -->
+  <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+    <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="30px" />
+  </button>
 </div>

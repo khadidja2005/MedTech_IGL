@@ -1,184 +1,259 @@
 <div class="flex p-4 font-poppins relative w-full">
-    <div class="flex-1 ml-6">
-      <div class="flex items-start mb-6 gap-20">
-        <!-- Bilan number -->
-        <div>
-          <div class="flex font-bold text-[#0C2757]" style="font-size: 35px; line-height: 1.2;">
-            <span>Bilan n°</span>
-            <span class="ml-2 mr-[350px]">{{ bilan.id }}</span>
-          </div>
-          <div class="text-[24px] text-gray-600">{{ bilan.etablissement }}</div>
+  <div class="flex-1 ml-6">
+    <div class="flex items-start mb-6 gap-20">
+      <!-- Bilan number -->
+      <div>
+        <div
+          class="flex font-bold text-[#0C2757]"
+          style="font-size: 35px; line-height: 1.2"
+        >
+          <span>Bilan n°</span>
+          <span class="ml-2 mr-[350px]">{{ bilan.id }}</span>
         </div>
-  
-        <!-- Medecin and Date -->
-        <div class="flex flex-col gap-4">
-          <div class="text-[24px]">
-            <span class="font-bold">Medecin: </span>
-            <span class="text-[#4B6386]">{{ bilan.medecin }}</span>
-          </div>
-          <div class="text-[24px]">
-            <span class="font-bold">date: </span>
-            <span class="text-[#4B6386]">{{ bilan.date_debut }}</span>
-          </div>
-        </div>
-  
-        <!-- Etat and Patient -->
-        <div class="flex flex-col gap-4">
-          <div class="text-[24px]">
-            <span class="font-bold">etat: </span>
-            <span [ngClass]="{'text-red-500': BilanNonValid(), 'text-green-500': !BilanNonValid()}">
-              {{ BilanNonValid() ? 'non valide' : 'valide' }}
-            </span>
-          </div>
-          <div class="text-[24px]">
-            <span class="font-bold">Patient: </span>
-            <span class="text-[#4B6386]">{{ bilan.patient }}</span>
-          </div>
-        </div>
+        <div class="text-[24px] text-gray-600">{{ bilan.etablissement }}</div>
       </div>
-  
-      <!-- Type Section -->
-      <div class="bg-white rounded-lg w-[800px] shadow-lg p-4 mb-6">
+
+      <!-- Medecin and Date -->
+      <div class="flex flex-col gap-4">
         <div class="text-[24px]">
-          <span class="font-bold">Type: </span>
-          <span class="text-[#4B6386]">{{ bilan.type_radio }}</span>
+          <span class="font-bold">Medecin: </span>
+          <span class="text-[#4B6386]">{{ bilan.medecin }}</span>
         </div>
-      </div>
-  
-      <!-- Replace the buttons section in your template -->
-<div class="absolute top-[90px] right-14">
-    <!-- Validation Button - Show enabled version only when PDF is imported -->
-    <button *ngIf="BilanNonValid() && !BilanNonComplet()" 
-            (click)="ValiderBilan()"
-            class="rounded-2xl px-16 py-2 mt-10 my-4 bg-[#1AED5D] text-white text-2xl font-semibold cursor-pointer hover:bg-[#15D651]">
-      valider le Bilan
-    </button>
-  
-    <!-- Disabled Validation Button - Show when no PDF -->
-    <button *ngIf="BilanNonValid() && BilanNonComplet()" 
-            class="rounded-2xl px-16 py-2 my-4 mt-10 bg-[#B5EEC7] text-white text-2xl font-semibold cursor-not-allowed">
-      valider le Bilan
-    </button> 
-    <br>
-  
-    <!-- Import PDF Button -->
-    <button *ngIf="BilanNonValid()" 
-            (click)="fileInput.click()"
-            class="rounded-2xl px-16 py-2 bg-white text-[#3A8EF6] border-2 border-[#3A8EF6] text-2xl font-semibold">
-      importer un PDF
-    </button>
-    <br>
-  
-    <!-- Hidden file input -->
-    <input #fileInput 
-           type="file" 
-           (change)="ImporterPDF($event)" 
-           accept="application/pdf" 
-           class="hidden">
-  
-    <!-- PDF Icon States -->
-    <div class="mt-4">
-      <!-- Show faded PDF icon when no PDF is imported -->
-      <img *ngIf="BilanNonValid() && BilanNonComplet()" 
-           src="assets/images/pdf.png" 
-           alt="pdf" 
-           class="w-30 opacity-30">
-      <!-- Show clickable PDF icon when PDF is imported -->
-      <img *ngIf="(BilanNonValid() && !BilanNonComplet()) || !BilanNonValid()" 
-           src="assets/images/pdf.png" 
-           alt="pdf" 
-           class="w-30 cursor-pointer"
-           (click)="viewPDF()">
-      
-      <!-- Show import info when bilan is validated -->
-      <div *ngIf="!BilanNonValid() && importedPDF" class="text-[24px] mt-2">
-        <span class="font-bold">importé par: </span>
-        <span class="text-[#4B6386]">{{ result.radiologue }}</span>
-      </div>
-      <div *ngIf="!BilanNonValid() && !importedPDF" class="text-[24px] mt-2">
-        <span class="font-bold">Pas de PDF importé</span>
-      </div>
-    </div> 
-     </div>
-  
-      <div class="bg-white rounded-lg w-[800px] shadow-lg p-4 mb-6">
         <div class="text-[24px]">
-          <span class="font-bold">Description: </span>
-          <div class="text-[#4B6386] mt-2 cursor-pointer" (click)="openViewDescription()">
-            {{ bilan.description }}
-          </div>
+          <span class="font-bold">date: </span>
+          <span class="text-[#4B6386]">{{ bilan.date_debut }}</span>
         </div>
       </div>
-      
-      <!-- In the Compte rendu section -->
-      <div class="bg-white rounded-lg mr-6 shadow-lg p-4">
+
+      <!-- Etat and Patient -->
+      <div class="flex flex-col gap-4">
         <div class="text-[24px]">
-          <span class="font-bold">Compte rendu: </span>
-          <div class="text-[#4B6386] mt-2 cursor-pointer" (click)="openViewCompteRendu()">
-            {{ result.compte_rendu }}
-          </div>
+          <span class="font-bold">etat: </span>
+          <span
+            [ngClass]="{
+              'text-red-500': BilanNonValid(),
+              'text-green-500': !BilanNonValid()
+            }"
+          >
+            {{ BilanNonValid() ? "non valide" : "valide" }}
+          </span>
         </div>
-        <!-- Edit/Delete buttons only show if bilan is not validated -->
-        <div *ngIf="BilanNonValid()" class="flex justify-end gap-2">
-          <button (click)="modifyCompteRendu()">
-            <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8">
+        <div class="text-[24px]">
+          <span class="font-bold">Patient: </span>
+          <span class="text-[#4B6386]">{{ bilan.patient }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type Section -->
+    <div class="bg-white rounded-lg w-[800px] shadow-lg p-4 mb-6">
+      <div class="text-[24px]">
+        <span class="font-bold">Type: </span>
+        <span class="text-[#4B6386]">{{ bilan.type_radio }}</span>
+      </div>
+    </div>
+
+    <!-- Replace the buttons section in your template -->
+    <div class="absolute top-[90px] right-14">
+      <!-- Validation Button - Show enabled version only when PDF is imported -->
+      <button
+        *ngIf="BilanNonValid() && !BilanNonComplet()"
+        (click)="ValiderBilan()"
+        class="rounded-2xl px-16 py-2 mt-10 my-4 bg-[#1AED5D] text-white text-2xl font-semibold cursor-pointer hover:bg-[#15D651]"
+      >
+        valider le Bilan
+      </button>
+
+      <!-- Disabled Validation Button - Show when no PDF -->
+      <button
+        *ngIf="BilanNonValid() && BilanNonComplet()"
+        class="rounded-2xl px-16 py-2 my-4 mt-10 bg-[#B5EEC7] text-white text-2xl font-semibold cursor-not-allowed"
+      >
+        valider le Bilan
+      </button>
+      <br />
+
+      <!-- Import PDF Button -->
+      <button
+        *ngIf="BilanNonValid()"
+        (click)="fileInput.click()"
+        class="rounded-2xl px-16 py-2 bg-white text-[#3A8EF6] border-2 border-[#3A8EF6] text-2xl font-semibold"
+      >
+        importer un PDF
+      </button>
+      <br />
+
+      <!-- Hidden file input -->
+      <input
+        #fileInput
+        type="file"
+        (change)="ImporterPDF($event)"
+        accept="application/pdf"
+        class="hidden"
+      />
+
+      <!-- PDF Icon States -->
+      <div class="mt-4">
+        <!-- Show faded PDF icon when no PDF is imported -->
+        <img
+          *ngIf="BilanNonValid() && BilanNonComplet()"
+          src="assets/images/pdf.png"
+          alt="pdf"
+          class="w-30 opacity-30"
+        />
+        <!-- Show clickable PDF icon when PDF is imported -->
+        <img
+          *ngIf="(BilanNonValid() && !BilanNonComplet()) || !BilanNonValid()"
+          src="assets/images/pdf.png"
+          alt="pdf"
+          class="w-30 cursor-pointer"
+          (click)="viewPDF()"
+        />
+
+        <!-- Show import info when bilan is validated -->
+        <div *ngIf="!BilanNonValid() && importedPDF" class="text-[24px] mt-2">
+          <span class="font-bold">importé par: </span>
+          <span class="text-[#4B6386]">{{ result.radiologue_nom }}</span>
+        </div>
+        <div *ngIf="!BilanNonValid() && !importedPDF" class="text-[24px] mt-2">
+          <span class="font-bold">Pas de PDF importé</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg w-[800px] shadow-lg p-4 mb-6">
+      <div class="text-[24px]">
+        <span class="font-bold">Description: </span>
+        <div
+          class="text-[#4B6386] mt-2 cursor-pointer"
+          (click)="openViewDescription()"
+        >
+          {{ bilan.description }}
+        </div>
+      </div>
+    </div>
+
+    <!-- In the Compte rendu section -->
+    <div class="bg-white rounded-lg mr-6 shadow-lg p-4">
+      <div class="text-[24px]">
+        <span class="font-bold">Compte rendu: </span>
+        <div
+          class="text-[#4B6386] mt-2 cursor-pointer"
+          (click)="openViewCompteRendu()"
+        >
+          {{ result.compte_rendu }}
+        </div>
+      </div>
+      <!-- Edit/Delete buttons only show if bilan is not validated -->
+      <div *ngIf="BilanNonValid()" class="flex justify-end gap-2">
+        <button (click)="modifyCompteRendu()">
+          <img src="assets/images/edit.png" alt="Edit" class="w-8 h-8" />
+        </button>
+        <button (click)="deleteCompteRendu()">
+          <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10" />
+        </button>
+      </div>
+      <div *ngIf="!BilanNonValid()" class="text-right text-[24px]">
+        <span class="font-bold">rédigé par: </span>
+        <span class="text-[#4B6386]">{{
+          result.radiologue_compte_rendu_nom
+        }}</span>
+      </div>
+    </div>
+
+    <!-- View Modal -->
+    <div
+      *ngIf="showViewModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-[#0C2757]">
+            {{ viewMode === "description" ? "Description" : "Compte Rendu" }}
+          </h2>
+          <button
+            (click)="closeViewModal()"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
-          <button (click)="deleteCompteRendu()">
-            <img src="assets/images/Trash.png" alt="Delete" class="w-10 h-10">
+        </div>
+        <div class="text-lg text-[#4B6386]">
+          {{
+            viewMode === "description"
+              ? viewOnlyDescription
+              : viewOnlyCompteRendu
+          }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div
+      *ngIf="showEditModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh]">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-[#0C2757]">
+            Modifier le Compte Rendu
+          </h2>
+          <button
+            (click)="closeEditModal()"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
-        <div *ngIf="!BilanNonValid()" class="text-right text-[24px]">
-          <span class="font-bold">rédigé par: </span>
-          <span class="text-[#4B6386]">{{ result.radiologue }}</span>
+        <textarea
+          [(ngModel)]="editedCompteRendu"
+          class="w-full h-48 p-3 border rounded-lg text-lg text-[#4B6386] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Saisissez le compte rendu..."
+        >
+        </textarea>
+        <div class="flex justify-end gap-4 mt-4">
+          <button
+            (click)="closeEditModal()"
+            class="px-6 py-2 text-gray-600 border rounded-lg hover:bg-gray-100"
+          >
+            Annuler
+          </button>
+          <button
+            (click)="saveCompteRendu()"
+            class="px-6 py-2 bg-[#3A8EF6] text-white rounded-lg hover:bg-blue-600"
+          >
+            Enregistrer
+          </button>
         </div>
       </div>
-      
-      <!-- View Modal -->
-      <div *ngIf="showViewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-[#0C2757]">
-              {{ viewMode === 'description' ? 'Description' : 'Compte Rendu' }}
-            </h2>
-            <button (click)="closeViewModal()" class="text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div class="text-lg text-[#4B6386]">
-            {{ viewMode === 'description' ? viewOnlyDescription : viewOnlyCompteRendu }}
-          </div>
-        </div>
-      </div>
-      
-      <!-- Edit Modal -->
-      <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh]">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-[#0C2757]">Modifier le Compte Rendu</h2>
-            <button (click)="closeEditModal()" class="text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <textarea
-            [(ngModel)]="editedCompteRendu"
-            class="w-full h-48 p-3 border rounded-lg text-lg text-[#4B6386] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Saisissez le compte rendu...">
-          </textarea>
-          <div class="flex justify-end gap-4 mt-4">
-            <button
-              (click)="closeEditModal()"
-              class="px-6 py-2 text-gray-600 border rounded-lg hover:bg-gray-100">
-              Annuler
-            </button>
-            <button
-              (click)="saveCompteRendu()"
-              class="px-6 py-2 bg-[#3A8EF6] text-white rounded-lg hover:bg-blue-600">
-              Enregistrer
-            </button>
-          </div>
-        </div>
-      </div>
+    </div>
+  </div>
+</div>

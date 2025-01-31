@@ -41,7 +41,7 @@ urlpatterns = [
     path("api/", include(bdd_urls)),
     path("control/", include(control_bdd_urls)),
     path("dashboard/", include(dashboard_urls)),
-    path("dpi/", include(dpi_urls)),
+    path("dpipage/", include(dpi_urls)),
     path("soins/", include(soins_urls)),
     path("cloudinary/", include(cloudinary_urls)),
     path("recherche/", include(recherche_urls)),

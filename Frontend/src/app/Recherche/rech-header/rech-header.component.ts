@@ -1,15 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AjouterDPIComponent } from '../ajouter-dpi/ajouter-dpi.component';
 import { DpiCards } from '../recherche/recherche.component';
 import { Etab } from '../../Pharmacie/pharmacie/pharmacie.component';
 import { ScannerComponent } from '../scanner/scanner.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import axios from 'axios';
-
+import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
+interface dpi {
+  dpi_id: number;
+  etablissement: number;
+}
+interface Data {
+  dpis: dpi[];
+  patient_name: string;
+}
 @Component({
   selector: 'app-rech-header',
-  imports: [CommonModule, AjouterDPIComponent, ScannerComponent, ReactiveFormsModule, FormsModule],
+  imports: [
+    NgxScannerQrcodeModule,
+    CommonModule,
+    AjouterDPIComponent,
+    ScannerComponent,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   templateUrl: './rech-header.component.html',
   styleUrl: './rech-header.component.css',
 })
@@ -18,6 +39,7 @@ export class RechHeaderComponent {
   @Input() etablissements!: Etab[];
   @Input() role!: string;
   @Input() isScannerPanelVisible!: boolean;
+  @Output() dpisChange = new EventEmitter<DpiCards[]>();
 
   isAddPanelVisible = false;
   isPopupVisible = false;
@@ -57,32 +79,37 @@ export class RechHeaderComponent {
 
   inputValue: string = ''; // Stores the input value temporarily
   nss: number | null = null; // Stores the final NSS value
+  rechResult: DpiCards[] = []; // Stores the search results
 
-  saveInputValue() {
+  async saveInputValue() {
     // Convert the inputValue to a number and store it in nss
     const parsedValue = Number(this.inputValue);
     if (!isNaN(parsedValue)) {
       this.nss = parsedValue;
       console.log('NSS saved:', this.nss);
-    } else {
-      console.error('Invalid input: Please enter a valid number');
-    }
-  }
-
-  onSubmit() {
-    if (this.rechForm.valid) {
-      const formValue = this.rechForm.value;
-      console.log(formValue);
-      axios
-        .get('http://localhost:8000/recherche/Patient/DPIS', {
-          params: { nss: formValue.nss },
+      await axios
+        .get<Data>('http://localhost:8000/recherche/Patient/DPIS', {
+          params: { nss: this.nss },
         })
         .then((response) => {
           console.log(response.data);
+          for (let dpi in response.data.dpis) {
+            this.rechResult.push({
+              id: response.data.dpis[dpi].dpi_id,
+              etablissement: response.data.dpis[dpi].etablissement,
+              nom_complet: response.data.patient_name,
+              nss: this.nss ? this.nss.toString() : '',
+            });
+          }
+          this.dpis = [...this.rechResult];
+          this.dpisChange.emit(this.dpis);
         })
         .catch((error) => {
           console.error('Error:', error);
+          alert('Error: NSS not found');
         });
+    } else {
+      console.error('Invalid input: Please enter a valid number');
     }
   }
 }

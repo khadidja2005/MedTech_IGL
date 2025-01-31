@@ -24,8 +24,12 @@
     "angularx-qrcode": "^19.0.0",
     "axios": "^1.7.9",
     "express": "^4.18.2",
+<<<<<<< HEAD
     "frontend": "file:",
+=======
+>>>>>>> ddf3e5d80710324dead3ffbada0b256c53cfd361
     "jwt-decode": "^4.0.0",
+    "ngx-scanner-qrcode": "^1.7.3",
     "notyf": "^3.10.0",
     "rxjs": "~7.8.0",
     "tailwindcss-filters": "^3.0.0",

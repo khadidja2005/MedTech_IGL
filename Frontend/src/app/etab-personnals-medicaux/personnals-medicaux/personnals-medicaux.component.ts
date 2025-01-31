@@ -1,12 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Etablissement } from '../../../types/etablissement';
 import { PersonnelMedical } from '../../../types/personnelMedical';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { DPI } from '../../../types/dpi';
 import { Patient } from '../../../types/patient';
 import { Mutuelle } from '../../../types/mutuelle';
 import { EtablissementPersonnelMedical } from '../../../types/etablissementPersonnelmedical';
+//dashboard/etablissements/1/personnel/
+import { FormsModule } from '@angular/forms';
+import axios from 'axios';
+import { Notyf } from 'notyf';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule, isPlatformBrowser, NgClass } from '@angular/common';
+
+interface CompleteDPI {
+  patient: {
+    nom_complet: string;
+    date_naissance: string;
+    nss: string;
+    email: string;
+    telephone: number;
+    adresse: string;
+  };
+  mutuelles: {
+    mutuelle1: {
+      nom: string;
+      telephone: number;
+      email: string;
+      type_couverture: string;
+    };
+    mutuelle2: {
+      nom: string;
+      telephone: number;
+      email: string;
+      type_couverture: string;
+    };
+  };
+}
 
 @Component({
   selector: 'app-personnals-medicaux',
@@ -15,6 +44,17 @@ import { EtablissementPersonnelMedical } from '../../../types/etablissementPerso
   styleUrl: './personnals-medicaux.component.css',
 })
 export class PersonnalsMedicauxComponent {
+  notyf: Notyf | undefined;
+  id: number = 0;
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.notyf = new Notyf();
+    }
+  }
   Etablissement: Etablissement = {
     id: 1,
     nom_etablissement: '',
@@ -25,65 +65,61 @@ export class PersonnalsMedicauxComponent {
   };
 
   user1 = {
-    Admin: true,
-    name: 'Mohamed Reda',
-    id: 1,
-    profession: 'infermier',
+    Admin: localStorage.getItem('role') ? true : false,
+    name: localStorage.getItem('nom_complet'),
+    id: localStorage.getItem('id'),
+    profession: localStorage.getItem('role'),
   };
 
-  personnels: PersonnelMedical[] = [
-    {
-      id: 1,
-      lienPhoto: 'assets/images/medecin1.jpg',
-      nom_complet: 'Jean Dupont',
-      email: 'jean.dupont@exemple.com',
-      specialite: 'Cardiologie',
-      telephone: 123456789,
-      password: 'password123',
-      role: 'MEDECIN',
-    },
-    {
-      id: 2,
-      lienPhoto: 'assets/images/medecin2.jpg',
-      nom_complet: 'Alice Martin',
-      email: 'alice.martin@exemple.com',
-      specialite: 'Radiologie',
-      telephone: 987654321,
-      password: 'password123',
-      role: 'RADIOLOGUE',
-    },
-  ];
+  personnels: PersonnelMedical[] = [];
+  DPIList: {
+    dpi_id: number;
+    patient_id: number;
+    nss: number;
+    nom_complet: string;
+    date_creation: string;
+  }[] = [];
+  async ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.id = params['id'];
+      // Use the ID to fetch data or whatever you need
+    });
+    try {
+      const response = await axios.get<{ data: PersonnelMedical[] }>(
+        `http://localhost:8000/dashboard/etablissements/${this.id}/personnel/`
+      );
+      //console.log(response.data);
+      this.personnels = response.data.data;
+    } catch (e) {
+      console.log(e);
+      if (this.notyf) {
+        this.notyf.error('Erreur lors du chargement des employees');
+      }
+    }
 
-  DPIList: DPI[] = [
-    {
-      id: 1,
-      date_creation: '2024-01-01T08:30:00.000Z',
-      patient: 'P001',
-      etablissement_id: 1,
-      createur_id: 1,
-    },
-    {
-      id: 2,
-      date_creation: '2024-01-10T09:45:00.000Z',
-      patient: 'P002',
-      etablissement_id: 2,
-      createur_id: 2,
-    },
-    {
-      id: 3,
-      date_creation: '2024-02-15T14:20:00.000Z',
-      patient: 'P003',
-      etablissement_id: 1,
-      createur_id: null, // No admin linked
-    },
-    {
-      id: 4,
-      date_creation: '2024-03-05T11:00:00.000Z',
-      patient: 'P004',
-      etablissement_id: 3,
-      createur_id: 3,
-    },
-  ];
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/dashboard/etablissements/${this.id}/dpis/`
+      );
+      //console.log(response.data);
+      this.DPIList = (
+        response.data as {
+          data: {
+            dpi_id: number;
+            patient_id: number;
+            nss: number;
+            nom_complet: string;
+            date_creation: string;
+          }[];
+        }
+      ).data;
+    } catch (e) {
+      console.log(e);
+      if (this.notyf) {
+        this.notyf.error('Erreur lors du chargement des DPIs');
+      }
+    }
+  }
 
   etablissementPersonnel: EtablissementPersonnelMedical[] = [
     { id: 1, etablissement: 1, personnel_medical: 1 },
@@ -218,19 +254,25 @@ export class PersonnalsMedicauxComponent {
     statueMatrimonial: 'Célibataire',
   };
 
-  newDPI: DPI = {
-    id: 0,
+  newDPI: {
+    dpi_id: number;
+    patient_id: number;
+    nss: number;
+    nom_complet: string;
+    date_creation: string;
+  } = {
+    dpi_id: 0,
+    patient_id: 0,
     date_creation: new Date().toISOString(),
-    patient: '',
-    etablissement_id: 0,
-    createur_id: 0,
+    nom_complet: '',
+    nss: 0,
   };
 
   validateNewDPI(): boolean {
     this.DPIValidationErrors = {};
     let isValid = true;
 
-    if (!this.newDPI.patient?.trim()) {
+    if (!this.newDPI.nom_complet?.trim()) {
       this.DPIValidationErrors['patient'] = 'Le patient est requis';
       isValid = false;
     }
@@ -314,11 +356,107 @@ export class PersonnalsMedicauxComponent {
     this.showMutuelleStep = false;
   }
 
+  completeDPI: CompleteDPI = {
+    patient: {
+      nom_complet: '',
+      date_naissance: '',
+      nss: '',
+      email: '',
+      telephone: 0,
+      adresse: '',
+    },
+    mutuelles: {
+      mutuelle1: {
+        nom: '',
+        telephone: 0,
+        email: '',
+        type_couverture: '',
+      },
+      mutuelle2: {
+        nom: '',
+        telephone: 0,
+        email: '',
+        type_couverture: '',
+      },
+    },
+  };
+
   saveDPIWithMutuelle() {
-    // Save both DPI and Mutuelle data
-    this.submitNewDPI();
+    // Sauvegarder les informations des mutuelles
+    this.completeDPI.mutuelles = {
+      mutuelle1: { ...this.mutuelle1 },
+      mutuelle2: { ...this.mutuelle2 },
+    };
+
+    // Créer un nouveau DPI avec toutes les informations
+    const newDPI = {
+      dpi_id: Math.max(0, ...this.DPIList.map((d) => d.dpi_id)) + 1,
+      patient_id: Math.floor(Math.random() * 1000), // Simuler un ID unique
+      nss: parseInt(this.completeDPI.patient.nss),
+      nom_complet: this.completeDPI.patient.nom_complet,
+      date_creation: new Date().toISOString(),
+    };
+
+    // Ajouter le nouveau DPI à la liste
+    this.DPIList.push(newDPI);
+
+    // Réinitialiser le formulaire et fermer les modales
+    this.resetCompleteDPIForm();
     this.showMutuelleStep = false;
     this.showDPIModal = false;
+
+    // Afficher le message de succès
+    if (this.notyf) {
+      this.notyf.success('DPI créé avec succès');
+    }
+  }
+
+  // Nouvelle méthode pour réinitialiser tout le formulaire
+  resetCompleteDPIForm() {
+    this.completeDPI = {
+      patient: {
+        nom_complet: '',
+        date_naissance: '',
+        nss: '',
+        email: '',
+        telephone: 0,
+        adresse: '',
+      },
+      mutuelles: {
+        mutuelle1: {
+          nom: '',
+          telephone: 0,
+          email: '',
+          type_couverture: '',
+        },
+        mutuelle2: {
+          nom: '',
+          telephone: 0,
+          email: '',
+          type_couverture: '',
+        },
+      },
+    };
+
+    this.resetDPIForm();
+    this.mutuelle1 = {
+      nom: '',
+      email: '',
+      telephone: 0,
+      type_couverture: '',
+      id: 0,
+      patient_id: 0,
+      numero_adherent: 0,
+    };
+    this.mutuelle2 = {
+      nom: '',
+      email: '',
+      telephone: 0,
+      type_couverture: '',
+      id: 0,
+      patient_id: 0,
+      numero_adherent: 0,
+    };
   }
 
   mutuelle1: Mutuelle = {
@@ -340,8 +478,11 @@ export class PersonnalsMedicauxComponent {
     patient_id: 0,
     numero_adherent: 0,
   };
+
   returnFirst() {
-    this.showDPIModal = false; // Assuming you track steps with currentStep variable
+    this.showDPIModal = false;
+    this.showMutuelleStep = false;
+    this.resetCompleteDPIForm();
   }
 
   DPIValidationErrors: {
@@ -370,11 +511,11 @@ export class PersonnalsMedicauxComponent {
     };
 
     this.newDPI = {
-      id: 0,
+      dpi_id: 0,
       date_creation: new Date().toISOString(),
-      patient: '',
-      etablissement_id: 0,
-      createur_id: 0,
+      patient_id: 0,
+      nom_complet: '',
+      nss: 0,
     };
 
     this.DPIValidationErrors = {};
@@ -438,6 +579,15 @@ export class PersonnalsMedicauxComponent {
 
   nextStep() {
     if (this.validateDPIForm()) {
+      // Sauvegarder les informations du patient dans completeDPI
+      this.completeDPI.patient = {
+        nom_complet: this.patient.nom_complet,
+        date_naissance: this.patient.date_naissance,
+        nss: this.patient.nss,
+        email: this.patient.email,
+        telephone: this.patient.telephone,
+        adresse: this.patient.adresse,
+      };
       this.showMutuelleStep = true;
     }
   }
@@ -576,20 +726,12 @@ export class PersonnalsMedicauxComponent {
     }
   }
   getPersonnelsForCurrentEtablissement(): PersonnelMedical[] {
-    return this.personnels.filter((personnel) =>
-      this.etablissementPersonnel.some(
-        (link) =>
-          link.etablissement === this.Etablissement.id &&
-          link.personnel_medical === personnel.id
-      )
-    );
+    return this.personnels;
   }
 
   // Obtenir les DPIs de l'établissement courant
-  getDPIsForCurrentEtablissement(): DPI[] {
-    return this.DPIList.filter(
-      (dpi) => dpi.etablissement_id === this.Etablissement.id
-    );
+  getDPIsForCurrentEtablissement() {
+    return this.DPIList;
   }
 
   // Méthode pour ajouter un personnel à l'établissement
@@ -602,7 +744,7 @@ export class PersonnalsMedicauxComponent {
     this.etablissementPersonnel.push(newLink);
   }
 
-  submitNewPersonnel(): void {
+  async submitNewPersonnel(): Promise<void> {
     if (this.validateNewPersonnel()) {
       if (this.editMode) {
         const index = this.personnels.findIndex(
@@ -619,7 +761,37 @@ export class PersonnalsMedicauxComponent {
         // Create new personnel with the new ID
         this.newPersonnel.id = newId;
         this.personnels.push({ ...this.newPersonnel });
-
+        try {
+          const response = await axios.post(
+            `http://localhost:8000/dashboard/etablissements/${this.id}/personnel/add/`,
+            {
+              lienPhoto:
+                this.newPersonnel.lienPhoto ||
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              nom_complet: this.newPersonnel.nom_complet,
+              role: this.newPersonnel.role,
+              telephone: this.newPersonnel.telephone,
+              email: this.newPersonnel.email,
+              specialite: this.newPersonnel.specialite,
+              password: Math.random().toString(36).substring(2, 10),
+            }
+          );
+          console.log(response.data);
+          if (this.notyf) {
+            this.notyf.success('Employee a été ajouté avec succès');
+            setTimeout(() => {
+              this.newPersonnel.id = (response.data as { id: number }).id; // Use the ID from the response
+              this.personnels.push({ ...this.newPersonnel });
+              this.togglePersonnelModal('');
+              this.showPersonnelModal = false;
+            }, 2000);
+          }
+        } catch (e) {
+          console.log(e);
+          if (this.notyf) {
+            this.notyf.error("Erreur lors de l'ajout de l'employee");
+          }
+        }
         // Add the link with establishment - now passing the new ID
         this.addPersonnelToEtablissement(newId);
       }

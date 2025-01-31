@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
     path("", views.get_infos, name="get_consultation_infos"),
-    path("<int:id>/", views.get_infos, name="get_consultation_infos"),  # Ajouter cette ligne
     path("modifier/", views.modifier_consultation, name="modifier_consultation"),
     path("medecins/", views.get_medecins, name="get_medecins"),
     path("modifier/resume/", views.modifier_resume, name="modifier_resume"),

@@ -15,6 +15,10 @@ export interface Dpi {
   nss: string;
   etablissement: number;
 }
+interface data {
+  success: boolean;
+  dpi_id: number;
+}
 
 @Component({
   selector: 'app-ajouter-dpi',
@@ -37,7 +41,7 @@ export class AjouterDPIComponent {
       etablissement: ['', Validators.required],
     });
   }
-  id = 296; //local storage
+  id = localStorage.getItem('id') || '';
   onSubmit() {
     if (this.ajoutForm.valid) {
       const formValue = this.ajoutForm.value;
@@ -51,7 +55,7 @@ export class AjouterDPIComponent {
       };
 
       axios
-        .post('http://localhost:8000/recherche/creerDPI', {
+        .post<data>('http://localhost:8000/recherche/creerDPI', {
           nss: newDpi.nss,
           nom_complet: newDpi.nom,
           etablissement_id: newDpi.etablissement,

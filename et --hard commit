@@ -1,0 +1,30 @@
+[33m8fb3fca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mSaad/backend[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/Saad/backend[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: rebase (finish): returning to refs/heads/Saad/backend
+[33m8fb3fca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mSaad/backend[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/Saad/backend[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: rebase (start): checkout origin/main
+[33m6a97a99[m HEAD@{2}: commit: Sauvegarde des modifications locales
+[33m19f84b3[m HEAD@{3}: checkout: moving from 6306afcccabfbbf382303492f92fb4973dcde79f to Saad/backend
+[33m6306afc[m HEAD@{4}: commit: Sauvegarde des modifications
+[33m8fb3fca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mSaad/backend[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/Saad/backend[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{5}: rebase (start): checkout origin/main
+[33m19f84b3[m HEAD@{6}: reset: moving to HEAD~1
+[33m4870f83[m HEAD@{7}: reset: moving to HEAD
+[33m4870f83[m HEAD@{8}: reset: moving to HEAD
+[33m4870f83[m HEAD@{9}: commit (merge): Resolved merge conflicts with main
+[33m19f84b3[m HEAD@{10}: checkout: moving from Saad/backend to Saad/backend
+[33m19f84b3[m HEAD@{11}: commit: Récupération des modifications
+[33m3972862[m HEAD@{12}: checkout: moving from main to Saad/backend
+[33m6ee0c25[m[33m ([m[1;32mmain[m[33m)[m HEAD@{13}: checkout: moving from main to main
+[33m6ee0c25[m[33m ([m[1;32mmain[m[33m)[m HEAD@{14}: pull origin main: Fast-forward
+[33md4a6bf0[m HEAD@{15}: checkout: moving from Saad/backend to main
+[33m3972862[m HEAD@{16}: commit: Description des modifications
+[33mf757f6f[m HEAD@{17}: pull origin main: Fast-forward
+[33me687923[m HEAD@{18}: commit: Integration Consultation + Ordannance
+[33mde4223f[m HEAD@{19}: checkout: moving from Saad/backend to Saad/backend
+[33mde4223f[m HEAD@{20}: commit (merge): Resolved merge conflicts and merged main into Saad/backend
+[33mf0ef12b[m HEAD@{21}: commit (merge): Resolved merge conflicts and merged main into Saad/backend
+[33m025e7ac[m HEAD@{22}: commit: Your commit message
+[33m7687a40[m HEAD@{23}: pull origin main: Fast-forward
+[33ma56fcf3[m HEAD@{24}: commit: Ajout de nouvelles fonctionnalités et modifications pour la structure de l'application
+[33mccc3d45[m HEAD@{25}: commit (merge): Merge branch 'Saad/backend' of https://github.com/khadidja2005/MedTech_IGL into Saad/backend
+[33mfb0a3e9[m HEAD@{26}: commit: Login_Backend
+[33m91c0b5a[m HEAD@{27}: checkout: moving from Saad/backend to Saad/backend
+[33m91c0b5a[m HEAD@{28}: checkout: moving from main to Saad/backend
+[33m91c0b5a[m HEAD@{29}: clone: from https://github.com/khadidja2005/MedTech_IGL.git

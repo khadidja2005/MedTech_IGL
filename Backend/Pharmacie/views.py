@@ -39,8 +39,7 @@ def get_pharmaciens(request):
 @require_http_methods(["GET"])
 def archive_pharmacie(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        pharmacien = data.get("pharmacien")
+        pharmacien = request.GET.get("pharmacien")
         try:
             pharmacien = PersonnelMedical.objects.get(id=pharmacien)
         except PersonnelMedical.DoesNotExist:
@@ -80,8 +79,7 @@ def archive_pharmacie(request):
 @require_http_methods(["GET"])
 def get_ordonnances(request):
     if request.method == "GET":
-        data = json.loads(request.body)
-        pharmacien = data.get("pharmacien")
+        pharmacien = request.GET.get("pharmacien")
         try:
             pharmacien = PersonnelMedical.objects.get(id=pharmacien)
         except PersonnelMedical.DoesNotExist:
@@ -98,15 +96,16 @@ def get_ordonnances(request):
         count = 0
         for ord in Ordonnance.objects.all():
             etab = ord.consultation.Hospitalisation.DPI.etablissement_id
-            if etab in etablissement and not ord.estValide:
+            if etab in etablissement and not ord.estValide and ord.estTerminer:
                 count += 1
                 ords.append(
                     {
                         "id": ord.id,
                         "date": ord.consultation.date.strftime("%Y-%m-%d"),
+                        "etablissement_id": etab.id,
                         "etablissement": etab.nom_etablissement,
                     }
                 )
-        return JsonResponse({"ordonnances": ords, "numOrdonnances": count})
+        return JsonResponse({"ordonnances": ords})
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
