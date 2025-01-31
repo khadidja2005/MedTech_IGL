@@ -2,11 +2,15 @@
   <!-- Ordonnance Title -->
   <div class="flex items-center justify-between">
     <div>
-      <h6 class="soin-title mb-4">Ordonnance</h6>
+      <h6 class="soin-title mb-4">
+        Ordonnance &nbsp; <span>{{ ordonnance.ordre }}</span>
+      </h6>
 
       <!-- Action Buttons -->
       <div
-        *ngIf="(role === 'admin' || role === 'medecin') && !ordonnance.termine"
+        *ngIf="
+          (role === 'admin' || role === 'medecin') && !ordonnance.estValide
+        "
         class="actions mb-4"
       >
         <button class="delete-button flex items-center gap-1">
@@ -47,20 +51,10 @@
         </span>
       </div>
       <div class="flex items-center justify-center gap-4">
-        <span
-          *ngIf="role == 'pharmacien' || role == 'infermier'"
-          class="label text-lg items-center"
-          >Medecin :</span
-        >
-        <span
-          *ngIf="role == 'pharmacien' || role == 'infermier'"
-          class="value text-lg items-center"
-          >{{ getMedecinName(ordonnance.medecin_id) }}</span
-        >
+        <span class="label text-lg items-center">Medecin :</span>
+        <span class="value text-lg items-center">{{ ordonnance.medecin }}</span>
         <span class="label text-lg">Patient :</span>
-        <span class="value text-lg">{{
-          getPatientName(ordonnance.patient_id)
-        }}</span>
+        <span class="value text-lg">{{ ordonnance.patient }}</span>
       </div>
     </div>
   </div>
@@ -86,7 +80,10 @@
       *ngIf="role == 'pharmacien' && !ordonnance.estValide"
       class="buttons-container"
     >
-      <button class="valider-button" (click)="valider()">
+      <button
+        [ngClass]="peutValider ? 'valider-button' : 'valider-button-disabled'"
+        (click)="valider()"
+      >
         valider l'ordonnance
       </button>
     </div>

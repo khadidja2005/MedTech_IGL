@@ -9,21 +9,32 @@ export interface OrdonnancePageOrd {
   ordre: number;
   date: string;
   estValide: boolean;
-  patient_id: number;
-  medecin_id: number;
+  patient: string;
+  medecin: string;
   termine: boolean;
   etablissement: number;
 }
 
 export interface MedicamentPageOrd {
+  id: number;
   nom: string;
   dosage: string;
   duree: string;
 }
 
-export interface Patient {
+interface resData {
+  date: string;
+  medecin: string;
+  patient: string;
+  estValide: boolean;
+  estTerminer: boolean;
+  medicaments: meds[];
+}
+interface meds {
+  medicament_id: number;
   nom: string;
-  id: number;
+  dosage: string;
+  duree: string;
 }
 
 @Component({
@@ -45,8 +56,7 @@ export class OrdonnanceComponent implements OnInit {
   errorMessage: string | null = null;
   ordonnanceId: string = '';
   activeItem: string = ''; // Ajoutez cette ligne
-  medecins: any[] = []; // Ajoutez cette ligne
-  patients: any[] = []; // Ajoutez cette ligne
+  peutValider = true;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -59,71 +69,37 @@ export class OrdonnanceComponent implements OnInit {
   async loadOrdonnance(id: number): Promise<void> {
     this.isLoading = true;
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/ordonnance/`, {
-        params: { ordonnance_id: id },
-      });
-      this.ordonnance = response.data;
-      console.log(this.ordonnance);
-      this.medicaments = response.data.medicaments;
+      await axios
+        .get<resData>(`http://127.0.0.1:8000/ordonnance/`, {
+          params: { ordonnance_id: id },
+        })
+        .then((response) => {
+          this.ordonnance = {
+            ordre: id,
+            date: response.data.date,
+            medecin: response.data.medecin,
+            patient: response.data.patient,
+            estValide: response.data.estValide,
+            termine: response.data.estTerminer,
+            etablissement: 1,
+          };
+          this.medicaments = response.data.medicaments.map((m) => ({
+            id: m.medicament_id,
+            nom: m.nom,
+            dosage: m.dosage,
+            duree: m.duree,
+          }));
+        });
+      // this.peutValider =
+      //   this.role === 'pharmacien' &&
+      //   !this.ordonnance.estValide &&
+      //   !this.ordonnance.termine &&
+      //   this.medicaments.length > 0;
     } catch (error) {
       this.errorMessage = 'Erreur lors du chargement des données.';
       console.error(error);
     } finally {
       this.isLoading = false;
-    }
-  }
-
-  async addMedicament(
-    nom: string,
-    dosage: string,
-    duree: string
-  ): Promise<void> {
-    try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/ordonnances/ajouter/medicament`,
-        {
-          ordonnance_id: this.ordonnance.ordre,
-          nom,
-          dosage,
-          duree,
-        }
-      );
-      this.medicaments.push({
-        id: response.data.medicament_id,
-        nom,
-        dosage,
-        duree,
-      });
-      alert('Médicament ajouté avec succès.');
-    } catch (error) {
-      console.error('Erreur lors de l’ajout du médicament:', error);
-    }
-  }
-
-  async deleteMedicament(id: number): Promise<void> {
-    try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/ordonnances/supprimer/medicament`,
-        {
-          data: { medicament_id: id },
-        }
-      );
-      this.medicaments = this.medicaments.filter((m) => m.id !== id);
-      alert('Médicament supprimé avec succès.');
-    } catch (error) {
-      console.error('Erreur lors de la suppression du médicament:', error);
-    }
-  }
-
-  async completeOrdonnance(): Promise<void> {
-    try {
-      await axios.post(`http://127.0.0.1:8000/api/ordonnances/terminer/`, {
-        ordonnance_id: this.ordonnance.ordre,
-      });
-      this.ordonnance.termine = true;
-      alert('Ordonnance terminée avec succès.');
-    } catch (error) {
-      console.error('Erreur lors de la terminaison:', error);
     }
   }
 }
