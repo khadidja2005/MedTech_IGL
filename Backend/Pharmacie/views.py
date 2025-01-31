@@ -68,7 +68,7 @@ def get_ordonnances(request):
         count = 0
         for ord in Ordonnance.objects.all():
             etab = ord.consultation.Hospitalisation.DPI.etablissement_id
-            if etab in etablissement and not ord.estValide:
+            if etab in etablissement and not ord.estValide and ord.estTerminer:
                 count += 1
                 ords.append(
                     {

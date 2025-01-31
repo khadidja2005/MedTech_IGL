@@ -98,7 +98,7 @@ export class OrdonnanceComponent implements OnInit {
       this.peutValider =
         this.role === 'pharmacien' &&
         !this.ordonnance.estValide &&
-        !this.ordonnance.termine &&
+        this.ordonnance.termine &&
         this.medicaments.length > 0;
       this.peutModifier =
         this.role === 'medecin' &&
