@@ -35,7 +35,7 @@ export class SidebarComponent {
       roles: [
         'admin',
         'medecin',
-        'infermier',
+        'infirmier',
         'radiologue',
         'laborantin',
         'pharmacien',
@@ -51,7 +51,7 @@ export class SidebarComponent {
     {
       label: 'DPI',
       icon: '/assets/images/DPI.png',
-      roles: ['admin', 'patient', 'medecin', 'infermier'],
+      roles: ['admin', 'patient', 'medecin', 'infirmier'],
       link: '/recherche',
     },
     {
@@ -82,7 +82,7 @@ export class SidebarComponent {
         'admin',
         'patient',
         'medecin',
-        'infermier',
+        'infirmier',
         'radiologue',
         'laborantin',
         'pharmacien',
