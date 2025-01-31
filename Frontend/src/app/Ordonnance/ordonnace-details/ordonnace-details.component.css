@@ -1,6 +1,6 @@
 .soin-container {
   @apply w-screen max-w-5xl p-4 mx-auto;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
 
 /* Title Section */
@@ -13,11 +13,9 @@
   @apply flex gap-2;
 }
 
-
 .actions {
   @apply flex gap-2;
 }
-
 
 .modify-button {
   @apply bg-orange_light text-orange font-semibold hover:bg-orange_little_darker rounded-lg px-1 py-1 text-xs;
@@ -64,6 +62,14 @@
   @apply px-4 py-2 font-medium rounded-lg bg-blue text-lg text-white hover:bg-blue_light;
 }
 
+.terminer-button-disabled {
+  @apply px-4 py-2 font-medium rounded-lg bg-gray-500 text-lg text-white cursor-not-allowed;
+}
+
 .valider-button {
   @apply px-10 py-2 text-lg font-medium rounded-lg bg-etat text-white hover:bg-[#188f3e];
+}
+
+.valider-button-disabled {
+  @apply px-10 py-2 text-lg font-medium rounded-lg bg-green-200 text-white cursor-not-allowed;
 }

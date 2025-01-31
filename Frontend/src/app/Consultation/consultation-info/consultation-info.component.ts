@@ -296,6 +296,6 @@ export class ConsultationInfoComponent implements OnInit {
     }
   }
   consulterOrdonnance(ordonnance: any): void {
-    this.routenon.navigate([`ordannace/${ordonnance.id}`]);
+    this.routenon.navigate([`ordannace/${ordonnance.ordonnance_id}`]);
   }
 }

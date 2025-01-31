@@ -7,24 +7,42 @@
     <form [formGroup]="ajoutForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="nom">nom de medicament</label>
-        <input id="nom" type="text" formControlName="nom" class="form-control">
+        <input
+          id="nom"
+          type="text"
+          formControlName="nom"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="dose">dose</label>
-        <input id="dose" type="text" formControlName="dose" class="form-control">
+        <input
+          id="dose"
+          type="text"
+          formControlName="dose"
+          class="form-control"
+        />
       </div>
       <div class="form-group">
         <label for="duree">duree</label>
-        <input id="duree" type="text" formControlName="duree" class="form-control">
+        <input
+          id="duree"
+          type="text"
+          formControlName="duree"
+          class="form-control"
+        />
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="ajoutForm.invalid" (click)="closePanel.emit()">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="ajoutForm.invalid"
+          (click)="closePanel.emit()"
+        >
           Sauvegarder
         </button>
-        <button type="submit" class="btn2" [disabled]="ajoutForm.invalid" (click)="closePanel.emit()">
-          Annuler
-        </button>
+        <button class="btn2" (click)="close()">Annuler</button>
       </div>
     </form>
   </div>
