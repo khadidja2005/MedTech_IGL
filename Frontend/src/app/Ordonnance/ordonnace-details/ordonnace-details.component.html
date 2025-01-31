@@ -9,7 +9,8 @@
       <!-- Action Buttons -->
       <div
         *ngIf="
-          (role === 'admin' || role === 'medecin') && !ordonnance.estValide
+          (role === 'admin' || (role === 'medecin' && peutModifier)) &&
+          !ordonnance.estValide
         "
         class="actions mb-4"
       >
@@ -61,7 +62,7 @@
   <!-- Footer Section -->
   <div class="footer">
     <div
-      *ngIf="role == 'medecin' && !ordonnance.termine"
+      *ngIf="role == 'medecin' && !ordonnance.termine && peutModifier"
       class="buttons-container"
     >
       <button class="add-button" (click)="openAddPanel()">

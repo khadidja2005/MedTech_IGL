@@ -22,6 +22,7 @@ def get_infos(request):
             {
                 "date": ordonnance.consultation.date,
                 "medecin": ordonnance.consultation.Medecin.nom_complet,
+                "medecin_id": ordonnance.consultation.Medecin.id,
                 "patient": ordonnance.consultation.Hospitalisation.DPI.patient.nom_complet,
                 "estValide": ordonnance.estValide,
                 "estTerminer": ordonnance.estTerminer,

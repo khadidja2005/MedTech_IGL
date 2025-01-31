@@ -11,6 +11,7 @@ export interface OrdonnancePageOrd {
   estValide: boolean;
   patient: string;
   medecin: string;
+  medecin_id: number;
   termine: boolean;
   etablissement: number;
 }
@@ -25,6 +26,7 @@ export interface MedicamentPageOrd {
 interface resData {
   date: string;
   medecin: string;
+  medecin_id: number;
   patient: string;
   estValide: boolean;
   estTerminer: boolean;
@@ -57,6 +59,7 @@ export class OrdonnanceComponent implements OnInit {
   ordonnanceId: string = '';
   activeItem: string = ''; // Ajoutez cette ligne
   peutValider = true;
+  peutModifier = false;
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -78,6 +81,7 @@ export class OrdonnanceComponent implements OnInit {
             ordre: id,
             date: response.data.date,
             medecin: response.data.medecin,
+            medecin_id: response.data.medecin_id,
             patient: response.data.patient,
             estValide: response.data.estValide,
             termine: response.data.estTerminer,
@@ -90,11 +94,14 @@ export class OrdonnanceComponent implements OnInit {
             duree: m.duree,
           }));
         });
-      // this.peutValider =
-      //   this.role === 'pharmacien' &&
-      //   !this.ordonnance.estValide &&
-      //   !this.ordonnance.termine &&
-      //   this.medicaments.length > 0;
+      this.peutValider =
+        this.role === 'pharmacien' &&
+        !this.ordonnance.estValide &&
+        !this.ordonnance.termine &&
+        this.medicaments.length > 0;
+      this.peutModifier =
+        this.role === 'medecin' &&
+        localStorage.getItem('id') === this.ordonnance.medecin_id.toString();
     } catch (error) {
       this.errorMessage = 'Erreur lors du chargement des données.';
       console.error(error);

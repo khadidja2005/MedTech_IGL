@@ -19,6 +19,7 @@ export class OrdonnaceDetailsComponent {
   @Input() role!: string;
   @Input() id!: string;
   @Input() peutValider!: boolean;
+  @Input() peutModifier!: boolean;
   isAddPanelVisible = false;
   isPopupVisible = false;
 
