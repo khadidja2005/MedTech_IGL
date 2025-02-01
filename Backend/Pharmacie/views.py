@@ -8,32 +8,6 @@ from BDD.models import (
     Ordonnance,
 )
 
-@csrf_exempt
-@require_http_methods(["GET"])
-def get_pharmaciens(request):
-    """
-    Récupère la liste des pharmaciens disponibles dans l'établissement.
-    """
-    try:
-        # Récupérer tous les pharmaciens
-        pharmaciens = PersonnelMedical.objects.filter(role="PHARMACIEN")
-        
-        # Formater la réponse
-        pharmaciens_list = [{
-            "id": pharmacien.id,
-            "nom_complet": pharmacien.nom_complet,
-            "etablissements": [
-                ep.etablissement.nom_etablissement 
-                for ep in etablissement_personnel_medical.objects.filter(personnel_medical=pharmacien)
-            ]
-        } for pharmacien in pharmaciens]
-        
-        return JsonResponse({
-            "pharmaciens": pharmaciens_list
-        })
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
-
 
 @csrf_exempt
 @require_http_methods(["GET"])
@@ -75,8 +49,6 @@ def archive_pharmacie(request):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
-@csrf_exempt
-@require_http_methods(["GET"])
 def get_ordonnances(request):
     if request.method == "GET":
         pharmacien = request.GET.get("pharmacien")
