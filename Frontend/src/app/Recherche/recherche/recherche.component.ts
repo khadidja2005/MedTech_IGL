@@ -35,7 +35,7 @@ export class RechercheComponent implements OnInit {
   dpis: DpiCards[] = [];
   etablissements: Etab[] = [];
   load = false;
-
+  nom_complet = '';
   constructor(
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -60,10 +60,12 @@ export class RechercheComponent implements OnInit {
       // Safely access localStorage
       this.role = localStorage.getItem('role')?.toLowerCase() || '';
       this.id = localStorage.getItem('id') || '';
+      this.nom_complet = localStorage.getItem('nom_complet') || '';
       
       console.log('Initialized from localStorage:', {
         role: this.role,
-        id: this.id
+        id: this.id,
+        nom_complet : this.nom_complet
       });
     } catch (error) {
       console.error('Error accessing localStorage:', error);
@@ -97,6 +99,10 @@ export class RechercheComponent implements OnInit {
       );
       this.dpis = response.data.all_dpis;
       console.log('Fetched DPIs:', this.dpis);
+      if (this.role.toLocaleLowerCase() === "patient"){
+        this.dpis = this.dpis.filter(dpi => dpi.nom_complet === this.nom_complet);
+        console.log('Filtered DPIs:', this.dpis);
+      }
     } catch (error) {
       console.error('Error fetching DPIs:', error);
     }
